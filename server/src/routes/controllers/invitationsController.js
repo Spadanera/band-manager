@@ -21,7 +21,7 @@ router.get("/band/:id", async (req, res) => {
     try {
         let invitation = await Invitation.findOne({ token: req.params.id });
         if (invitation) {
-            res.json(await Band.findOne({ _id: invitation.bandId }).select('name shortDescription createdAt'));
+            res.json(await Band.findOne({ _id: invitation.bandId }).select('name'));
         }
         else {
             res.status("400").send("Invitation not found");
@@ -47,8 +47,8 @@ router.post("/", async (req, res) => {
     try {
         await Invitation.findOneAndDelete({ emailAddress: req.body.emailAddress, inviterId: req.session.userId, bandId: req.body.bandId });
         req.body.inviterId = req.session.userId;
-        let band = await Band.findOne({ _id: req.body.bandId, storyTeller: req.session.userId });
-        if (band) {
+        let bandMemberInviter = await BandMember.findOne({ bandId: req.body.bandId, userId: req.session.userId, isAdmin: true });
+        if (bandMemberInviter) {
             let user = await User.findOne({ email: req.body.emailAddress });
             if (user) {
                 let bandMember = await BandMember.findOne({ userId: user._id, bandId: req.body.bandId });
@@ -58,6 +58,7 @@ router.post("/", async (req, res) => {
                 }
             }
             req.body.token = uuid.v4();
+            let band = await Band.findOne({ _id: req.body.bandId });
             await mailSender.sendMail(req.body.emailAddress,
                 `Your invitation to join ${band.name} on Band Manager`,
                 `Open this link to join ${process.env.PROTOCOL || "http"}://${process.env.ORIGIN || "localhost"}/#/join/${req.body.token}`);

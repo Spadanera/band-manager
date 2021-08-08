@@ -24,6 +24,6 @@ router.use(async (req, res, next) => {
 });
 
 router.use("/invitations", require("./controllers/invitationsController").default);
-router.use("/ogp", require("./controllers/ogpController").default);
+router.use("/band", require("./controllers/bandController").default);
 
 export default router;

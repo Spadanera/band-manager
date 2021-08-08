@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 let InvitationSchema = new mongoose.Schema({
-    storyTellerId: mongoose.Schema.Types.ObjectId,
+    inviterId: mongoose.Schema.Types.ObjectId,
     bandId: mongoose.Schema.Types.ObjectId,
     emailAddress: String,
     token: String

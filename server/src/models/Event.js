@@ -9,6 +9,7 @@ const SetListType = Object.freeze({
 
 let EventSchema = new mongoose.Schema({
     eventId: mongoose.Schema.Types.ObjectId,
+    bandId: mongoose.Schema.Types.ObjectId,
     eventDate: String,
     place: String,
     description: String,

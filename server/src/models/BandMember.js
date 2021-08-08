@@ -5,8 +5,9 @@ let BandMemberSchema = new mongoose.Schema({
     userDisplayName: String,
     userPicture: String,
     bandId: mongoose.Schema.Types.ObjectId,
+    role: String,
     createdAt: { type: Date, default: Date.now },
-    active: Boolean
+    isAdmin: Boolean
 });
 
 export default mongoose.model("BandMember", BandMemberSchema);

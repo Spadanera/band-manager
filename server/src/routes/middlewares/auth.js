@@ -8,13 +8,12 @@ import BandMember from "../../models/BandMember";
 import Invitation from "../../models/Invitation";
 import Band from "../../models/Band";
 
-router.get('/google-join/:invitation', (req, res) => {
-    req.session.invitation = req.params.invitation;
+router.get('/', (req, res) => {
     res.redirect('/auth/google');
 });
 
-router.get('/google-role/:role', (req, res) => {
-    req.session.role = req.params.role;
+router.get('/google-join/:invitation', (req, res) => {
+    req.session.invitation = req.params.invitation;
     res.redirect('/auth/google');
 });
 
@@ -25,7 +24,7 @@ router.get('/google', passport.authenticate('google', {
 
 router.get('/checkauthentication', (req, res) => {
     if (req.session.userId) {
-        res.send(req.session.role);
+        res.send(true);
     }
     else {
         res.send("");
@@ -59,32 +58,20 @@ router.get('/google/callback',
                     userId: user._id,
                     userDisplayName: profile.displayName,
                     userPicture: profile._json.picture,
-                    chronicleId: invitation.chronicleId,
+                    bandId: invitation.bandId,
                     active: true,
                 };
-                let bandMemberUpserted = await BandMember.findOneAndUpdate({ userId: user._id }, bandMember, { upsert: true, new: true, setDefaultsOnInsert: true });
-                let chronicle = await Band.findOne({ _id: invitation.chronicleId });
-                if (chronicle) {
-                    chronicle.bandMembers.push(bandMemberUpserted);
-                    await chronicle.save();
+                let bandMemberUpserted = await BandMember.findOneAndUpdate({ userId: user._id, bandId: invitation.bandId }, bandMember, { upsert: true, new: true, setDefaultsOnInsert: true });
+                let band = await Band.findOne({ _id: invitation.bandId });
+                if (band) {
+                    band.bandMembers.push(bandMemberUpserted);
+                    await band.save();
                 }
                 await Invitation.findOneAndDelete({ token: req.session.invitation });
-                res.redirect(`${process.env.PROTOCOL || "http"}://${process.env.ORIGIN || "localhost"}/#/bandMember`);
+                res.redirect(`${process.env.PROTOCOL || "http"}://${process.env.ORIGIN || "localhost"}/#/band/${band._id}`);
             }
 
-            // redirect
-            if (req.session.role === "story-teller") {
-                res.redirect(`${process.env.PROTOCOL || "http"}://${process.env.ORIGIN || "localhost"}/#/story-teller`);
-            }
-            if (req.session.role === "bandMember") {
-                await BandMember.updateMany({ userId: req.session.userId }, {
-                    $set: {
-                        userDisplayName: profile.displayName,
-                        userPicture: profile._json.picture,
-                    }
-                });
-                res.redirect(`${process.env.PROTOCOL || "http"}://${process.env.ORIGIN || "localhost"}/#/bandMember`);
-            }
+            res.redirect(`${process.env.PROTOCOL || "http"}://${process.env.ORIGIN || "localhost"}/#/band`);
         } catch (error) {
             console.log(error);
             res.redirect(`${process.env.PROTOCOL || "http"}://${process.env.ORIGIN || "localhost"}/`);
