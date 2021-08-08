@@ -1,0 +1,12 @@
+@font-face {
+    font-family: 'MontFort';
+    src: url('MontFort-Regular.eot');
+    src: url('MontFort-Regular.eot?#iefix') format('embedded-opentype'),
+        url('MontFort-Regular.woff2') format('woff2'),
+        url('MontFort-Regular.woff') format('woff'),
+        url('MontFort-Regular.ttf') format('truetype'),
+        url('MontFort-Regular.svg#MontFort-Regular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+

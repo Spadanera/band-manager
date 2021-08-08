@@ -1,0 +1,14 @@
+@font-face {
+    font-family: 'Cavatelo';
+    src: url('Cavatelo.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Cavatelo Swash';
+    src: url('CavateloSwash.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+

@@ -1,0 +1,17 @@
+/server/node_modules/
+server/dist/
+server/dist-sample-data
+/server/dist/gmailAuth.js
+/server/src/gmailAuth.js
+/server/src/client_secret.json
+/client/src/gmapsKey.js
+/server/.DS_Store
+.DS_Store
+/.project
+.vscode/
+node_modules/
+/db/*
+package-lock.json
+/server/package-lock.json
+/client/package-lock.json
+/server-typescript
