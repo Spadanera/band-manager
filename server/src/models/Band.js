@@ -9,6 +9,8 @@ let BandSchema = new mongoose.Schema({
     setList: [Song],
     bandMembers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'BandMember' }],
     events: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Event' }],
+    isPublic: Boolean,
+    isMemberPublic: Boolean,
 });
 
 export default mongoose.model("Band", BandSchema);

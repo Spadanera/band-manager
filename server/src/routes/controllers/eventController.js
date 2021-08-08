@@ -4,6 +4,10 @@ const router = require('express').Router();
 import Band from '../../models/Band';
 import Event from '../../models/Event';
 
+router.get("/", async (req, res) => {
+    res.json(await Event.find({ isPublic: true }));
+});
+
 router.get("/:bandId", async (req, res) => {
     try {
         let band = await Band.find({ _id: req.params.bandId, bandMember: { "$in": req.session.userId } }).populate("events bandMembers");

@@ -15,6 +15,29 @@ router.get("/", async (req, res) => {
     }
 });
 
+router.get("/public", async (req, res) => {
+    try {
+        let bands = await Band.find({ isPublic: true }).populate("events");
+        for (let i = 0; i < bands.length; i++) {
+            let band = bands[i];
+            band.events = band.events.filter(e => e.isPublic);
+            for (let j = 0; j < band.events.length; j++) {
+                if (band.events[j].isPublicSetList) {
+                    await band.events[i].populate("setList");
+                }
+            }
+            if (band.isMemberPublic) {
+                await bands[i].populate("bandMembers");
+            }
+        }
+        res.json(await Band.find({ isPublic: true }));
+    }
+    catch (e) {
+        console.error(e);
+        res.status(500).json(e);
+    }
+});
+
 router.get("/:id", async (req, res) => {
     try {
         res.json(await Band.findOne({ _id: req.params.id }));

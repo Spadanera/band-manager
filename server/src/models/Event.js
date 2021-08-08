@@ -13,7 +13,9 @@ let EventSchema = new mongoose.Schema({
     eventDate: String,
     place: String,
     description: String,
-    setList: [Song]
+    setList: [Song],
+    isPublic: Boolean,
+    isSetListPublic: Boolean,
 });
 
 export default mongoose.model("Event", EventSchema);
