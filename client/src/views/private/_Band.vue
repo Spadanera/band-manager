@@ -141,7 +141,7 @@
                     v-on="on"
                   ></v-text-field>
                 </template>
-                <v-date-picker v-model="event.date" scrollable color="#B71D1C">
+                <v-date-picker v-model="event.date" scrollable>
                   <v-spacer></v-spacer>
                   <v-btn text color="primary" @click="dialogDate = false">
                     Cancel

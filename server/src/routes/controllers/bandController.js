@@ -4,10 +4,12 @@ const router = require('express').Router();
 import Band from '../../models/Band';
 import BandMember from '../../models/BandMember';
 import User from '../../models/User';
+import Event from '../../models/Event';
 
 router.get("/", async (req, res) => {
     try {
-        res.json(await Band.find({ bandMember: { "$in": req.session.userId } }));
+        let bandMembers = await BandMember.find({ userId: req.session.userId }).select("_id");
+        res.json(await Band.find({ bandMembers: { "$in": bandMembers } }).populate("bandMembers"));
     }
     catch (e) {
         console.error(e);
@@ -51,29 +53,29 @@ router.get("/:id", async (req, res) => {
 router.post("/", async (req, res) => {
     try {
         let band = new Band(req.body);
+        await band.save();
         let user = await User.findOne({ _id: req.session.userId });
         let bandMember = new BandMember({
             userId: req.session.userId,
-            userDisplayName: user.userDisplayName,
-            userPicture: user.userPicture,
+            userDisplayName: user.displayName,
+            userPicture: user.picture,
             bandId: band._id,
-            role: "",
             isAdmin: true
         });
         await bandMember.save();
-        band.bandMember.push(bandMember._id);
+        band.bandMembers.push(bandMember._id);
         res.json(await band.save());
     }
     catch (e) {
         console.error(e);
-        res.status(500).json(e);
+        res.status(500).json({ p: "pippo" });
     }
 });
 
 router.put("/:id", async (req, res) => {
     try {
         let bandMember = await BandMember({ userId: req.session.userId, bandId: req.params.id, isAdmin: true });
-        if (bandMember && req.parmas.id === req.body._id) {
+        if (bandMember && req.params.id === req.body._id) {
             res.json(await Band.findOneAndUpdate({ _id: req.params.id }, req.body));
         }
         else {
@@ -82,7 +84,30 @@ router.put("/:id", async (req, res) => {
     }
     catch (e) {
         console.error(e);
-        res.status(500).json(e);
+        res.status(500).json({ e: e.message });
+    }
+});
+
+router.delete("/:id", async (req, res) => {
+    try {
+        let bandMember = await BandMember.findOne({ userId: req.session.userId, bandId: req.params.id, isAdmin: true });
+        if (bandMember) {
+            let band = await Band.findOne({ _id: req.params.id });
+            for (let i = 0; i < band.bandMembers.length; i++) {
+                await BandMember.findOneAndDelete({ _id: band.bandMembers[i] });
+            }
+            for (let i = 0; i < band.events.length; i++) {
+                await Event.findOneAndDelete({ _id: band.events[i]._id });
+            }
+            res.json(await Band.findOneAndDelete({ _id: req.params.id }));
+        }
+        else {
+            res.status(401).send("Unauthorized");
+        }
+    }
+    catch (e) {
+        console.error(e);
+        res.status(500).json({e: e.message });
     }
 });
 

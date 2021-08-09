@@ -1,6 +1,4 @@
-import client from '../client';
-import IOgp from '../interfaces/IOgp';
-import implement from 'implement-js';
+import client from './client';
 
 const ogp = {
     getSetList: async () => {
@@ -34,7 +32,5 @@ const ogp = {
         await client.delete(`/api/ogp/event/${eventId}`);
     },
 };
-
-implement(IOgp)(ogp);
 
 export default ogp;

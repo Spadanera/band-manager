@@ -8,9 +8,9 @@
       <v-card-actions>
         <v-spacer></v-spacer>
 
-        <v-btn color="green darken-1" text @click="closeModal">{{$ml.get("dismiss")}}</v-btn>
+        <v-btn color="green darken-1" text @click="closeModal">Dismiss</v-btn>
 
-        <v-btn color="green darken-1" text @click="confirm">{{$ml.get("confirm")}}</v-btn>
+        <v-btn color="green darken-1" text @click="confirm">Confirm</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>

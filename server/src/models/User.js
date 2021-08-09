@@ -6,7 +6,7 @@ let UserSchema = new mongoose.Schema({
     token: String,
     displayName: String,
     giveName: String,
-    familName: String,
+    familyName: String,
     picture: String
 });
 

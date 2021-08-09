@@ -3,10 +3,12 @@ import Router from 'vue-router';
 // import RestService from './services/rest/rest-services';
 
 // Component
-import Public from './views/Public.vue';
+import Layout from './views/Layout.vue';
 import Home from './views/public/Home.vue';
 import About from './views/public/About.vue';
 import Join from './views/public/Join.vue';
+import Bands from './views/private/Bands.vue';
+import Band from './views/private/Band.vue';
 
 Vue.use(Router);
 
@@ -16,11 +18,10 @@ export default new Router({
   routes: [
     {
       path: "/",      
-      component: Public,
+      component: Layout,
       children: [
         {
           path: '/',
-          name: "home",
           component: Home,
           props: true
         },
@@ -31,6 +32,14 @@ export default new Router({
         {
           path: '/join/:token',
           component: Join
+        },
+        {
+          path: '/bands',
+          component: Bands
+        },
+        {
+          path: '/band/:id',
+          component: Band
         }
       ]
     },

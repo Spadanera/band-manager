@@ -9,7 +9,7 @@ import VuetifyConfirm from 'vuetify-confirm';
 import TextHighlight from 'vue-text-highlight';
 import CKEditor from '@ckeditor/ckeditor5-vue';
 import VueSessionStorage from 'vue-sessionstorage';
-import RestService from './services/rest/rest-services';
+import RestService from './services/rest-services';
 import 'vuetify/dist/vuetify.min.css'
 import * as VueGoogleMaps from 'vue2-google-maps'
 import gmapsKey from './gmapsKey';

@@ -1,6 +1,4 @@
-import client from '../client';
-import IInvitation from '../interfaces/IInvitation';
-import implement from 'implement-js';
+import client from './client';
 
 const invitation = {
     getInvitations: async (chronicleId) => {
@@ -17,7 +15,5 @@ const invitation = {
         await client.delete(`/api/invitations/${id}`);
     }
 };
-
-implement(IInvitation)(invitation);
 
 export default invitation;

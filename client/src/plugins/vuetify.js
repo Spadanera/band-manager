@@ -15,17 +15,11 @@ export default new Vuetify({
     iconfont: 'md',
   },
   theme: {
+    dark: false,
     themes: {
       light: {
-        primary: colors.red.darken4,
-        secondary: '#b0bec5',
-        accent: '#FFFAFA',
-        error: '#b71c1c',
-        background: '#FFFFFF'
-      },
-      dark: {
-        primary: colors.red.darken4,
-        background: '#424242'
+        primary: colors.indigo.darken4,
+        secondary: colors.indigo.darken3
       }
     }
   }

@@ -49,7 +49,7 @@ export default {
 }
 
 ::-webkit-scrollbar {
-  width: 5px;
+  width: 2px;
 }
 
 ::-webkit-scrollbar-track {
@@ -58,7 +58,7 @@ export default {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #b71c1c;
+  background: #394AAB;
   -webkit-box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.2);
   box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.2);
 }
@@ -68,7 +68,7 @@ export default {
 }
 
 ::-webkit-scrollbar-thumb:active {
-  background: #b71c1c;
+  background: #394AAB;
   -webkit-box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.3);
   box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.3);
 }

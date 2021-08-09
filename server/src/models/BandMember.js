@@ -1,4 +1,4 @@
-import mongoose, { mongo } from 'mongoose';
+import mongoose from 'mongoose';
 
 let BandMemberSchema = new mongoose.Schema({
     userId: mongoose.Schema.Types.ObjectId,
