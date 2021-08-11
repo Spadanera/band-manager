@@ -12,6 +12,7 @@ import VueSessionStorage from 'vue-sessionstorage';
 import RestService from './services/rest-services';
 import 'vuetify/dist/vuetify.min.css'
 import * as VueGoogleMaps from 'vue2-google-maps'
+import MusicGenres from 'musicgenres-json'
 import gmapsKey from './gmapsKey';
 import client from "./services/client";
 import './ml';
@@ -48,12 +49,13 @@ Vue.use(VueGoogleMaps, {
 Vue.config.productionTip = false;
 Vue.prototype.moment = moment;
 
-// if (process.env.VUE_APP_API === "graphql") {
+Vue.prototype.copy = (obj) => {
+  return JSON.parse(JSON.stringify(obj));
+},
 
-// }
-// else {
 Vue.prototype.Service = RestService;
-// }
+
+Vue.prototype.Genres = new MusicGenres().genres;
 
 const nprogress = new NProgress({ showSpinner: false });
 

@@ -5,6 +5,8 @@ import Band from '../../models/Band';
 import BandMember from '../../models/BandMember';
 import User from '../../models/User';
 import Event from '../../models/Event';
+import fs from 'fs';
+import imageToUri from 'image-to-uri';
 
 router.get("/", async (req, res) => {
     try {
@@ -42,17 +44,40 @@ router.get("/public", async (req, res) => {
 
 router.get("/:id", async (req, res) => {
     try {
-        res.json(await Band.findOne({ _id: req.params.id }));
+        let bandMembers = await BandMember.find({ userId: req.session.userId }).select("_id");
+        let band = await Band.findOne({ _id: req.params.id, bandMembers: { "$in": bandMembers } }).populate("bandMembers events");
+        res.json(band); 
     }
     catch (e) {
         console.error(e);
-        res.status(500).json(e);
+        res.status(500).json({e: e.message });
+    }
+});
+
+router.get("/memberinfo/:id", async (req, res) => {
+    try {
+        let bandMember = await BandMember.findOne({ userId: req.session.userId, bandId: req.params.id }); 
+        res.json(bandMember); 
+    }
+    catch (e) {
+        console.error(e);
+        res.status(500).json({e: e.message });
     }
 });
 
 router.post("/", async (req, res) => {
     try {
         let band = new Band(req.body);
+        band.creatorId = req.session.userId;
+        if (!band.bandLogo) {
+            band.bandLogo = {};
+        }
+        if (!band.genres) {
+            band.genres = [];
+        }
+        if (!band.setList) {
+            band.setList = [];
+        }
         await band.save();
         let user = await User.findOne({ _id: req.session.userId });
         let bandMember = new BandMember({
@@ -60,7 +85,8 @@ router.post("/", async (req, res) => {
             userDisplayName: user.displayName,
             userPicture: user.picture,
             bandId: band._id,
-            isAdmin: true
+            isAdmin: true,
+            isCreator: false
         });
         await bandMember.save();
         band.bandMembers.push(bandMember._id);
@@ -68,7 +94,7 @@ router.post("/", async (req, res) => {
     }
     catch (e) {
         console.error(e);
-        res.status(500).json({ p: "pippo" });
+        res.status(500).json({ e: e.message });
     }
 });
 
@@ -110,5 +136,42 @@ router.delete("/:id", async (req, res) => {
         res.status(500).json({e: e.message });
     }
 });
+
+router.post("/logo/:id", async (req, res) => {
+    try {
+        if (req.files && req.files.file) {
+            let bandMembers = await BandMember.find({ userId: req.session.userId }).select("_id");
+            let band = await Band.findOne({ _id: req.params.id, bandMembers: { "$in": bandMembers } });
+            if (band) {
+                if (!band.bandLogo) {
+                    band.bandLogo = {};
+                }
+                if (/image/.test(band.bandLogo.fileType)) {
+                    band.bandLogo.file = imageToUri(req.files.file.path);
+                }
+                band.bandLogo.base64 = base64_encode(req.files.file.path);
+                await Band.findOneAndUpdate({ _id: req.params.id }, band);
+                res.json(band);
+            }
+            else {
+                throw new Error("Attachment noy found");
+            }
+        }
+        else {
+            throw "Missing file";
+        }
+    }
+    catch (e) {
+        console.error(e);
+        res.status(500).json({ e: e.message });
+    }
+});
+
+function base64_encode(file) {
+    // read binary data
+    var bitmap = fs.readFileSync(file);
+    // convert binary data to base64 encoded string
+    return new Buffer(bitmap).toString('base64');
+}
 
 export default router;

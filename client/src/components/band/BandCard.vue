@@ -1,22 +1,74 @@
 <template>
-  <v-card style="display: flex; flex-direction: column; height: 100%">
-    <v-card-title class="headline">{{ band.name }}</v-card-title>
+  <v-card>
+    <div>
+      <v-card-title class="headline">{{ band.name }}</v-card-title>
+      <v-card-subtitle>{{ formatted_address }}</v-card-subtitle>
+    </div>
     <v-card-text style="flex: 1">
-      <p>{{ band.description }}</p>
-    <v-divider></v-divider>
+      <v-avatar v-if="hasLogo" class="ma-3" size="130" tile style="float: left">
+        <v-img :src="band.bandLogo.file"></v-img>
+      </v-avatar>
+      <div v-html="band.description"></div>
+      <v-divider v-if="!inBand"></v-divider>
     </v-card-text>
-    <v-card-text>
+    <v-card-text style="padding-top: 0" v-if="!inBand">
+      <div class="my-4 subtitle-1" style="margin-top: 0 !important">
+        Band Members
+      </div>
       <v-chip v-for="(member, index) in band.bandMembers" :key="index">
         <v-avatar left>
           <v-img :src="member.userPicture"></v-img>
         </v-avatar>
-        {{ member.userDisplayName }}
+        {{ member.userDisplayName || member.userEmailAddress }}
       </v-chip>
     </v-card-text>
-    <v-card-actions>
+    <v-divider></v-divider>
+    <v-card-text style="padding-top: 0">
+      <v-subheader>Genres</v-subheader>
+      <v-chip v-for="(genre, index) in band.genres" :key="index" class="ma-1">
+        {{ genre }}
+      </v-chip>
+    </v-card-text>
+    <v-divider></v-divider>
+    <v-card-text style="padding-top: 0" v-if="memberInfo.isAdmin">
+      <v-subheader>Visibility</v-subheader>
+      <div v-if="!band.isPublic">Nothing is public</div>
+      <v-chip v-if="band.isPublic" class="ma-1">
+        Public
+      </v-chip>
+      <v-chip v-if="band.isMembersPublic" class="ma-1">
+        Members Public
+      </v-chip>
+      <v-chip v-if="band.isEventsPublic" class="ma-1">
+        Events Public
+      </v-chip>
+      <v-chip v-if="band.isSetlistPublic" class="ma-1">
+        Setlist Public
+      </v-chip>
+    </v-card-text>
+    <v-card-text
+      v-if="inBand && (memberInfo.isAdmin || memberInfo.canEditInfo)"
+      style="padding: 0; position: relative"
+    >
+      <v-btn
+        absolute
+        dark
+        small
+        fab
+        top
+        right
+        color="primary"
+        @click="editBand()"
+      >
+        <v-icon> edit </v-icon>
+      </v-btn>
+    </v-card-text>
+    <v-card-actions v-if="!inBand">
       <v-spacer></v-spacer>
-      <v-btn text @click="openBand(band._id)">Open</v-btn>
-      <v-btn text color="error" @click="modalDelete">Delete</v-btn>
+      <v-btn text @click="openBand()">Open</v-btn>
+      <v-btn v-if="memberInfo.isCreator" text color="error" @click="modalDelete"
+        >Delete</v-btn
+      >
     </v-card-actions>
     <Confirm
       :dialog="dialog"
@@ -44,6 +96,8 @@ export default {
   },
   props: {
     band: Object,
+    inBand: Boolean,
+    memberInfo: Object,
   },
   methods: {
     modalDelete() {
@@ -55,10 +109,25 @@ export default {
       await this.Service.bandService.deleteBand(this.band._id);
       this.$emit("submitted", "Band successfully deleted");
     },
-    openBand(id) {
+    openBand() {
       this.$router.push({
-        path: `/band/${id}`,
+        path: `/band/${this.band._id}`,
       });
+    },
+    editBand() {
+      this.$emit("edit");
+    },
+  },
+  computed: {
+    hasLogo() {
+      return this.band && this.band.bandLogo && this.band.bandLogo.file;
+    },
+    formatted_address() {
+      if (this.band && this.band.location_address) {
+        return this.band.location_address.formatted_address;
+      } else {
+        return "";
+      }
     },
   },
 };

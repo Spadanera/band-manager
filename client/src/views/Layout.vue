@@ -11,8 +11,8 @@
       </router-link>
       <v-toolbar-title class="display-1 text-uppercase pl-5">
         <router-link :to="rootMenu" tag="span" id="title" class="cavatelo">
-          <span class="hidden-xs-and-down">Band Manager</span>
-          <span class="hidden-sm-and-up" v-if="!leftIconVisible()">BD</span>
+          <span class="hidden-sm-and-down">Band Manager</span>
+          <span class="hidden-md-and-up">BD</span>
         </router-link>
 
         <span class="font-weight-light"></span>

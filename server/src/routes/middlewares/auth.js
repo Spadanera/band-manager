@@ -6,7 +6,6 @@ import passport from 'passport';
 import User from "../../models/User";
 import BandMember from "../../models/BandMember";
 import Invitation from "../../models/Invitation";
-import Band from "../../models/Band";
 
 router.get('/', (req, res) => {
     res.redirect('/auth/google');
@@ -54,21 +53,13 @@ router.get('/google/callback',
             // invitation
             if (req.session.invitation) {
                 let invitation = await Invitation.findOne({ token: req.session.invitation });
-                let bandMember = {
-                    userId: user._id,
-                    userDisplayName: profile.displayName,
-                    userPicture: profile._json.picture,
-                    bandId: invitation.bandId,
-                    active: true,
-                };
-                let bandMemberUpserted = await BandMember.findOneAndUpdate({ userId: user._id, bandId: invitation.bandId }, bandMember, { upsert: true, new: true, setDefaultsOnInsert: true });
-                let band = await Band.findOne({ _id: invitation.bandId });
-                if (band) {
-                    band.bandMembers.push(bandMemberUpserted);
-                    await band.save();
-                }
+                let bandMember = await BandMember.findOne({ bandId: invitation.bandId, userEmailAddress: invitation.emailAddress });
+                bandMember.userId = user._id;
+                bandMember.userDisplayName = profile.displayName;
+                bandMember.userPicture = profile._json.picture;
+                await bandMember.save();
                 await Invitation.findOneAndDelete({ token: req.session.invitation });
-                res.redirect(`${process.env.PROTOCOL || "http"}://${process.env.ORIGIN || "localhost"}/#/band/${band._id}`);
+                res.redirect(`${process.env.PROTOCOL || "http"}://${process.env.ORIGIN || "localhost"}/#/band/${invitation.bandId}`);
             }
 
             res.redirect(`${process.env.PROTOCOL || "http"}://${process.env.ORIGIN || "localhost"}/#/bands`);

@@ -1,9 +1,9 @@
 import client from './client';
 
 const invitation = {
-    getInvitations: async (chronicleId) => {
+    getInvitations: async (bandId) => {
         let response = await client.get(
-            `/api/invitations/all/${chronicleId}`
+            `/api/invitations/all/${bandId}`
         );
         return response.data;
     },

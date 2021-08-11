@@ -44,7 +44,11 @@
           v-bind:key="band._id"
           class="my-2"
         >
-          <BandCard :band="band" @submitted="submitted" />
+          <BandCard
+            :band="band"
+            @submitted="submitted"
+            :memberInfo="band.memberInfo"
+          />
         </v-flex>
       </v-layout>
       <BandForm
@@ -65,7 +69,7 @@
       :timeout="3000"
       :vertical="false"
     >
-      {{snackbar.text}}
+      {{ snackbar.text }}
       <v-btn text @click="snackbar.enabled = false">Close</v-btn>
     </v-snackbar>
   </v-container>
@@ -77,7 +81,7 @@ import BandCard from "../../components/band/BandCard.vue";
 export default {
   components: {
     BandForm,
-    BandCard
+    BandCard,
   },
   data() {
     return {

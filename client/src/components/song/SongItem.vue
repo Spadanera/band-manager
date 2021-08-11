@@ -2,7 +2,7 @@
   <div>
     <v-divider></v-divider>
     <v-list-item two-line>
-      <v-list-item-icon>
+      <v-list-item-icon v-if="song.audio">
         <v-icon>play_circle</v-icon>
       </v-list-item-icon>
       <v-list-item-content>
@@ -13,9 +13,9 @@
         <v-list-item-action-text
           v-text="parseTime(song.duration)"
         ></v-list-item-action-text>
-        <v-menu close-on-content-click close-on-click absolute>
+        <v-menu close-on-content-click close-on-click absolute v-if="memberInfo.isAdmin || memberInfo.canEditSetList">
           <template v-slot:activator="{ on, attrs }">
-            <v-icon v-bind="attrs" v-on="on"> more_vert </v-icon>
+            <v-btn icon><v-icon v-bind="attrs" v-on="on"> more_vert </v-icon></v-btn>
           </template>
           <v-list dense flat>
             <v-list-item-group>
@@ -46,6 +46,7 @@ export default {
   name: "SongItem",
   props: {
     song: Object,
+    memberInfo: Object
   },
   data() {
     return {};

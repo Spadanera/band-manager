@@ -2,8 +2,25 @@ import client from './client';
 
 const band = {
     getBands: async () => {
-        let response = await client.get(
+        let bands = (await client.get(
             `/api/band`
+        )).data;
+        for (let i = 0; i < bands.length; i++) {
+            bands[i].memberInfo = (await client.get(
+                `/api/band/memberinfo/${bands[i]._id}`
+            )).data;
+            if (bands[i].location) {
+                bands[i].location_address = JSON.parse(bands[i].location);
+            }
+            else {
+                bands[i].location_address = {};
+            }
+        }
+        return bands;
+    },
+    memberInfo: async (id) => {
+        let response = await client.get(
+            `/api/band/memberinfo/${id}`
         );
         return response.data;
     },
@@ -21,10 +38,29 @@ const band = {
         else {
             response = await client.put(`/api/band/${band._id}`, band);
         }
-        return response;
+        return response.data;
     },
     deleteBand: async (id) => {
         await client.delete(`/api/band/${id}`);
+    },
+    setImage: async (bandId, image) => {
+        let formData = new FormData();
+        formData.append('file', image.imageFile);
+        await client.post(`/api/band/logo/${bandId}`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        });
+    },
+    updateBandMember: async (bandId, bandMember) => {
+        let response;
+        response = await client.put(`/api/bandMember/${bandId}`, bandMember);
+        return response.data;
+    },
+    deleteBandMember: async (bandMemberId) => {
+        let response;
+        response = await client.delete(`/api/bandMember/${bandMemberId}`);
+        return response.data;
     }
 };
 

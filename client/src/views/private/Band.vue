@@ -2,118 +2,19 @@
   <v-container fluid class="max-height" style="padding: 0">
     <v-tabs-items v-model="tab" class="max-height">
       <v-tab-item>
-
+        <GeneralInfo :band="this.band" :memberInfo="memberInfo" @reload="loadBand" />
       </v-tab-item>
       <v-tab-item class="max-height">
-        <v-container fluid class="max-height">
-          <v-row class="max-height">
-            <v-col col="12" xs="12" sm="12" lg="4" md="4" class="max-height">
-              <v-card class="max-height">
-                <v-list-item>
-                  <v-list-item-content>
-                    <v-list-item-title class="headline"
-                      >Confirmed</v-list-item-title
-                    >
-                  </v-list-item-content>
-                  <v-list-item-action>
-                    <v-list-item-action-text
-                      >Time: {{ confirmedDuration }}</v-list-item-action-text
-                    >
-                  </v-list-item-action>
-                </v-list-item>
-                <v-list flat class="max-height-list">
-                  <v-list-item-group>
-                    <draggable
-                      :options="{ group: 'songs' }"
-                      v-model="confirmedList"
-                      @start="drag = true"
-                      @end="orderSetList"
-                    >
-                      <template v-for="(song, index) in this.confirmedList">
-                        <SongItem
-                          @opensong="openSong"
-                          @deletesong="deleteSong"
-                          :key="index"
-                          :song="song"
-                        ></SongItem>
-                      </template>
-                    </draggable>
-                  </v-list-item-group>
-                </v-list>
-              </v-card>
-            </v-col>
-            <v-col col="12" xs="12" sm="12" lg="4" md="4" class="max-height">
-              <v-card class="max-height">
-                <v-list-item>
-                  <v-list-item-content>
-                    <v-list-item-title class="headline"
-                      >Pending</v-list-item-title
-                    >
-                  </v-list-item-content>
-                  <v-list-item-action>
-                    <v-list-item-action-text
-                      >Time: {{ pendingDuration }}</v-list-item-action-text
-                    >
-                  </v-list-item-action>
-                </v-list-item>
-                <v-list flat>
-                  <v-list-item-group>
-                    <draggable
-                      :options="{ group: 'songs' }"
-                      v-model="pendingList"
-                      @start="drag = true"
-                      @end="orderSetList"
-                    >
-                      <template v-for="(song, index) in this.pendingList">
-                        <SongItem
-                          @opensong="openSong"
-                          @deletesong="deleteSong"
-                          :key="index"
-                          :song="song"
-                        ></SongItem>
-                      </template>
-                    </draggable>
-                  </v-list-item-group>
-                </v-list>
-              </v-card>
-            </v-col>
-            <v-col col="12" xs="12" sm="12" lg="4" md="4" class="max-height">
-              <v-card class="max-height">
-                <v-list-item>
-                  <v-list-item-content>
-                    <v-list-item-title class="headline"
-                      >Removed</v-list-item-title
-                    >
-                  </v-list-item-content>
-                  <v-list-item-action>
-                    <v-list-item-action-text
-                      >Time: {{ removedDuration }}</v-list-item-action-text
-                    >
-                  </v-list-item-action>
-                </v-list-item>
-                <v-list flat>
-                  <v-list-item-group>
-                    <draggable
-                      :options="{ group: 'songs' }"
-                      v-model="removedList"
-                      @start="drag = true"
-                      @end="orderSetList"
-                    >
-                      <template v-for="(song, index) in this.removedList">
-                        <SongItem
-                          @opensong="openSong"
-                          @deletesong="deleteSong"
-                          :key="index"
-                          :song="song"
-                        ></SongItem>
-                      </template>
-                    </draggable>
-                  </v-list-item-group>
-                </v-list>
-              </v-card>
-            </v-col>
-          </v-row>
-        </v-container>
+        <SetList
+          :setList="band.setList"
+          :statuses="statuses"
+          :memberInfo="memberInfo"
+          ref="setlist"
+          @ordersetlist="orderSetList"
+          @savesong="saveSong"
+          @opensong="openSong"
+          @deletesong="deleteSong"
+        />
         <v-btn color="primary" dark fixed bottom right fab @click="openSong">
           <v-icon>add</v-icon>
         </v-btn>
@@ -141,7 +42,7 @@
               ></v-text-field>
               <v-text-field
                 v-model="song.duration"
-                label="Duration"
+                label="Time"
                 suffix="seconds"
                 required
               ></v-text-field>
@@ -150,6 +51,8 @@
                 :items="statuses"
                 label="Status"
               ></v-select>
+              <!-- <v-text-field v-model="song.audio" label="Soundcloud track URL">
+              </v-text-field> -->
             </v-form>
           </v-container>
         </v-card-text>
@@ -166,12 +69,13 @@
 </template>
 
 <script>
-import draggable from "vuedraggable";
-import SongItem from "../../components/song/SongItem.vue";
+import SetList from "../../components/band/SetList.vue";
+import GeneralInfo from "../../components/band/GeneralInfo.vue";
+
 export default {
   components: {
-    draggable,
-    SongItem,
+    SetList,
+    GeneralInfo,
   },
   props: {
     nav: Object,
@@ -179,25 +83,23 @@ export default {
   },
   data() {
     return {
-      confirmedList: [],
-      pendingList: [],
-      removedList: [],
       band: {
         setList: [],
         bandMembers: [],
         events: [],
+        bandLogo: {}
       },
-      drag: false,
       dialogEvent: false,
-      dialogSong: false,
       dialogDate: false,
+      dialogSong: false,
+      event: {},
       song: {},
       statuses: [
         { text: "Confirmed", value: "confirmed" },
         { text: "Pending", value: "pending" },
         { text: "Removed", value: "removed" },
       ],
-      event: {},
+      memberInfo: {}
     };
   },
   methods: {
@@ -207,43 +109,36 @@ export default {
     async loadBand() {
       this.band = await this.Service.bandService.getBand(this.$route.params.id);
       this.getSubList();
+      if (this.band.location) {
+          this.band.location_address = JSON.parse(this.band.location);
+      }
       this.$emit("setband", this.band.name);
-    },
-    parseTime(second) {
-      return `${Math.floor(second / 60)}:${("0" + (second % 60)).slice(-2)}`;
     },
     async updateBand() {
       await this.Service.bandService.upsertBand(this.band);
+      this.getSubList();
     },
-    orderSetList() {
-      this.confirmedList.forEach((s) => (s.status = "confirmed"));
-      this.pendingList.forEach((s) => (s.status = "pending"));
-      this.removedList.forEach((s) => (s.status = "removed"));
-      this.drag = false;
-      for (let i = 0; i < this.confirmedList.length; i++) {
-        this.confirmedList[i].position = i + 1;
+    orderSetList(lists) {
+      lists.confirmedList.forEach((s) => (s.status = "confirmed"));
+      lists.pendingList.forEach((s) => (s.status = "pending"));
+      lists.removedList.forEach((s) => (s.status = "removed"));
+      for (let i = 0; i < lists.confirmedList.length; i++) {
+        lists.confirmedList[i].position = i + 1;
       }
       this.band.setList = [
-        ...this.confirmedList,
-        ...this.pendingList,
-        ...this.removedList,
+        ...lists.confirmedList,
+        ...lists.pendingList,
+        ...lists.removedList,
       ];
       this.updateBand();
     },
     getSubList() {
-      this.confirmedList = this.band.setList.filter(
-        (s) => s.status === "confirmed"
-      );
-      this.pendingList = this.band.setList.filter(
-        (s) => s.status === "pending"
-      );
-      this.removedList = this.band.setList.filter(
-        (s) => s.status === "removed"
-      );
-      this.confirmedList.sort((s1, s2) => s1.position - s2.position);
+      if (this.$refs.setlist) {
+        this.$refs.setlist.getSubList();
+      }
     },
     openSong(song) {
-      this.song = this.copy(song || {});
+      this.song = this.copy(song || { });
       this.dialogSong = true;
     },
     saveSong() {
@@ -259,31 +154,17 @@ export default {
         }
       }
       this.updateBand();
-      this.getSubList();
       this.dialogSong = false;
       this.song = {};
     },
     deleteSong(song) {
       this.band.setList = this.band.setList.filter((s) => s._id !== song._id);
-      this.getSubList();
-      this.orderSetList();
-    },
-    copy(obj) {
-      return JSON.parse(JSON.stringify(obj));
-    },
-    getDuration(setListType) {
-      let list = this.band.setList.filter((s) => s.status === setListType);
-      if (list.length) {
-        return this.parseTime(
-          list.map((s) => s.duration).reduce((a, c) => a + c)
-        );
-      } else {
-        return "00:00";
-      }
+      this.updateBand();
     },
   },
-  created() {
+  async created() {
     this.loadBand();
+    this.memberInfo = await this.Service.bandService.memberInfo(this.$route.params.id);
   },
   computed: {
     navVisible: {
@@ -294,23 +175,15 @@ export default {
         this.nav.visible = val;
       },
     },
-    confirmedDuration() {
-      return this.getDuration("confirmed");
-    },
-    pendingDuration() {
-      return this.getDuration("pending");
-    },
-    removedDuration() {
-      return this.getDuration("removed");
-    },
   },
 };
 </script>
 
 <style>
-.max-height-list {
-  height: calc(100% - 52px);
-  max-height: calc(100% - 52px);
-  overflow-y: auto;
+@media screen and (min-width: 960px) {
+  .max-height {
+    height: 100%;
+    max-height: 100%;
+  }
 }
 </style>

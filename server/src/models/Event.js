@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import Song from './Song';
+import Image from './Image';
 
 const SetListType = Object.freeze({
     Unplugged: 'unplugged',
@@ -16,6 +17,7 @@ let EventSchema = new mongoose.Schema({
     setList: [Song],
     isPublic: Boolean,
     isSetListPublic: Boolean,
+    poster: Image
 });
 
 export default mongoose.model("Event", EventSchema);

@@ -16,6 +16,7 @@
     "debounce-promise": "^3.1.2",
     "implement-js": "0.0.27",
     "moment": "^2.24.0",
+    "musicgenres-json": "^1.0.2",
     "sortablejs": "^1.14.0",
     "vue": "^2.6.6",
     "vue-cookies": "^1.5.12",
