@@ -9,6 +9,8 @@ import About from './views/public/About.vue';
 import Join from './views/public/Join.vue';
 import Bands from './views/private/Bands.vue';
 import Band from './views/private/Band.vue';
+import BandsPublic from './views/public/Bands.vue';
+import EventsPublic from './views/public/Events.vue';
 
 Vue.use(Router);
 
@@ -26,10 +28,6 @@ export default new Router({
           props: true
         },
         {
-          path: '/about',
-          component: About
-        },
-        {
           path: '/join/:token',
           component: Join
         },
@@ -40,6 +38,18 @@ export default new Router({
         {
           path: '/band/:id',
           component: Band
+        },
+        {
+          path: '/about',
+          component: About
+        },
+        {
+          path: '/public-events',
+          component: EventsPublic
+        },
+        {
+          path: '/public-bands',
+          component: BandsPublic
         }
       ]
     },

@@ -6,7 +6,7 @@
     </div>
     <v-card-text style="flex: 1">
       <v-avatar v-if="hasLogo" class="ma-3" size="130" tile style="float: left">
-        <v-img :src="band.bandLogo.file"></v-img>
+        <v-img :src="band.logo"></v-img>
       </v-avatar>
       <div v-html="band.description"></div>
       <v-divider v-if="!inBand"></v-divider>
@@ -64,11 +64,11 @@
       </v-btn>
     </v-card-text>
     <v-card-actions v-if="!inBand">
-      <v-spacer></v-spacer>
       <v-btn text @click="openBand()">Open</v-btn>
       <v-btn v-if="memberInfo.isCreator" text color="error" @click="modalDelete"
         >Delete</v-btn
       >
+      <v-spacer></v-spacer>
     </v-card-actions>
     <Confirm
       :dialog="dialog"
@@ -120,7 +120,7 @@ export default {
   },
   computed: {
     hasLogo() {
-      return this.band && this.band.bandLogo && this.band.bandLogo.file;
+      return this.band && this.band.logo;
     },
     formatted_address() {
       if (this.band && this.band.location_address) {

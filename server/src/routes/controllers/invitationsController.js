@@ -72,7 +72,7 @@ router.post("/", async (req, res) => {
             await band.save();
 
             await mailSender.sendMail(invitation.emailAddress,
-                `Your invitation to join ${band.name} on Band Manager`,
+                `Your invitation to join ${band.name} on Gig Addicted`,
                 `Open this link to join ${process.env.PROTOCOL || "http"}://${process.env.ORIGIN || "localhost"}/#/join/${invitation.token}`);
             let invitationNew = new Invitation(invitation);
             res.json(await invitationNew.save());

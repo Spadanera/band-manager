@@ -6,6 +6,7 @@
           :dialog="dialog"
           @submitted="submitted"
           @close="dialog = false"
+          :memberInfo="memberInfo"
         />
         <v-flex
           xs12
@@ -55,6 +56,7 @@
         :dialog="dialog"
         @submitted="submitted"
         @close="dialog = false"
+        :memberInfo="memberInfo"
       />
       <v-btn color="primary" dark fixed bottom right fab @click="dialog = true">
         <v-icon>add</v-icon>
@@ -92,6 +94,7 @@ export default {
         text: "",
       },
       loaded: false,
+      memberInfo: {}
     };
   },
   methods: {

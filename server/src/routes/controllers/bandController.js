@@ -11,7 +11,11 @@ import imageToUri from 'image-to-uri';
 router.get("/", async (req, res) => {
     try {
         let bandMembers = await BandMember.find({ userId: req.session.userId }).select("_id");
-        res.json(await Band.find({ bandMembers: { "$in": bandMembers } }).populate("bandMembers"));
+        let bands = await Band.find({ bandMembers: { "$in": bandMembers } }).populate("bandMembers");
+        for (var i = 0; i < bands.length; i++) {
+            bands[i].memberInfo = await BandMember.findOne({ userId: req.session.userId, bandId: bands[i]._id }); 
+        }
+        res.json(bands);
     }
     catch (e) {
         console.error(e);
@@ -69,9 +73,6 @@ router.post("/", async (req, res) => {
     try {
         let band = new Band(req.body);
         band.creatorId = req.session.userId;
-        if (!band.bandLogo) {
-            band.bandLogo = {};
-        }
         if (!band.genres) {
             band.genres = [];
         }
@@ -134,36 +135,6 @@ router.delete("/:id", async (req, res) => {
     catch (e) {
         console.error(e);
         res.status(500).json({e: e.message });
-    }
-});
-
-router.post("/logo/:id", async (req, res) => {
-    try {
-        if (req.files && req.files.file) {
-            let bandMembers = await BandMember.find({ userId: req.session.userId }).select("_id");
-            let band = await Band.findOne({ _id: req.params.id, bandMembers: { "$in": bandMembers } });
-            if (band) {
-                if (!band.bandLogo) {
-                    band.bandLogo = {};
-                }
-                if (/image/.test(band.bandLogo.fileType)) {
-                    band.bandLogo.file = imageToUri(req.files.file.path);
-                }
-                band.bandLogo.base64 = base64_encode(req.files.file.path);
-                await Band.findOneAndUpdate({ _id: req.params.id }, band);
-                res.json(band);
-            }
-            else {
-                throw new Error("Attachment noy found");
-            }
-        }
-        else {
-            throw "Missing file";
-        }
-    }
-    catch (e) {
-        console.error(e);
-        res.status(500).json({ e: e.message });
     }
 });
 

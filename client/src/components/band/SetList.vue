@@ -32,7 +32,7 @@
                 <template v-for="(song, index) in this.confirmedList">
                   <SongItem
                     v-bind:class="{
-                      song: memberInfo.isAdmin || memberInfo.canEditSetList,
+                      song: memberInfo.isAdmin || memberInfo.canEditSetList && $vuetify.breakpoint.mdAndUp,
                     }"
                     @opensong="openSong"
                     @deletesong="deleteSong"
@@ -76,7 +76,7 @@
                 <template v-for="(song, index) in this.pendingList">
                   <SongItem
                     v-bind:class="{
-                      song: memberInfo.isAdmin || memberInfo.canEditSetList,
+                      song: (memberInfo.isAdmin || memberInfo.canEditSetList) && $vuetify.breakpoint.mdAndUp,
                     }"
                     @opensong="openSong"
                     @deletesong="deleteSong"
@@ -120,7 +120,7 @@
                 <template v-for="(song, index) in this.removedList">
                   <SongItem
                     v-bind:class="{
-                      song: memberInfo.isAdmin || memberInfo.canEditSetList,
+                      song: (memberInfo.isAdmin || memberInfo.canEditSetList) && $vuetify.breakpoint.mdAndUp,
                     }"
                     @opensong="openSong"
                     @deletesong="deleteSong"

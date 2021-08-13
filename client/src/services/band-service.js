@@ -43,15 +43,6 @@ const band = {
     deleteBand: async (id) => {
         await client.delete(`/api/band/${id}`);
     },
-    setImage: async (bandId, image) => {
-        let formData = new FormData();
-        formData.append('file', image.imageFile);
-        await client.post(`/api/band/logo/${bandId}`, formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            }
-        });
-    },
     updateBandMember: async (bandId, bandMember) => {
         let response;
         response = await client.put(`/api/bandMember/${bandId}`, bandMember);
@@ -61,6 +52,17 @@ const band = {
         let response;
         response = await client.delete(`/api/bandMember/${bandMemberId}`);
         return response.data;
+    },
+    upsertEvent: async (bandId, event) => {
+        if (event._id) {
+            return (await client.put(`/api/event/${bandId}/${event._id}`, event)).data;
+        }
+        else {
+            return (await client.post(`/api/event/${bandId}`, event)).data;
+        }
+    },
+    deleteEvent: async (bandId, eventId) => {
+        return (await client.delete(`/api/event/${bandId}/${eventId}`)).data;
     }
 };
 

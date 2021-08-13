@@ -47,6 +47,8 @@ Vue.use(VueGoogleMaps, {
 })
 
 Vue.config.productionTip = false;
+let locale = window.navigator.userLanguage || window.navigator.language;
+moment.locale(locale);
 Vue.prototype.moment = moment;
 
 Vue.prototype.copy = (obj) => {

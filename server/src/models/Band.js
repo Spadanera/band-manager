@@ -7,7 +7,7 @@ let BandSchema = new mongoose.Schema({
     creatorUserId: mongoose.Schema.Types.ObjectId,
     name: String,
     description: String,
-    bandLogo: Image,
+    logo: String,
     location: String,
     setList: [Song],
     bandMembers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'BandMember' }],

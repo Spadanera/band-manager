@@ -1,23 +1,6 @@
 <template>
   <div>
-    <!-- <h1>The site is under development. Do not use for real chronicles</h1> -->
-    <v-layout wrap justify-space-around v-show="loaded">
-      <v-flex xs12 sm6 md6 lg5 xl4 pa-3>
-        
-      </v-flex>
-      <v-snackbar
-        v-model="snackbar.enabled"
-        :bottom="true"
-        :left="false"
-        :multi-line="false"
-        :right="false"
-        :timeout="3000"
-        :vertical="false"
-      >
-        {{ snackbar.text }}
-        <v-btn color="red" text @click="snackbar.enabled = false">Close</v-btn>
-      </v-snackbar>
-    </v-layout>
+    home
   </div>
 </template>
 
@@ -31,11 +14,7 @@ export default {
   },
   data() {
     return {
-      snackbar: {
-        enabled: false,
-        text: ""
-      },
-      loaded: false
+      
     };
   }
 };

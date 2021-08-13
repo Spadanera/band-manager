@@ -1,32 +1,65 @@
 <template>
-  <v-dialog v-model="dialog" persistent max-width="600px">
+  <v-dialog v-model="dialog" persistent scrollable max-width="500px">
     <v-card>
       <v-card-title>
         <span v-if="localBand._id" class="headline">Edit band</span>
         <span v-else class="headline">New band</span>
       </v-card-title>
-      <v-card-text>
+      <v-divider></v-divider>
+      <v-card-text style="max-height: 600px">
         <v-container grid-list-md>
           <v-form autocomplete="off" ref="form" v-model="valid">
-            <v-text-field
-              v-model="localBand.name"
-              label="Name"
-              required
-            ></v-text-field>
-            <Attachment
-              label="Logo"
-              :service="Service.bandService"
-              :parentId="localBand._id"
-              :name="localBand.bandLogo.fileName"
-              ref="logo"
-              @update="setLogo"
-            />
-            <ckeditor
-              :editor="editor"
-              v-model="localBand.description"
-              :config="editorConfig"
-              tag-name="textarea"
-            ></ckeditor>
+            <v-row>
+              <v-col col="12">
+                <v-text-field
+                  v-model="localBand.name"
+                  label="Name"
+                  required
+                ></v-text-field>
+              </v-col>
+            </v-row>
+            <v-row align-content="center" style="margin-bottom: 15px">
+              <v-col col=12 md=8 style="position: relative">
+                <v-subheader>Band Logo</v-subheader>
+                <v-img :src="bandLogo" max-width="300">
+                  <v-row
+                    class="fill-height ma-0"
+                    align="center"
+                    justify="center"
+                  >
+                  </v-row>
+                </v-img>
+                <v-btn
+                  style="position: absolute; bottom: 0; right: 0"
+                  fab
+                  small
+                  color="primary"
+                  dark
+                  @click="$refs.file.$refs.input.click()"
+                >
+                  <v-icon> edit </v-icon>
+                </v-btn>
+                <v-file-input
+                  ref="file"
+                  style="display: none"
+                  show-size
+                  @change="onFilePicket"
+                  accept="image/*"
+                  label="File input"
+                ></v-file-input>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col col="12">
+                <v-subheader>Description</v-subheader>
+                <ckeditor
+                  :editor="editor"
+                  v-model="localBand.description"
+                  :config="editorConfig"
+                  tag-name="textarea"
+                ></ckeditor>
+              </v-col>
+            </v-row>
             <GoogleMapsAutocomplete
               @input="setPlace"
               v-model="currentPlace"
@@ -72,6 +105,7 @@
           </v-form>
         </v-container>
       </v-card-text>
+      <v-divider></v-divider>
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn color="blue darken-1" text @click="closeModal">Dismiss</v-btn>
@@ -82,20 +116,18 @@
 </template>
 
 <script>
-import Attachment from "../../components/layout/Attachment.vue";
 import GoogleMapsAutocomplete from "../../components/layout/GoogleMapsAutocomplete.vue";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
 export default {
   name: "BandForm",
   components: {
-    Attachment,
     GoogleMapsAutocomplete,
   },
   props: {
     dialog: Boolean,
     band: Object,
-    memberInfo: Object
+    memberInfo: Object,
   },
   data() {
     return {
@@ -106,6 +138,7 @@ export default {
       editorConfig: {
         // The configuration of the editor.
       },
+      baseLogo: "/static-assets/empty.jpeg",
     };
   },
   methods: {
@@ -119,7 +152,6 @@ export default {
         this.localBand = await this.Service.bandService.upsertBand(
           this.localBand
         );
-        this.$refs.logo.setImage();
         this.$emit("submitted", "Band successfully created");
         this.$emit("close", false);
       }
@@ -134,15 +166,18 @@ export default {
         this.localBand = {
           bandMembers: [],
           location_address: {},
-          bandLogo: {},
         };
       }
     },
-    setLogo(image) {
-      this.localBand.bandLogo = {
-        fileName: image.imageName,
-        fileType: image.imageType,
-      };
+    onFilePicket(file) {
+      if (file) {
+        const fr = new FileReader();
+        let that = this;
+        fr.readAsDataURL(file);
+        fr.addEventListener("load", () => {
+          that.localBand.logo = fr.result;
+        });
+      }
     },
     setPlace(place) {
       this.currentPlace = place;
@@ -154,6 +189,9 @@ export default {
   computed: {
     isPublic() {
       return this.localBand.isPublic;
+    },
+    bandLogo() {
+      return this.localBand.logo || this.baseLogo;
     },
   },
   watch: {

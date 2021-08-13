@@ -1,4 +1,5 @@
 <template>
+<div>
   <v-autocomplete
     :value="value.place_id"
     :items="virtualItems"
@@ -29,6 +30,7 @@
       </v-list-item-content>
     </template>
   </v-autocomplete>
+</div>
 </template>
 
 <script>

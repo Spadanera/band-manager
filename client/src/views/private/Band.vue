@@ -19,7 +19,9 @@
           <v-icon>add</v-icon>
         </v-btn>
       </v-tab-item>
-      <v-tab-item></v-tab-item>
+      <v-tab-item>
+          <EventsList :band="band" :memberInfo="memberInfo" @reload="loadBand" />
+      </v-tab-item>
     </v-tabs-items>
     <v-dialog v-model="dialogSong" persistent max-width="600px">
       <v-card>
@@ -71,14 +73,15 @@
 <script>
 import SetList from "../../components/band/SetList.vue";
 import GeneralInfo from "../../components/band/GeneralInfo.vue";
+import EventsList from "../../components/event/EventsList.vue";
 
 export default {
   components: {
     SetList,
     GeneralInfo,
+    EventsList
   },
   props: {
-    nav: Object,
     tab: Number,
   },
   data() {
@@ -87,7 +90,6 @@ export default {
         setList: [],
         bandMembers: [],
         events: [],
-        bandLogo: {}
       },
       dialogEvent: false,
       dialogDate: false,
@@ -103,9 +105,6 @@ export default {
     };
   },
   methods: {
-    closeNavBar() {
-      this.navVisible = false;
-    },
     async loadBand() {
       this.band = await this.Service.bandService.getBand(this.$route.params.id);
       this.getSubList();
@@ -165,16 +164,6 @@ export default {
   async created() {
     this.loadBand();
     this.memberInfo = await this.Service.bandService.memberInfo(this.$route.params.id);
-  },
-  computed: {
-    navVisible: {
-      get() {
-        return this.nav.visible || this.$vuetify.breakpoint.lgAndUp;
-      },
-      set(val) {
-        this.nav.visible = val;
-      },
-    },
   },
 };
 </script>

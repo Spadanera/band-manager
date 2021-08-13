@@ -14,7 +14,7 @@
             tile
             style="float: left"
           >
-            <v-img :src="band.bandLogo.file"></v-img>
+            <v-img :src="band.logo"></v-img>
           </v-avatar>
           <div v-html="band.description"></div>
           <v-divider v-if="!inBand"></v-divider>
@@ -83,7 +83,7 @@ export default {
   },
   computed: {
     hasLogo() {
-      return this.band && this.band.bandLogo && this.band.bandLogo.file;
+      return this.band && this.band.logo;
     },
     formatted_address() {
         if (this.band && this.band.location_address) {
