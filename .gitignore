@@ -15,3 +15,7 @@ package-lock.json
 /server/package-lock.json
 /client/package-lock.json
 /server-typescript
+.firebaserc
+firebase.json
+.firebase
+firebase-debug.log

@@ -32,7 +32,7 @@
                 <template v-for="(song, index) in this.confirmedList">
                   <SongItem
                     v-bind:class="{
-                      song: memberInfo.isAdmin || memberInfo.canEditSetList && $vuetify.breakpoint.mdAndUp,
+                      song: (memberInfo.isAdmin || memberInfo.canEditSetList) && $vuetify.breakpoint.mdAndUp,
                     }"
                     @opensong="openSong"
                     @deletesong="deleteSong"
