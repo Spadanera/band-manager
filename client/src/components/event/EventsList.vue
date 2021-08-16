@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid>
+  <v-container fluid class="max-height" style="overflow: auto;">
     <v-row v-if="futureEvents.length" justify="space-around">
       <v-col
         col="12"
@@ -19,7 +19,12 @@
         />
       </v-col>
     </v-row>
-    <h3 v-if="pastEvents.length" class="text-center">Past Events</h3>
+    <v-row>
+      <v-col col="12">
+        <v-divider></v-divider>
+        <h3 v-if="pastEvents.length" style="margin-top: 20px;" class="text-center">Past Events</h3>
+      </v-col>
+    </v-row>
     <v-row v-if="pastEvents.length" justify="space-around">
       <v-col
         col="12"
@@ -39,7 +44,11 @@
         />
       </v-col>
     </v-row>
-    <v-row v-if="!pastEvents.length && !futureEvents.length" align="center" justify="center">
+    <v-row
+      v-if="!pastEvents.length && !futureEvents.length"
+      align="center"
+      justify="center"
+    >
       <v-col col="12" sm="6" md="4" lg="3" xl="2">
         <v-card>
           <v-card-title primary-title>
@@ -55,7 +64,8 @@
     </v-row>
     <EventForm
       :dialog="dialogEvent"
-      :bandId="band._id"
+      :band="band"
+      :memberInfo="memberInfo"
       ref="eventform"
       @reload="reload"
       @close="dialogEvent = false"
@@ -104,7 +114,7 @@ export default {
   components: {
     EventCard,
     EventForm,
-    Confirm
+    Confirm,
   },
   props: {
     band: Object,
@@ -120,15 +130,15 @@ export default {
       },
       eventId: "",
       modalTitle: "Are you sure?",
-      modalText: "Event will be removed from the list"
+      modalText: "Event will be removed from the list",
     };
   },
   methods: {
     openEvent(bandEvent) {
-      if (!bandEvent) {
+      if (!bandEvent || !bandEvent.locationName) {
         bandEvent = {
           bandId: this.band._id,
-          setList: this.band.setList
+          setList: this.band.setList.filter(s => s.live ),
         };
       }
       this.$refs.eventform.reload(bandEvent);
@@ -139,12 +149,11 @@ export default {
       this.dialogConfirm = true;
     },
     async deleteEvent() {
-      console.log(this.band._id, this.eventId);
       await this.Service.bandService.deleteEvent(this.band._id, this.eventId);
       this.snackbar = {
         enabled: true,
-        text: "Event deleted"
-      }
+        text: "Event deleted",
+      };
       this.reload();
     },
     reload() {
@@ -153,12 +162,16 @@ export default {
   },
   computed: {
     futureEvents() {
-      return this.band.events.filter(e => this.moment().isSameOrBefore(e.eventDate, 'day'));
+      return this.band.events.filter((e) =>
+        this.moment().isSameOrBefore(e.eventDate, "day")
+      );
     },
     pastEvents() {
-      return this.band.events.filter(e => this.moment().isAfter(e.eventDate, 'day'));
-    }
-  }
+      return this.band.events.filter((e) =>
+        this.moment().isAfter(e.eventDate, "day")
+      );
+    },
+  },
 };
 </script>
 

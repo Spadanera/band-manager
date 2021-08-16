@@ -1,6 +1,6 @@
 <template>
-  <v-card class="max-height">
-    <v-list color="primary" dark>
+  <v-card v-bind:class="{ 'max-height': !readOnly, 'limited-height': readOnly }">
+    <v-list color="primary" dark v-if="!inEvent">
       <v-list-item>
         <v-list-item-icon>
           <v-icon> {{ icon }} </v-icon>
@@ -17,7 +17,12 @@
         </v-list-item-action>
       </v-list-item>
     </v-list>
-    <v-list flat class="max-height-list">
+    <v-list flat class="max-height-list" v-bind:class="{ full: readOnly }">
+        <v-subheader v-if="inEvent">
+            <span>Time: {{ duration }}</span>
+            <v-spacer></v-spacer>
+            <span v-if="inEvent && !readOnly" style="cursor: pointer;" @click="reloadSetList()">RELOAD MAIN SETLIST</span>
+        </v-subheader>
       <v-list-item-group>
         <draggable
           group="songs"
@@ -29,12 +34,15 @@
         >
           <template v-for="(song, index) in this.localSongList">
             <SongItem
+              :inEvent="inEvent"
               class="song"
               @opensong="openSong"
               @deletesong="deleteSong"
               :key="index"
               :song="song"
               :memberInfo="memberInfo"
+              @togglelive="toggleLive(index)"
+              :readOnly="readOnly"
             ></SongItem>
           </template>
           <v-divider></v-divider>
@@ -54,6 +62,7 @@ export default {
     SongItem,
   },
   props: {
+    inEvent: Boolean,
     songList: Array,
     memberInfo: Object,
     listName: String,
@@ -61,6 +70,7 @@ export default {
     duration: String,
     icon: String,
     drag: Boolean,
+    readOnly: Boolean
   },
   data() {
     return {
@@ -83,6 +93,16 @@ export default {
     startDrag() {
       this.$emit("startdrag");
     },
+    toggleLive(index) {
+        this.localSongList[index].live = !this.localSongList[index].live;
+        this.orderSetList();
+    },
+    reload(songList) {
+        this.localSongList = this.copy(songList || this.songList);
+    },
+    reloadSetList() {
+        this.$emit("reloadsetlist");
+    },
   },
   created() {
     this.localSongList = this.copy(this.songList);
@@ -91,4 +111,13 @@ export default {
 </script>
 
 <style>
+    .full {
+        max-height: 100% !important;
+        height: 100% !important;
+    }
+
+    .limited-height {
+        max-height: 500px;
+        overflow: auto;
+    }
 </style>

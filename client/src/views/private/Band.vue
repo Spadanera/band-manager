@@ -1,6 +1,6 @@
 <template>
   <v-container fluid class="max-height" style="padding: 0">
-    <v-tabs-items v-model="tab" class="max-height">
+    <v-tabs-items v-model="tab" class="max-height" touchless>
       <v-tab-item>
         <GeneralInfo :band="this.band" :memberInfo="memberInfo" @reload="loadBand" />
       </v-tab-item>
@@ -19,7 +19,7 @@
           <v-icon>add</v-icon>
         </v-btn>
       </v-tab-item>
-      <v-tab-item>
+      <v-tab-item class="max-height">
           <EventsList :band="band" :memberInfo="memberInfo" @reload="loadBand" />
       </v-tab-item>
     </v-tabs-items>

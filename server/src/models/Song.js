@@ -9,6 +9,7 @@ const Song = {
     author: String,
     duration: { type: Number, default: 0 },
     status: { type: String, enum: Object.values(SongStatuses), default: SongStatuses.Confirmed },
+    live: Boolean,
     position: { type: Number, default: 1 },
     audio: String
 };

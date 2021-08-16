@@ -92,6 +92,7 @@ export default {
   watch: {
     isAdmin: {
       handler(newValue) {
+        console.log(newValue);
         if (newValue) {
           this.localBandMember.canEditMembers = true;
           this.localBandMember.canEditInfo = true;

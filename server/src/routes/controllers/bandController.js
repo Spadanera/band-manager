@@ -103,7 +103,8 @@ router.put("/:id", async (req, res) => {
     try {
         let bandMember = await BandMember({ userId: req.session.userId, bandId: req.params.id, isAdmin: true });
         if (bandMember && req.params.id === req.body._id) {
-            res.json(await Band.findOneAndUpdate({ _id: req.params.id }, req.body));
+            let band = formatSetList(req.body);
+            res.json(await Band.findOneAndUpdate({ _id: req.params.id }, band));
         }
         else {
             res.status(401).send("Unauthorized");
@@ -138,11 +139,20 @@ router.delete("/:id", async (req, res) => {
     }
 });
 
-function base64_encode(file) {
-    // read binary data
-    var bitmap = fs.readFileSync(file);
-    // convert binary data to base64 encoded string
-    return new Buffer(bitmap).toString('base64');
+function formatSetList(band) {
+    let setList = band.setList;
+    if (setList) {
+        for (let i = 0; i < setList.length; i++) {
+            let song = setList[i];
+            if (song.status === "confirmed") {
+                song.live = true;
+            }
+            else {
+                song.live = false;
+            }
+        }
+    }
+    return band;
 }
 
 export default router;

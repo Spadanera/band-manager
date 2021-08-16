@@ -61,7 +61,7 @@
         Log in
       </v-btn>
       <template v-slot:extension v-if="bandPage">
-        <v-tabs v-model="bandTab" fixed-tabs background-color="secondary">
+        <v-tabs v-model="bandTab" grow background-color="secondary">
           <v-tab><span>General Info</span></v-tab>
           <v-tab>Setlist</v-tab>
           <v-tab>Events</v-tab>
@@ -152,7 +152,7 @@ export default {
         { title: "HOME", to: "/", icon: "home" },
         { title: "BANDS", to: "/public-bands", icon: "recent_actors" },
         { title: "EVENTS", to: "/public-events", icon: "event" },
-        // { title: "ABOUT", to: "/about", icon: "info" },
+        { title: "ABOUT", to: "/about", icon: "info" },
       ],
     };
   },

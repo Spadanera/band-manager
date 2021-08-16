@@ -85,6 +85,11 @@ export default {
       this.pendingList = this.setList.filter((s) => s.status === "pending");
       this.removedList = this.setList.filter((s) => s.status === "removed");
       this.confirmedList.sort((s1, s2) => s1.position - s2.position);
+      for (let i = 0; i < this.listArray.length; i++) {
+        if (this.$refs[this.listArray[i]] && this[this.listArray[i]]) {
+          this.$refs[this.listArray[i]].reload(this[this.listArray[i]]);
+        }
+      }
     },
     openSong(song) {
       this.$emit("opensong", song);
@@ -112,9 +117,6 @@ export default {
       } else {
         return "00:00";
       }
-    },
-    parseTime(second) {
-      return `${Math.floor(second / 60)}:${("0" + (second % 60)).slice(-2)}`;
     },
     startDrag() {
       this.drag = true;

@@ -53,7 +53,11 @@ Vue.prototype.moment = moment;
 
 Vue.prototype.copy = (obj) => {
   return JSON.parse(JSON.stringify(obj));
-},
+};
+
+Vue.prototype.parseTime =(second) => {
+  return `${Math.floor(second / 60)}:${("00" + (second % 60)).slice(-2)}`;
+};
 
 Vue.prototype.Service = RestService;
 
