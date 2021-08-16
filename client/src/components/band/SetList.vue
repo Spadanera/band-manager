@@ -2,155 +2,58 @@
   <v-container fluid class="max-height">
     <v-row class="max-height">
       <v-col col="12" xs="12" sm="12" lg="4" md="4" class="max-height">
-        <v-card class="max-height">
-          <v-list color="primary" dark>
-            <v-list-item>
-              <v-list-item-icon>
-                <v-icon> assignment_turned_in </v-icon>
-              </v-list-item-icon>
-              <v-list-item-content>
-                <v-list-item-title class="headline"
-                  >Confirmed</v-list-item-title
-                >
-              </v-list-item-content>
-              <v-list-item-action>
-                <v-list-item-action-text
-                  >Time: {{ confirmedDuration }}</v-list-item-action-text
-                >
-              </v-list-item-action>
-            </v-list-item>
-          </v-list>
-          <v-list flat class="max-height-list">
-            <v-list-item-group>
-              <draggable
-                :options="{ group: 'songs' }"
-                v-model="confirmedList"
-                @start="drag = true"
-                @end="orderSetList"
-                draggable=".song"
-                handle=".handle"  
-              >
-                <template v-for="(song, index) in this.confirmedList">
-                  <SongItem
-                    v-bind:class="{
-                      song: memberInfo.isAdmin || memberInfo.canEditSetList,
-                    }"
-                    @opensong="openSong"
-                    @deletesong="deleteSong"
-                    :key="index"
-                    :song="song"
-                    :memberInfo="memberInfo"
-                  ></SongItem>
-                </template>
-                <v-divider></v-divider>
-              </draggable>
-            </v-list-item-group>
-          </v-list>
-        </v-card>
+        <SongList
+          ref="confirmedList"
+          icon="assignment_turned_in"
+          listLabel="Confirmed"
+          listName="confirmedList"
+          :duration="confirmedDuration"
+          :songList="confirmedList"
+          :memberInfo="memberInfo"
+          @ordersetlist="orderSetList"
+          @opensong="openSong"
+          @deletesong="deleteSong"
+        />
       </v-col>
       <v-col col="12" xs="12" sm="12" lg="4" md="4" class="max-height">
-        <v-card class="max-height">
-          <v-list color="primary" dark>
-            <v-list-item>
-              <v-list-item-icon>
-                <v-icon> pending_actions </v-icon>
-              </v-list-item-icon>
-              <v-list-item-content>
-                <v-list-item-title class="headline">Pending</v-list-item-title>
-              </v-list-item-content>
-              <v-list-item-action>
-                <v-list-item-action-text
-                  >Time: {{ pendingDuration }}</v-list-item-action-text
-                >
-              </v-list-item-action>
-            </v-list-item>
-          </v-list>
-          <v-list flat class="max-height-list">
-            <v-list-item-group>
-              <draggable
-                :options="{ group: 'songs' }"
-                v-model="pendingList"
-                @start="drag = true"
-                @end="orderSetList"
-                draggable=".song"
-                handle=".handle"
-              >
-                <template v-for="(song, index) in this.pendingList">
-                  <SongItem
-                    v-bind:class="{
-                      song: memberInfo.isAdmin || memberInfo.canEditSetList,
-                    }"
-                    @opensong="openSong"
-                    @deletesong="deleteSong"
-                    :key="index"
-                    :song="song"
-                    :memberInfo="memberInfo"
-                  ></SongItem>
-                </template>
-                <v-divider></v-divider>
-              </draggable>
-            </v-list-item-group>
-          </v-list>
-        </v-card>
+        <SongList
+          ref="pendingList"
+          icon="pending_actions"
+          listLabel="Pending"
+          listName="pendingList"
+          :duration="pendingDuration"
+          :songList="pendingList"
+          :memberInfo="memberInfo"
+          @ordersetlist="orderSetList"
+          @opensong="openSong"
+          @deletesong="deleteSong"
+        />
       </v-col>
       <v-col col="12" xs="12" sm="12" lg="4" md="4" class="max-height">
-        <v-card class="max-height">
-          <v-list color="primary" dark>
-            <v-list-item>
-              <v-list-item-icon>
-                <v-icon> cancel </v-icon>
-              </v-list-item-icon>
-              <v-list-item-content>
-                <v-list-item-title class="headline">Removed</v-list-item-title>
-              </v-list-item-content>
-              <v-list-item-action>
-                <v-list-item-action-text
-                  >Time: {{ removedDuration }}</v-list-item-action-text
-                >
-              </v-list-item-action>
-            </v-list-item>
-          </v-list>
-          <v-list flat class="max-height-list">
-            <v-list-item-group >
-              <draggable
-                :options="{ group: 'songs' }"
-                v-model="removedList"
-                @start="drag = true"
-                @end="orderSetList"
-                draggable=".song"
-                handle=".handle"
-              >
-                <template v-for="(song, index) in this.removedList">
-                  <SongItem
-                    v-bind:class="{
-                      song: memberInfo.isAdmin || memberInfo.canEditSetList,
-                    }"
-                    @opensong="openSong"
-                    @deletesong="deleteSong" 
-                    :key="index"
-                    :song="song"
-                    :memberInfo="memberInfo"
-                  ></SongItem>
-                </template>
-                <v-divider></v-divider>
-              </draggable>
-            </v-list-item-group>
-          </v-list>
-        </v-card>
+        <SongList
+          ref="removedList"
+          icon="cancel"
+          listLabel="Removed"
+          listName="removedList"
+          :duration="removedDuration"
+          :songList="removedList"
+          :memberInfo="memberInfo"
+          @ordersetlist="orderSetList"
+          @opensong="openSong"
+          @deletesong="deleteSong"
+        />
       </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script>
-import draggable from "vuedraggable";
-import SongItem from "../../components/song/SongItem.vue";
+import SongList from "../song/SongList.vue";
 
 export default {
   name: "SetList",
   components: {
-    draggable,
-    SongItem,
+    SongList,
   },
   props: {
     setList: Array,
@@ -164,6 +67,11 @@ export default {
       confirmedList: [],
       pendingList: [],
       removedList: [],
+      listArray: [
+        "confirmedList",
+        "pendingList",
+        "removedList"
+      ]
     };
   },
   created() {
@@ -182,7 +90,11 @@ export default {
     deleteSong(song) {
       this.$emit("deletesong", song);
     },
-    orderSetList() {
+    orderSetList(songListInfo) {
+      console.log(songListInfo);
+      for (let i = 0; i < this.listArray.length; i++) {
+        this[this.listArray[i]] = this.$refs[this.listArray[i]].getList();
+      }
       this.$emit("ordersetlist", {
         confirmedList: this.confirmedList,
         pendingList: this.pendingList,
