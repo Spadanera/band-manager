@@ -141,6 +141,12 @@ export default {
       this.dialogSong = true;
     },
     saveSong() {
+      if (this.song.duration) {
+        this.song.duration = Math.floor(this.song.duration);
+      }
+      else {
+        this.song.duration = 0;
+      }
       if (!this.song._id) {
         this.song.position = this.band.setList.length + 2;
         this.band.setList.push(this.copy(this.song));
