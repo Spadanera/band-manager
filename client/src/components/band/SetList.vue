@@ -28,11 +28,12 @@
                 @start="drag = true"
                 @end="orderSetList"
                 draggable=".song"
+                handle=".handle"  
               >
                 <template v-for="(song, index) in this.confirmedList">
                   <SongItem
                     v-bind:class="{
-                      song: (memberInfo.isAdmin || memberInfo.canEditSetList) && $vuetify.breakpoint.mdAndUp,
+                      song: memberInfo.isAdmin || memberInfo.canEditSetList,
                     }"
                     @opensong="openSong"
                     @deletesong="deleteSong"
@@ -72,11 +73,12 @@
                 @start="drag = true"
                 @end="orderSetList"
                 draggable=".song"
+                handle=".handle"
               >
                 <template v-for="(song, index) in this.pendingList">
                   <SongItem
                     v-bind:class="{
-                      song: (memberInfo.isAdmin || memberInfo.canEditSetList) && $vuetify.breakpoint.mdAndUp,
+                      song: memberInfo.isAdmin || memberInfo.canEditSetList,
                     }"
                     @opensong="openSong"
                     @deletesong="deleteSong"
@@ -116,14 +118,15 @@
                 @start="drag = true"
                 @end="orderSetList"
                 draggable=".song"
+                handle=".handle"
               >
                 <template v-for="(song, index) in this.removedList">
                   <SongItem
                     v-bind:class="{
-                      song: (memberInfo.isAdmin || memberInfo.canEditSetList) && $vuetify.breakpoint.mdAndUp,
+                      song: memberInfo.isAdmin || memberInfo.canEditSetList,
                     }"
                     @opensong="openSong"
-                    @deletesong="deleteSong"
+                    @deletesong="deleteSong" 
                     :key="index"
                     :song="song"
                     :memberInfo="memberInfo"

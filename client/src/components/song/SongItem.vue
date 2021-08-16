@@ -2,6 +2,9 @@
   <div>
     <v-divider></v-divider>
     <v-list-item two-line>
+      <v-list-item-icon class="handle" v-if="memberInfo.isAdmin || memberInfo.canEditSetList">
+        <v-icon style="margin-top: 12px;"> menu </v-icon>
+      </v-list-item-icon>
       <v-list-item-content>
         <v-list-item-title v-text="song.title"></v-list-item-title>
         <v-list-item-subtitle v-text="song.author"></v-list-item-subtitle>
