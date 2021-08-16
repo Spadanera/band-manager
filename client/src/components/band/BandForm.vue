@@ -19,7 +19,7 @@
               </v-col>
             </v-row>
             <v-row align-content="center" style="margin-bottom: 15px">
-              <v-col col=12 md=8 style="position: relative">
+              <v-col col="12" md="8" style="position: relative">
                 <v-subheader>Band Logo</v-subheader>
                 <v-img :src="bandLogo" max-width="300">
                   <v-row
@@ -61,6 +61,7 @@
               </v-col>
             </v-row>
             <GoogleMapsAutocomplete
+              style="margin-top: 20px"
               @input="setPlace"
               v-model="currentPlace"
               label="Enter a location"
@@ -76,6 +77,7 @@
               multiple
               style="margin-top: 20px"
             ></v-autocomplete>
+            <v-subheader>Visibility</v-subheader>
             <v-row
               align="center"
               justify="space-around"

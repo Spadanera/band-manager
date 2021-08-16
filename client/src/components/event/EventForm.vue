@@ -213,6 +213,7 @@ export default {
     },
     async submitForm() {
       if (this.currentPlace.formatted_address) {
+        this.currentPlace.placeId = this.currentPlace.place_id;
         this.event.locationAddress = JSON.stringify(this.currentPlace);
       }
       await this.Service.bandService.upsertEvent(this.band._id, this.event);

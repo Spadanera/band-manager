@@ -66,7 +66,10 @@ export default {
     // with at least the value so that the component still works
     virtualItems() {
       if (this.items.length === 0 && this.value) {
-        return [this.value];
+        return [{
+          placeId: this.value.place_id,
+          address: this.value.formatted_address
+        }];
       } else {
         return this.items;
       }
@@ -75,19 +78,21 @@ export default {
   watch: {
     search(text) {
       if (text) {
-        this.isLoading = true;
-        this.searchPlaces(text).then(({ predictions, status }) => {
-          const autocompleteError =
-            status != window.google.maps.places.PlacesServiceStatus.OK;
-          if (!autocompleteError) {
-            this.items = predictions.map(p => ({
-              name: p.structured_formatting.main_text,
-              address: p.description,
-              placeId: p.place_id
-            }));
-          }
-          this.isLoading = false;
-        });
+        if (text !== this.value.formatted_address) {
+          this.isLoading = true;
+          this.searchPlaces(text).then(({ predictions, status }) => {
+            const autocompleteError =
+              status != window.google.maps.places.PlacesServiceStatus.OK;
+            if (!autocompleteError) {
+              this.items = predictions.map(p => ({
+                name: p.structured_formatting.main_text,
+                address: p.description,
+                placeId: p.place_id
+              }));
+            }
+            this.isLoading = false;
+          });
+        }
       }
     }
     // Resolve lat and lng of selected place's location, and update selected place with that
