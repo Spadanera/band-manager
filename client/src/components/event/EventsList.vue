@@ -16,6 +16,7 @@
           :baseSetList="band.setList"
           @openevent="openEvent(event)"
           @deleteevent="confirmDeleteEvent"
+          @copyevent="copyEvent"
         />
       </v-col>
     </v-row>
@@ -41,6 +42,7 @@
           :baseSetList="band.setList"
           @openevent="openEvent(event)"
           @deleteevent="confirmDeleteEvent"
+          @copyevent="copyEvent"
         />
       </v-col>
     </v-row>
@@ -135,7 +137,7 @@ export default {
   },
   methods: {
     openEvent(bandEvent) {
-      if (!bandEvent || !bandEvent.locationName) {
+      if (!bandEvent || !bandEvent._id) {
         bandEvent = {
           bandId: this.band._id,
           setList: this.band.setList.filter(s => s.live ),
@@ -159,6 +161,15 @@ export default {
     reload() {
       this.$emit("reload");
     },
+    copyEvent(bandEvent) {
+      let bandCopied = this.copy(bandEvent);
+      delete bandCopied._id;
+      bandCopied.eventDate = undefined;
+      bandCopied.eventTime = undefined;
+      bandCopied.poster = undefined;
+      this.$refs.eventform.reload(bandCopied);
+      this.dialogEvent = true;
+    }
   },
   computed: {
     futureEvents() {

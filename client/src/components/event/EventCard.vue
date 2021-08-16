@@ -51,6 +51,13 @@
       </v-btn>
       <v-btn
         v-if="memberInfo.canEditEvents"
+        text
+        @click="$emit('copyevent', event)"
+      >
+        copy
+      </v-btn>
+      <v-btn
+        v-if="memberInfo.canEditEvents"
         color="error"
         @click="$emit('deleteevent', event._id)"
         text
