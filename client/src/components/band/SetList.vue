@@ -10,9 +10,11 @@
           :duration="confirmedDuration"
           :songList="confirmedList"
           :memberInfo="memberInfo"
+          :drag="drag"
           @ordersetlist="orderSetList"
           @opensong="openSong"
           @deletesong="deleteSong"
+          @startdrag="startDrag"
         />
       </v-col>
       <v-col col="12" xs="12" sm="12" lg="4" md="4" class="max-height">
@@ -24,9 +26,11 @@
           :duration="pendingDuration"
           :songList="pendingList"
           :memberInfo="memberInfo"
+          :drag="drag"
           @ordersetlist="orderSetList"
           @opensong="openSong"
           @deletesong="deleteSong"
+          @startdrag="startDrag"
         />
       </v-col>
       <v-col col="12" xs="12" sm="12" lg="4" md="4" class="max-height">
@@ -38,9 +42,11 @@
           :duration="removedDuration"
           :songList="removedList"
           :memberInfo="memberInfo"
+          :drag="drag"
           @ordersetlist="orderSetList"
           @opensong="openSong"
           @deletesong="deleteSong"
+          @startdrag="startDrag"
         />
       </v-col>
     </v-row>
@@ -67,11 +73,7 @@ export default {
       confirmedList: [],
       pendingList: [],
       removedList: [],
-      listArray: [
-        "confirmedList",
-        "pendingList",
-        "removedList"
-      ]
+      listArray: ["confirmedList", "pendingList", "removedList"],
     };
   },
   created() {
@@ -90,8 +92,7 @@ export default {
     deleteSong(song) {
       this.$emit("deletesong", song);
     },
-    orderSetList(songListInfo) {
-      console.log(songListInfo);
+    orderSetList() {
       for (let i = 0; i < this.listArray.length; i++) {
         this[this.listArray[i]] = this.$refs[this.listArray[i]].getList();
       }
@@ -114,6 +115,9 @@ export default {
     },
     parseTime(second) {
       return `${Math.floor(second / 60)}:${("0" + (second % 60)).slice(-2)}`;
+    },
+    startDrag() {
+      this.drag = true;
     },
   },
   computed: {

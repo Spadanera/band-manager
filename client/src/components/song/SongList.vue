@@ -3,10 +3,12 @@
     <v-list color="primary" dark>
       <v-list-item>
         <v-list-item-icon>
-          <v-icon> {{icon}} </v-icon>
+          <v-icon> {{ icon }} </v-icon>
         </v-list-item-icon>
         <v-list-item-content>
-          <v-list-item-title class="headline">{{ listLabel }}</v-list-item-title>
+          <v-list-item-title class="headline">{{
+            listLabel
+          }}</v-list-item-title>
         </v-list-item-content>
         <v-list-item-action>
           <v-list-item-action-text
@@ -20,16 +22,14 @@
         <draggable
           :options="{ group: 'songs' }"
           v-model="localSongList"
-          @start="drag = true"
+          @start="startDrag"
           @end="orderSetList"
           draggable=".song"
           handle=".handle"
         >
           <template v-for="(song, index) in this.localSongList">
             <SongItem
-              v-bind:class="{
-                song: memberInfo.isAdmin || memberInfo.canEditSetList,
-              }"
+              class="song"
               @opensong="openSong"
               @deletesong="deleteSong"
               :key="index"
@@ -60,10 +60,11 @@ export default {
     listLabel: String,
     duration: String,
     icon: String,
+    drag: Boolean,
   },
   data() {
     return {
-        localSongList: []
+      localSongList: [],
     };
   },
   methods: {
@@ -74,18 +75,18 @@ export default {
       this.$emit("deletesong", song);
     },
     orderSetList() {
-      this.$emit("ordersetlist", {
-          listName: this.listName,
-          songList: this.localSongList
-      });
+      this.$emit("ordersetlist");
     },
     getList() {
-        return this.localSongList;
-    }
+      return this.localSongList;
+    },
+    startDrag() {
+      this.$emit("startdrag");
+    },
   },
   created() {
-      this.localSongList = this.copy(this.songList);
-  }
+    this.localSongList = this.copy(this.songList);
+  },
 };
 </script>
 
