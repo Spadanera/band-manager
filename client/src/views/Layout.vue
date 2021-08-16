@@ -5,23 +5,23 @@
         class="hidden-md-and-up"
         @click="drawer = true"
       ></v-app-bar-nav-icon>
-      <router-link :to="rootMenu" tag="span" style="cursor: pointer">
-        <img style="padding: 3px; margin-top: 6px;" src="../assets/logo_small.png" />
+      <router-link :to="rootMenu" custom v-slot="{ navigate }">
+          <img @click="navigate" style="padding: 3px; margin-top: 6px; cursor: pointer;" src="../assets/logo_small.png" />
       </router-link>
       <v-toolbar-title v-if="!bandPage" class="display-1 text-uppercase pl-5">
-        <router-link :to="rootMenu" tag="span" id="title" class="cavatelo">
-          <span>Gig Addicted</span>
+        <router-link :to="rootMenu" id="title" v-slot="{ navigate }" custom class="cavatelo">
+          <span @click="navigate">Gig Addicted</span>
         </router-link>
 
         <span class="font-weight-light"></span>
       </v-toolbar-title>
       <v-toolbar-items class="hidden-sm-and-down">
         <v-btn text v-for="link in links" :key="link.to">
-          <router-link :to="link.to" tag="span"> {{ link.title }} </router-link>
+          <router-link :to="link.to" v-slot="{ navigate }" custom> <span @click="navigate">{{ link.title }}</span> </router-link>
         </v-btn>
         <v-divider vertical v-if="isLoggedIn"></v-divider>
         <v-btn v-if="isLoggedIn" text>
-          <router-link to="/bands" tag="span"> My Bands </router-link>
+          <router-link to="/bands"  v-slot="{ navigate }" custom> <span @click="navigate">My Bands</span> </router-link>
         </v-btn>
       </v-toolbar-items>
       <v-spacer></v-spacer>
@@ -93,7 +93,7 @@
           </v-list-item-icon>
           <v-list-item-content>
             <v-list-item-title>
-              <router-link tag="span" to="/bands"> MY BANDS </router-link>
+              <router-link v-slot="{ navigate }" custom to="/bands"> <span @click="navigate">MY BANDS</span> </router-link>
             </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
@@ -104,8 +104,8 @@
           </v-list-item-icon>
           <v-list-item-content>
             <v-list-item-title>
-              <router-link tag="span" :to="link.to">
-                {{ link.title }}
+              <router-link v-slot="{ navigate }" custom :to="link.to">
+                <span @click="navigate">{{ link.title }}</span>
               </router-link>
             </v-list-item-title>
           </v-list-item-content>
@@ -124,9 +124,9 @@
         </v-list-item>
       </template>
     </v-navigation-drawer>
-    <v-content class="max-height">
+    <v-main class="max-height">
       <router-view @setband="setBand" :tab="bandTab"></router-view>
-    </v-content>
+    </v-main>
     <NprogressContainer />
   </div>
 </template>
