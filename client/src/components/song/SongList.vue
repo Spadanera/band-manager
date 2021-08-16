@@ -20,7 +20,7 @@
     <v-list flat class="max-height-list">
       <v-list-item-group>
         <draggable
-          :options="{ group: 'songs' }"
+          group="songs"
           v-model="localSongList"
           @start="startDrag"
           @end="orderSetList"
