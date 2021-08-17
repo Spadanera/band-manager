@@ -1,5 +1,5 @@
 {
-  "name": "band-manager",
+  "name": "gig-addicted",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -15,14 +15,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Spadanera/band-manager.git"
+    "url": "git+https://github.com/Spadanera/gig-addicted.git"
   },
   "author": "Nicola Zirilli",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Spadanera/band-manager/issues"
+    "url": "https://github.com/Spadanera/gig-addicted/issues"
   },
-  "homepage": "https://github.com/Spadanera/band-manager#readme",
+  "homepage": "https://github.com/Spadanera/gig-addicted#readme",
   "devDependencies": {
     "babel-eslint": "^10.0.3",
     "eslint": "^6.2.2",

@@ -1,4 +1,4 @@
-# Band Manager - Web App
+# Gig Addicted - Web App
 
 tbd
 

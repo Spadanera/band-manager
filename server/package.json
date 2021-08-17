@@ -1,7 +1,7 @@
 {
-  "name": "band-manager-server",
+  "name": "gig-addicted-server",
   "version": "1.0.0",
-  "description": "API for Band Manager website",
+  "description": "API for Gig Addicted website",
   "main": "app.js",
   "scripts": {
     "start": "nodemon --inspect=0.0.0.0:9229 --exec babel-node ./src/app.js",
