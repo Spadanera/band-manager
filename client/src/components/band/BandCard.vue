@@ -9,9 +9,9 @@
         <v-img :src="band.logo"></v-img>
       </v-avatar>
       <div v-html="band.description"></div>
+      <v-divider v-if="!inBand" style="clear: both"></v-divider>
     </v-card-text>
-    <v-divider v-if="!inBand" style="clear: both"></v-divider>
-    <v-card-text style="padding-top: 0;" v-if="!inBand">
+    <v-card-text style="padding-top: 0" v-if="!inBand">
       <v-subheader>Band Members</v-subheader>
       <v-chip v-for="(member, index) in band.bandMembers" :key="index">
         <v-avatar left>
@@ -20,8 +20,8 @@
         {{ member.userDisplayName || member.userEmailAddress }}
       </v-chip>
     </v-card-text>
-    <v-divider></v-divider>
-    <v-card-text style="padding-top: 0;">
+    <v-divider style="clear: both"></v-divider>
+    <v-card-text style="padding-top: 0">
       <v-subheader>Genres</v-subheader>
       <v-chip v-for="(genre, index) in band.genres" :key="index" class="ma-1">
         {{ genre }}
