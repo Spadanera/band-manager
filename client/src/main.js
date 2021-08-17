@@ -103,7 +103,7 @@ new Vue({
         }, 500);
       }
       if (error.response.status === 401) {
-        router.push({ name: "home", params: { message: 'Session expired' } });
+        window.location.href = window.origin;
       }
       return Promise.reject(error);
     });
