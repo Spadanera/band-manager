@@ -21,12 +21,18 @@ router.get('/google', passport.authenticate('google', {
         'https://www.googleapis.com/auth/userinfo.email']
 }));
 
-router.get('/checkauthentication', (req, res) => {
+router.get('/checkauthentication', async (req, res) => {
     if (req.session.userId) {
-        res.send(true);
+        let user = await User.findOne({ _id: req.session.userId });
+        if (user) {
+            res.send(true);
+        }
+        else {
+            res.send(false);
+        }
     }
     else {
-        res.send("");
+        res.send(false);
     }
 });
 

@@ -18,9 +18,9 @@ export default {
     }
   },
   mounted() {
-    // if (localStorage.darkTheme !== undefined) {
-    //   this.darkTheme = localStorage.darkTheme === "true";
-    // }
+    if (window.location.protocol === "http:" && window.location.host !== "localhost") {
+      window.location.href = window.location.href.replace(/http/i, "https");
+    }
   },
   computed: {
     scrollbarColor: {

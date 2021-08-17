@@ -115,7 +115,7 @@ export default {
     },
     async updateBand() {
       await this.Service.bandService.upsertBand(this.band);
-      this.getSubList();
+      await this.loadBand();
     },
     orderSetList(lists) {
       lists.confirmedList.forEach((s) => (s.status = "confirmed"));

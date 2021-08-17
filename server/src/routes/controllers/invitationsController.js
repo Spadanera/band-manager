@@ -68,14 +68,20 @@ router.post("/", async (req, res) => {
             req.body.bandMember.userEmailAddress = invitation.emailAddress;
             let bandMemberNew = new BandMember(req.body.bandMember);
             await bandMemberNew.save();
-            band.bandMembers.push(bandMemberNew._id);
-            await band.save();
 
-            await mailSender.sendMail(invitation.emailAddress,
-                `Your invitation to join ${band.name} on Gig Addicted`,
-                `Open this link to join ${process.env.PROTOCOL || "http"}://${process.env.ORIGIN || "localhost"}/#/join/${invitation.token}`);
-            let invitationNew = new Invitation(invitation);
-            res.json(await invitationNew.save());
+            try {
+                await mailSender.sendMail(invitation.emailAddress,
+                    `Your invitation to join ${band.name} on Gig Addicted`,
+                    `Open this link to join ${process.env.PROTOCOL || "http"}://${process.env.ORIGIN || "localhost"}/#/join/${invitation.token}`);
+                let invitationNew = new Invitation(invitation);
+                band.bandMembers.push(bandMemberNew._id);
+                await band.save();
+                res.json(await invitationNew.save());
+            }
+            catch (err) {
+                await bandMemberNew.delete();
+                res.status(500).json({ e: err.message });
+            }
         }
         else {
             res.status(400).send("Band not found");

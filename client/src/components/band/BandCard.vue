@@ -9,12 +9,10 @@
         <v-img :src="band.logo"></v-img>
       </v-avatar>
       <div v-html="band.description"></div>
-      <v-divider v-if="!inBand"></v-divider>
     </v-card-text>
-    <v-card-text style="padding-top: 0" v-if="!inBand">
-      <div class="my-4 subtitle-1" style="margin-top: 0 !important">
-        Band Members
-      </div>
+    <v-divider v-if="!inBand" style="clear: both"></v-divider>
+    <v-card-text style="padding-top: 0;" v-if="!inBand">
+      <v-subheader>Band Members</v-subheader>
       <v-chip v-for="(member, index) in band.bandMembers" :key="index">
         <v-avatar left>
           <v-img :src="member.userPicture"></v-img>
@@ -23,7 +21,7 @@
       </v-chip>
     </v-card-text>
     <v-divider></v-divider>
-    <v-card-text style="padding-top: 0">
+    <v-card-text style="padding-top: 0;">
       <v-subheader>Genres</v-subheader>
       <v-chip v-for="(genre, index) in band.genres" :key="index" class="ma-1">
         {{ genre }}
@@ -33,18 +31,10 @@
     <v-card-text style="padding-top: 0" v-if="memberInfo.isAdmin">
       <v-subheader>Visibility</v-subheader>
       <div v-if="!band.isPublic">Nothing is public</div>
-      <v-chip v-if="band.isPublic" class="ma-1">
-        Public
-      </v-chip>
-      <v-chip v-if="band.isMembersPublic" class="ma-1">
-        Members Public
-      </v-chip>
-      <v-chip v-if="band.isEventsPublic" class="ma-1">
-        Events Public
-      </v-chip>
-      <v-chip v-if="band.isSetlistPublic" class="ma-1">
-        Setlist Public
-      </v-chip>
+      <v-chip v-if="band.isPublic" class="ma-1"> Public </v-chip>
+      <v-chip v-if="band.isMembersPublic" class="ma-1"> Members Public </v-chip>
+      <v-chip v-if="band.isEventsPublic" class="ma-1"> Events Public </v-chip>
+      <v-chip v-if="band.isSetlistPublic" class="ma-1"> Setlist Public </v-chip>
     </v-card-text>
     <v-card-text
       v-if="inBand && (memberInfo.isAdmin || memberInfo.canEditInfo)"

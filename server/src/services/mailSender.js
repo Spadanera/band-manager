@@ -1,31 +1,23 @@
 import { createTransport } from 'nodemailer';
-import gmailAuth from '../gmailAuth';
+import arubaAuth from '../arubaAuth';
 
-module.exports.sendMail = (to, subject, text) => {
-    return new Promise((resolve, reject) => {
-        var transporter = createTransport({
-            service: 'gmail',
-            auth: gmailAuth
-        });
+module.exports.sendMail = async (to, subject, text) => {
+    let transporter = createTransport({
+        host: arubaAuth.smtp,
+        port: arubaAuth.port,
+        secure: true,
+        auth: {
+            user: arubaAuth.user,
+            pass: arubaAuth.pass,
+        },
+    });
 
-        var mailOptions = {
-            from: 'info@bandmanager.com',
-            to: to,
-            subject: subject,
-            text: text
-        };
-        if (gmailAuth.pass && gmailAuth.user) {
-            transporter.sendMail(mailOptions, (error, info) => {
-                if (error) {
-                    console.log(error);
-                    reject(error);
-                } else {
-                    resolve(info);
-                }
-            });
-        }
-        else {
-            resolve();
-        }
+    // send mail with defined transport object
+    await transporter.sendMail({
+        from: '"Info - Gig Addicted" <info@gig-addicted.com>',
+        to: to,
+        subject: subject,
+        text: text
+        // html: "<b>Hello world?</b>", // html body
     });
 };

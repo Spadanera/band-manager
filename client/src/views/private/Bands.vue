@@ -56,7 +56,9 @@
         :dialog="dialog"
         @submitted="submitted"
         @close="dialog = false"
-        :memberInfo="memberInfo"
+        :memberInfo="{
+          isAdmin: true
+        }"
       />
       <v-btn color="primary" dark fixed bottom right fab @click="dialog = true">
         <v-icon>add</v-icon>
