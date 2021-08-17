@@ -203,7 +203,7 @@ export default {
       currentPlace: {},
       basePoster: "/static-assets/empty.jpeg",
       tab: 0,
-      duration: "00:00",
+      duration: "0:00",
       drag: false
     };
   },
@@ -260,7 +260,7 @@ export default {
           setList.map((s) => s.duration).reduce((a, c) => a + c)
         );
       } else {
-        this.duration = "00:00";
+        this.duration = "0:00";
       }
     },
     reloadSetList() {

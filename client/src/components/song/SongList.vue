@@ -1,5 +1,5 @@
 <template>
-  <v-card v-bind:class="{ 'max-height': !readOnly, 'limited-height': readOnly }">
+  <v-card v-bind:class="{ 'max-height': !readOnly, 'limited-height': readOnly }" class="setlist">
     <v-list color="primary" dark v-if="!inEvent">
       <v-list-item>
         <v-list-item-icon>
@@ -17,7 +17,7 @@
         </v-list-item-action>
       </v-list-item>
     </v-list>
-    <v-list flat class="max-height-list" v-bind:class="{ full: readOnly }">
+    <v-list flat class="max-height-list" v-bind:class="{ full: readOnly }" dense>
         <v-subheader v-if="inEvent">
             <span>Time: {{ duration }}</span>
             <v-spacer></v-spacer>
@@ -119,5 +119,10 @@ export default {
     .limited-height {
         max-height: 500px;
         overflow: auto;
+    }
+
+    .setlist .v-list-item__icon, .setlist .v-list-item__action {
+      margin-top: 5px;
+      margin-bottom: 5px;
     }
 </style>

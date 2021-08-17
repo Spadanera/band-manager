@@ -1,6 +1,5 @@
 /server/node_modules/
 server/dist/
-server/dist-sample-data
 /server/dist/gmailAuth.js
 /server/src/gmailAuth.js
 /server/src/client_secret.json

@@ -27,7 +27,7 @@
         {{ event.description }}
       </v-card-text>
     </v-expand-transition>
-    <v-expansion-panels flat tile accordion v-if="event.isSetListPublic" v-model="setListOpen">
+    <v-expansion-panels flat tile accordion v-model="setListOpen">
       <v-expansion-panel>
         <v-expansion-panel-header>Setlist</v-expansion-panel-header>
         <v-expansion-panel-content>
@@ -102,7 +102,7 @@ export default {
           setList.map((s) => s.duration).reduce((a, c) => a + c)
         );
       } else {
-        return "00:00";
+        return "0:00";
       }
     },
   },

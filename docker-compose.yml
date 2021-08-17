@@ -22,7 +22,7 @@ services:
     depends_on: 
       - server-database
     environment:
-      - CONNECTION_STRING=mongodb://server-database:27017/band-manager
+      - CONNECTION_STRING=mongodb://server-database:27017/gig-addicted
       - ORIGIN=localhost
       - PROTOCOL=http
     networks:

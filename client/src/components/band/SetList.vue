@@ -115,7 +115,7 @@ export default {
           list.map((s) => s.duration).reduce((a, c) => a + c)
         );
       } else {
-        return "00:00";
+        return "0:00";
       }
     },
     startDrag() {

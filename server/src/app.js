@@ -8,7 +8,7 @@ import mongoose from "mongoose";
 mongoose.set('useCreateIndex', true);
 mongoose.set('useFindAndModify', false);
 mongoose.Promise = require('bluebird');
-var connectionString = process.env.CONNECTION_STRING || 'mongodb://server-database:27017/band-manager';
+var connectionString = process.env.CONNECTION_STRING || 'mongodb://server-database:27017/gig-addicted';
 mongoose.connect(connectionString, { promiseLibrary: require('bluebird'), useNewUrlParser: true,  useUnifiedTopology: true })
   .then(() => console.log('connection succesful'))
   .catch((err) => console.error(err, connectionString));
