@@ -1,9 +1,13 @@
 <template>
-  <v-card v-bind:class="{ 'max-height': !readOnly, 'limited-height': readOnly }" class="setlist">
+  <v-card
+    v-bind:class="{ 'max-height': !readOnly, 'limited-height': readOnly }"
+    :elevation="elevation"
+    class="setlist"
+  >
     <v-list color="primary" dark v-if="!inEvent">
       <v-list-item>
         <v-list-item-icon>
-          <v-icon style="margin-top: 9px;"> {{ icon }} </v-icon>
+          <v-icon style="margin-top: 9px"> {{ icon }} </v-icon>
         </v-list-item-icon>
         <v-list-item-content>
           <v-list-item-title class="headline">{{
@@ -17,12 +21,22 @@
         </v-list-item-action>
       </v-list-item>
     </v-list>
-    <v-list flat class="max-height-list" v-bind:class="{ full: readOnly }" dense>
-        <v-subheader v-if="inEvent">
-            <span>Time: {{ duration }}</span>
-            <v-spacer></v-spacer>
-            <span v-if="inEvent && !readOnly" style="cursor: pointer;" @click="reloadSetList()">RELOAD MAIN SETLIST</span>
-        </v-subheader>
+    <v-list
+      flat
+      class="max-height-list"
+      v-bind:class="{ full: readOnly }"
+      dense
+    >
+      <v-subheader v-if="inEvent">
+        <span>Time: {{ duration }}</span>
+        <v-spacer></v-spacer>
+        <span
+          v-if="inEvent && !readOnly"
+          style="cursor: pointer"
+          @click="reloadSetList()"
+          >RELOAD MAIN SETLIST</span
+        >
+      </v-subheader>
       <v-list-item-group>
         <draggable
           group="songs"
@@ -70,7 +84,8 @@ export default {
     duration: String,
     icon: String,
     drag: Boolean,
-    readOnly: Boolean
+    readOnly: Boolean,
+    elevation: Number
   },
   data() {
     return {
@@ -94,14 +109,14 @@ export default {
       this.$emit("startdrag");
     },
     toggleLive(index) {
-        this.localSongList[index].live = !this.localSongList[index].live;
-        this.orderSetList();
+      this.localSongList[index].live = !this.localSongList[index].live;
+      this.orderSetList();
     },
     reload(songList) {
-        this.localSongList = this.copy(songList || this.songList);
+      this.localSongList = this.copy(songList || this.songList);
     },
     reloadSetList() {
-        this.$emit("reloadsetlist");
+      this.$emit("reloadsetlist");
     },
   },
   created() {
@@ -111,18 +126,19 @@ export default {
 </script>
 
 <style>
-    .full {
-        max-height: 100% !important;
-        height: 100% !important;
-    }
+.full {
+  max-height: 100% !important;
+  height: 100% !important;
+}
 
-    .limited-height {
-        max-height: 500px;
-        overflow: auto;
-    }
+.limited-height {
+  max-height: 500px;
+  overflow: auto;
+}
 
-    .setlist .v-list-item__icon, .setlist .v-list-item__action {
-      margin-top: 5px;
-      margin-bottom: 5px;
-    }
+.setlist .v-list-item__icon,
+.setlist .v-list-item__action {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
 </style>

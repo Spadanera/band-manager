@@ -27,9 +27,28 @@
         {{ event.description }}
       </v-card-text>
     </v-expand-transition>
-    <v-expansion-panels id="event-expansion" flat tile accordion v-model="setListOpen">
+    <v-expansion-panels
+      id="event-expansion"
+      flat
+      tile
+      accordion
+      v-model="setListOpen"
+    >
       <v-expansion-panel>
-        <v-expansion-panel-header>Setlist</v-expansion-panel-header>
+        <v-expansion-panel-header>
+          <template v-slot:default="{ open }">
+            <v-row no-gutters style="margin-left: 32px;">
+              <v-col cols="4"> Setlist </v-col>
+              <v-col cols="8" class="text-right font-weight-bold">
+                <v-fade-transition leave-absolute>
+                  <span v-if="open" key="0">
+                    {{ event.locationName }}
+                  </span>
+                </v-fade-transition>
+              </v-col>
+            </v-row>
+          </template>
+        </v-expansion-panel-header>
         <v-expansion-panel-content>
           <SongList
             :memberInfo="memberInfo"
@@ -37,6 +56,7 @@
             :inEvent="true"
             :readOnly="true"
             :duration="duration"
+            :elevation="0"
           />
         </v-expansion-panel-content>
       </v-expansion-panel>
@@ -115,5 +135,7 @@ export default {
 }
 #event-expansion .v-expansion-panel-header__icon {
   margin-left: 12px;
+  position: absolute;
+  left: 0;
 }
 </style>
