@@ -9,7 +9,7 @@
           @edit="dialogBand = true"
         />
       </v-col>
-      <v-col>
+      <v-col style="padding-bottom: 30px;">
         <v-card>
           <v-card-title class="headline">Band Members</v-card-title>
           <v-list two-line :threeLine="memberInfo.isAdmin">

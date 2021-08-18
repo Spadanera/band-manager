@@ -27,7 +27,7 @@
         {{ event.description }}
       </v-card-text>
     </v-expand-transition>
-    <v-expansion-panels flat tile accordion v-model="setListOpen">
+    <v-expansion-panels id="event-expansion" flat tile accordion v-model="setListOpen">
       <v-expansion-panel>
         <v-expansion-panel-header>Setlist</v-expansion-panel-header>
         <v-expansion-panel-content>
@@ -112,5 +112,8 @@ export default {
 <style>
 .v-expansion-panel-content__wrap {
   padding: 0 !important;
+}
+#event-expansion .v-expansion-panel-header__icon {
+  margin-left: 12px;
 }
 </style>
