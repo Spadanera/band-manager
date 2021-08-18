@@ -17,11 +17,11 @@
       </v-toolbar-title>
       <v-toolbar-items class="hidden-sm-and-down">
         <v-btn text v-for="link in links" :key="link.to">
-          <router-link :to="link.to" v-slot="{ navigate }" custom> <span @click="navigate">{{ link.title }}</span> </router-link>
+          <router-link v-bind:class="{ underline: matchRoute(link.to) }" :to="link.to" v-slot="{ navigate }" custom> <span @click="navigate">{{ link.title }}</span> </router-link>
         </v-btn>
         <v-divider vertical v-if="isLoggedIn"></v-divider>
         <v-btn v-if="isLoggedIn" text>
-          <router-link to="/bands"  v-slot="{ navigate }" custom> <span @click="navigate">My Bands</span> </router-link>
+          <router-link v-bind:class="{ underline: matchRoute('/bands') }" to="/bands"  v-slot="{ navigate }" custom> <span @click="navigate">My Bands</span> </router-link>
         </v-btn>
       </v-toolbar-items>
       <v-spacer></v-spacer>
@@ -93,7 +93,7 @@
           </v-list-item-icon>
           <v-list-item-content>
             <v-list-item-title>
-              <router-link v-slot="{ navigate }" custom to="/bands"> <span @click="navigate">MY BANDS</span> </router-link>
+              <router-link v-bind:class="{ underline: matchRoute('/bands') }" v-slot="{ navigate }" custom to="/bands"> <span @click="navigate">MY BANDS</span> </router-link>
             </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
@@ -104,7 +104,7 @@
           </v-list-item-icon>
           <v-list-item-content>
             <v-list-item-title>
-              <router-link v-slot="{ navigate }" custom :to="link.to">
+              <router-link v-bind:class="{ underline: matchRoute(link.to) }" v-slot="{ navigate }" custom :to="link.to">
                 <span @click="navigate">{{ link.title }}</span>
               </router-link>
             </v-list-item-title>
@@ -190,6 +190,13 @@ export default {
         this.user = response.data;
       }
     },
+    matchRoute(path) {
+      if (path === "/") {
+        return `#${path}` === window.location.hash;
+      }
+      let reg = new RegExp(path);
+      return reg.test(window.location.hash);
+    }
   },
   async created() {
     try {
@@ -225,5 +232,8 @@ export default {
 }
 img {
   width: 45px;
+}
+.underline {
+  text-decoration: underline;
 }
 </style>
