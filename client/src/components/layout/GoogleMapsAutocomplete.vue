@@ -13,6 +13,7 @@
     return-object
     @input="onSelected"
     v-bind="$attrs"
+    :filter="filterResult"
   >
     <template slot="no-data">
       <v-list-item>
@@ -128,6 +129,9 @@ export default {
           this.$emit("input", result[0]);
         });
       }
+    },
+    filterResult() {
+      return true;
     }
   }
 };
