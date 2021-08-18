@@ -16,6 +16,8 @@
               style="padding-top: 20px; padding-bottom: 20px"
               v-model="valid"
               autocomplete="off"
+              @submit.prevent="submitForm"
+              ref="form"
             >
               <v-row>
                 <v-col col="12" md="6">
@@ -33,6 +35,7 @@
                         readonly
                         v-bind="attrs"
                         v-on="on"
+                        :rules="[validationRules.required]"
                       ></v-text-field>
                     </template>
                     <v-date-picker v-model="event.eventDate" scrollable>
@@ -66,6 +69,7 @@
                         readonly
                         v-bind="attrs"
                         v-on="on"
+                        :rules="[validationRules.required]"
                       ></v-text-field>
                     </template>
                     <v-time-picker
@@ -92,7 +96,7 @@
               <v-text-field
                 v-model="event.locationName"
                 label="Location Name"
-                required
+                :rules="[validationRules.required]"
               ></v-text-field>
               <GoogleMapsAutocomplete
                 @input="setPlace"
@@ -149,6 +153,7 @@
                   ></v-switch>
                 </v-col>
               </v-row>
+              <v-btn type="submit" style="display: none"></v-btn>
             </v-form>
           </v-tab-item>
           <v-tab-item>
@@ -204,23 +209,32 @@ export default {
       basePoster: "/static-assets/empty.jpeg",
       tab: 0,
       duration: "0:00",
-      drag: false
+      drag: false,
+      eventPoster: ""
     };
   },
   methods: {
     closeModal() {
+      this.$refs.form.reset();
+      this.$refs.form.resetValidation();
       this.$emit("close");
     },
     async submitForm() {
-      if (this.currentPlace.formatted_address) {
-        this.currentPlace.placeId = this.currentPlace.place_id;
-        this.event.locationAddress = JSON.stringify(this.currentPlace);
+      this.$refs.form.validate();
+      if (this.valid) {
+        if (this.currentPlace.formatted_address) {
+          this.currentPlace.placeId = this.currentPlace.place_id;
+          this.event.locationAddress = JSON.stringify(this.currentPlace);
+        }
+        await this.Service.bandService.upsertEvent(this.band._id, this.event);
+        this.$emit("reload");
+        this.closeModal();
       }
-      await this.Service.bandService.upsertEvent(this.band._id, this.event);
-      this.$emit("reload");
-      this.closeModal();
     },
     reload(bandEvent) {
+      if (this.$refs.form) {
+        this.$refs.form.resetValidation();
+      }
       this.tab = 0;
       this.event = this.copy(bandEvent);
       if (this.event.locationAddress) {
@@ -231,6 +245,7 @@ export default {
       if (this.$refs.songlist) {
         this.$refs.songlist.reload(this.event.setList);
       }
+      this.eventPoster = this.event.poster || this.basePoster;
       this.setListDuration();
     },
     setPlace(place) {
@@ -241,7 +256,7 @@ export default {
         const fr = new FileReader();
         fr.readAsDataURL(file);
         fr.addEventListener("load", () => {
-          this.event.poster = fr.result;
+          this.eventPoster = this.event.poster = fr.result;
         });
       }
     },
@@ -251,7 +266,7 @@ export default {
       this.drag = false;
     },
     liveSetList() {
-      return this.event.setList.filter(s => s.live);
+      return this.event.setList.filter((s) => s.live);
     },
     setListDuration() {
       let setList = this.liveSetList();
@@ -264,7 +279,7 @@ export default {
       }
     },
     reloadSetList() {
-      this.event.setList = this.copy(this.band.setList.filter(s => s.live));
+      this.event.setList = this.copy(this.band.setList.filter((s) => s.live));
       this.setListDuration();
       this.$refs.songlist.reload(this.event.setList);
     },
@@ -276,9 +291,6 @@ export default {
     isPublic() {
       return this.event.isPublic;
     },
-    eventPoster() {
-      return this.event.poster || this.basePoster;
-    }
   },
   watch: {
     isPublic: {

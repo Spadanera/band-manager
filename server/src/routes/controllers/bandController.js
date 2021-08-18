@@ -85,9 +85,14 @@ router.post("/", async (req, res) => {
             userId: req.session.userId,
             userDisplayName: user.displayName,
             userPicture: user.picture,
+            userEmailAddress: user.email,
             bandId: band._id,
             isAdmin: true,
-            isCreator: false
+            isCreator: true,
+            canEditMembers: true,
+            canEditInfo: true,
+            canEditSetList: true,
+            canEditEvents: true
         });
         await bandMember.save();
         band.bandMembers.push(bandMember._id);

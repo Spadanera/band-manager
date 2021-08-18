@@ -59,6 +59,14 @@ Vue.prototype.parseTime =(second) => {
   return `${Math.floor(second / 60)}:${("00" + (second % 60)).slice(-2)}`;
 };
 
+Vue.prototype.validationRules = {
+  required: value => !!value || 'Required.',
+  email: value => {
+    const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    return pattern.test(value) || 'Invalid e-mail.'
+  },
+},
+
 Vue.prototype.Service = RestService;
 
 Vue.prototype.Genres = new MusicGenres().genres;

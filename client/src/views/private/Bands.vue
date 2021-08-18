@@ -2,12 +2,6 @@
   <v-container fluid grid-list-md>
     <div v-if="!bands.length && loaded">
       <v-layout row wrap>
-        <BandForm
-          :dialog="dialog"
-          @submitted="submitted"
-          @close="dialog = false"
-          :memberInfo="memberInfo"
-        />
         <v-flex
           xs12
           sm10

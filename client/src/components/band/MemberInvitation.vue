@@ -10,7 +10,8 @@
             <v-text-field
               v-model="invitation.emailAddress"
               label="Gmail Address"
-              required
+              :autofocus="true"
+              :rules="[validationRules.required, validationRules.email]"
             ></v-text-field>
             <v-text-field
               v-model="bandMember.role"
@@ -108,9 +109,13 @@ export default {
         canEditSetList: false,
         canEditEvents: false,
       };
+      if (this.$refs.form) {
+        this.$refs.form.resetValidation();
+      }
     },
     async submit() {
-      if (this.$refs.form.validate()) {
+      this.$refs.form.validate();
+      if (this.valid) {
         try {
           this.invitation.bandId = this.bandId;
           this.loading = true;

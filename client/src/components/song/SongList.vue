@@ -3,7 +3,7 @@
     <v-list color="primary" dark v-if="!inEvent">
       <v-list-item>
         <v-list-item-icon>
-          <v-icon> {{ icon }} </v-icon>
+          <v-icon style="margin-top: 9px;"> {{ icon }} </v-icon>
         </v-list-item-icon>
         <v-list-item-content>
           <v-list-item-title class="headline">{{

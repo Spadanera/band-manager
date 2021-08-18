@@ -6,6 +6,13 @@ import BandMember from '../../models/BandMember';
 
 router.put("/:id", async (req, res) => {
     try {
+        let bandMember = req.body;
+        if (bandMember.isAdmin) {
+            bandMember.canEditMembers = true;
+            bandMember.canEditInfo = true;
+            bandMember.canEditSetList = true;
+            bandMember.canEditEvents = true;
+        }
         res.json(await BandMember.findOneAndUpdate({ _id: req.body._id, bandId: req.params.id }, req.body));
     }
     catch (e) {

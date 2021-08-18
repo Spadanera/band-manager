@@ -8,13 +8,21 @@
       <v-divider></v-divider>
       <v-card-text style="max-height: 600px">
         <v-container grid-list-md>
-          <v-form autocomplete="off" ref="form" v-model="valid">
+          <v-form
+            autocomplete="off"
+            ref="form"
+            v-model="valid"
+            @submit.prevent="submitForm"
+          >
             <v-row>
               <v-col col="12">
                 <v-text-field
                   v-model="localBand.name"
                   label="Name"
                   required
+                  :rules="[validationRules.required]"
+                  ref="name"
+                  :autofocus="true"
                 ></v-text-field>
               </v-col>
             </v-row>
@@ -104,6 +112,7 @@
                 label="Events Public"
               ></v-switch>
             </v-row>
+            <v-btn type="submit" style="display: none;"></v-btn>
           </v-form>
         </v-container>
       </v-card-text>
@@ -141,6 +150,7 @@ export default {
         // The configuration of the editor.
       },
       baseLogo: "/static-assets/empty.jpeg",
+      bandLogo: "",
     };
   },
   methods: {
@@ -170,6 +180,10 @@ export default {
           location_address: {},
         };
       }
+      this.bandLogo = this.localBand.logo || this.baseLogo;
+      if (this.$refs.form) {
+        this.$refs.form.resetValidation();
+      }
     },
     onFilePicket(file) {
       if (file) {
@@ -177,7 +191,7 @@ export default {
         let that = this;
         fr.readAsDataURL(file);
         fr.addEventListener("load", () => {
-          that.localBand.logo = fr.result;
+          that.bandLogo = that.localBand.logo = fr.result;
         });
       }
     },
@@ -191,9 +205,6 @@ export default {
   computed: {
     isPublic() {
       return this.localBand.isPublic;
-    },
-    bandLogo() {
-      return this.localBand.logo || this.baseLogo;
     },
   },
   watch: {

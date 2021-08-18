@@ -3,7 +3,7 @@
     <v-card>
       <v-card-title> Edit Band Member </v-card-title>
       <v-card-text>
-        <v-form autocomplete="off" ref="form" v-model="valid">
+        <v-form autocomplete="off" ref="form" v-model="valid" @submit.prevent="submitForm">
           <v-text-field
             v-model="localBandMember.userDisplayName"
             v-if="!localBandMember.userEmailAddress"
@@ -41,6 +41,7 @@
               label="Edit Members"
             ></v-switch>
           </v-row>
+          <v-btn type="submit" style="display: none;"></v-btn>
         </v-form>
       </v-card-text>
       <v-card-actions>
