@@ -150,7 +150,7 @@
           <v-btn type="submit" style="display: none"></v-btn>
         </v-form>
       </v-card-text>
-      <div style="max-height: 700px" v-show="tab === 1">
+      <v-card-text style="max-height: 700px; padding: 0;" v-show="tab === 1">
         <SongList
           :inEvent="true"
           :duration="duration"
@@ -163,7 +163,7 @@
           ref="songlist"
           :elevation="0"
         />
-      </div>
+      </v-card-text>
       <v-divider></v-divider>
       <v-card-actions>
         <v-spacer></v-spacer>
