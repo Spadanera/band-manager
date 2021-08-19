@@ -1,9 +1,8 @@
 /server/node_modules/
 server/dist/
-/server/dist/gmailAuth.js
 /server/src/gmailAuth.js
-/server/dist/arubaAuth.js
 /server/src/arubaAuth.js
+/server/src/deezerAuth.js
 /server/src/client_secret.json
 /client/src/gmapsKey.js
 /server/.DS_Store
