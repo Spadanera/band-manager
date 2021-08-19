@@ -11,7 +11,7 @@ const Song = {
     status: { type: String, enum: Object.values(SongStatuses), default: SongStatuses.Confirmed },
     live: Boolean,
     position: { type: Number, default: 1 },
-    audio: String
+    audio: String,
 };
 
 export default Song;

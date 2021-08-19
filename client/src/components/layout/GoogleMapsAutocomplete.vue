@@ -8,12 +8,12 @@
     :loading="isLoading"
     :hide-no-data="isLoading || !search"
     clearable
+    no-filter
     item-text="address"
     item-value="placeId"
     return-object
     @input="onSelected"
     v-bind="$attrs"
-    :filter="filterResult"
   >
     <template slot="no-data">
       <v-list-item>
@@ -130,9 +130,6 @@ export default {
         });
       }
     },
-    filterResult() {
-      return true;
-    }
   }
 };
 </script>

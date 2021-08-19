@@ -63,6 +63,9 @@ const band = {
     },
     deleteEvent: async (bandId, eventId) => {
         return (await client.delete(`/api/event/${bandId}/${eventId}`)).data;
+    },
+    searchSong: async (text) => {
+        return (await client.get(`/api/deezer/songs?q=${text}`)).data;
     }
 };
 

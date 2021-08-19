@@ -35,17 +35,51 @@
         </v-card-title>
         <v-card-text>
           <v-container grid-list-md>
-            <v-form autocomplete="off" ref="form" v-model="valid" @submit.prevent="saveSong">
+            <v-form
+              autocomplete="off"
+              ref="form"
+              v-model="valid"
+              @submit.prevent="saveSong"
+            >
               <v-text-field
+                v-if="band.type === 'original'"
                 v-model="song.title"
                 label="Title"
                 :rules="[validationRules.required]"
                 :autofocus="true"
               ></v-text-field>
-              <v-text-field
-                v-model="song.author"
-                label="Author"
-              ></v-text-field>
+              <v-combobox
+                v-else
+                label="Title"
+                :value="selectedSong.id"
+                :items="songs"
+                :search-input.sync="search"
+                :loading="isLoading"
+                :hide-no-data="isLoading || !search || search.length < 4"
+                clearable
+                no-filter
+                item-text="title_short"
+                item-value="id"
+                return-object
+                @input="onSelected"
+                hint="Type 5 characters to query"
+              >
+                <template slot="no-data">
+                  <v-list-item>
+                    <v-list-item-title>No results</v-list-item-title>
+                  </v-list-item>
+                </template>
+
+                <template slot="item" slot-scope="{ item }">
+                  <v-list-item-content>
+                    <v-list-item-title v-text="item.title" />
+                    <v-list-item-subtitle>
+                      {{ item.author }} - {{ item.album }}
+                    </v-list-item-subtitle>
+                  </v-list-item-content>
+                </template>
+              </v-combobox>
+              <v-text-field v-model="song.author" label="Author"></v-text-field>
               <v-text-field
                 v-model="song.duration"
                 label="Time"
@@ -57,7 +91,7 @@
                 :rules="[validationRules.required]"
                 label="Status"
               ></v-select>
-              <v-btn type="submit" style="display: none;"></v-btn>
+              <v-btn type="submit" style="display: none"></v-btn>
             </v-form>
           </v-container>
         </v-card-text>
@@ -93,6 +127,10 @@ export default {
   },
   data() {
     return {
+      songs: [],
+      selectedSong: {},
+      search: null,
+      isLoading: false,
       band: {
         setList: [],
         bandMembers: [],
@@ -111,6 +149,7 @@ export default {
         { text: "Removed", value: "removed" },
       ],
       memberInfo: {},
+      tempText: ""
     };
   },
   methods: {
@@ -149,12 +188,11 @@ export default {
     openSong(song) {
       if (!song._id) {
         song = {
-          status: "confirmed"
+          status: "confirmed",
         };
         if (this.band.type === "tribute") {
           song.author = this.band.tributeArtist;
-        }
-        else if (this.band.type === "original") {
+        } else if (this.band.type === "original") {
           song.author = this.band.name;
         }
       }
@@ -191,6 +229,30 @@ export default {
     deleteSong(song) {
       this.band.setList = this.band.setList.filter((s) => s._id !== song._id);
       this.updateBand();
+    },
+    onSelected(selectedItem) {
+      this.song.title = selectedItem.title_short;
+      this.song.author = selectedItem.author;
+      this.song.duration = selectedItem.duration;
+    },
+  },
+  watch: {
+    search(text) {
+      if (text && text.length > 4) {
+        this.isLoading = true;
+        this.tempText = text;
+        let self = this;
+        window.setTimeout(() => {
+          if (text === self.tempText) {
+            self.Service.bandService.searchSong(text).then((r) => {
+              self.songs = r;
+              self.isLoading = false;
+            });
+          }
+        }, 300);
+      } else {
+        this.songs = [];
+      }
     },
   },
   async created() {

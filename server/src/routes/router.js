@@ -4,7 +4,7 @@ const router = require('express').Router();
 import User from '../models/User';
 
 router.use(async (req, res, next) => {
-    if (req.url.startsWith("/invitations/band/")) {
+    if (req.url.startsWith("/invitations/band/") || req.url.startsWith("/deezer")) {
         next();
     }
     else {
@@ -25,5 +25,6 @@ router.use("/invitations", require("./controllers/invitationsController").defaul
 router.use("/band", require("./controllers/bandController").default);
 router.use("/bandMember", require("./controllers/bandMemberController").default);
 router.use("/event", require("./controllers/eventController").default);
+router.use("/deezer", require("./controllers/deezerController").default);
 
 export default router;
