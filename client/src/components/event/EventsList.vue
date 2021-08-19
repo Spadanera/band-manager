@@ -2,7 +2,7 @@
   <v-container fluid class="max-height" style="overflow: auto;">
     <v-row v-if="futureEvents.length" justify="space-around">
       <v-col
-        col="12"
+        cols="12"
         sm="6"
         md="4"
         lg="3"
@@ -21,14 +21,14 @@
       </v-col>
     </v-row>
     <v-row>
-      <v-col col="12">
+      <v-col cols="12">
         <v-divider></v-divider>
         <h3 v-if="pastEvents.length" style="margin-top: 20px;" class="text-center">Past Events</h3>
       </v-col>
     </v-row>
     <v-row v-if="pastEvents.length" justify="space-around">
       <v-col
-        col="12"
+        cols="12"
         sm="6"
         md="4"
         lg="3"
@@ -51,7 +51,7 @@
       align="center"
       justify="center"
     >
-      <v-col col="12" sm="6" md="4" lg="3" xl="2">
+      <v-col cols="12" sm="6" md="4" lg="3" xl="2">
         <v-card>
           <v-card-title primary-title>
             <div>

@@ -5,8 +5,6 @@ import Band from '../../models/Band';
 import BandMember from '../../models/BandMember';
 import User from '../../models/User';
 import Event from '../../models/Event';
-import fs from 'fs';
-import imageToUri from 'image-to-uri';
 
 router.get("/", async (req, res) => {
     try {

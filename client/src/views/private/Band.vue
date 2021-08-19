@@ -39,20 +39,17 @@
               <v-text-field
                 v-model="song.title"
                 label="Title"
-                required
                 :rules="[validationRules.required]"
                 :autofocus="true"
               ></v-text-field>
               <v-text-field
                 v-model="song.author"
                 label="Author"
-                required
               ></v-text-field>
               <v-text-field
                 v-model="song.duration"
                 label="Time"
                 suffix="seconds"
-                required
               ></v-text-field>
               <v-select
                 v-model="song.status"
@@ -150,9 +147,17 @@ export default {
       }
     },
     openSong(song) {
-      song = song._id ? song : {
-        status: "confirmed"
-      };
+      if (!song._id) {
+        song = {
+          status: "confirmed"
+        };
+        if (this.band.type === "tribute") {
+          song.author = this.band.tributeArtist;
+        }
+        else if (this.band.type === "original") {
+          song.author = this.band.name;
+        }
+      }
       this.song = this.copy(song);
       this.dialogSong = true;
       if (this.$refs.form) {

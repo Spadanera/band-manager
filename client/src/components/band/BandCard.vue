@@ -1,8 +1,9 @@
 <template>
   <v-card>
     <div>
+      <v-subheader>{{ formatted_address }}</v-subheader>
       <v-card-title class="headline">{{ band.name }}</v-card-title>
-      <v-card-subtitle>{{ formatted_address }}</v-card-subtitle>
+      <v-card-subtitle class="text-capitalize">{{ band.type }}</v-card-subtitle>
     </div>
     <v-card-text style="flex: 1">
       <v-avatar v-if="hasLogo" class="ma-3" size="130" tile style="float: left">

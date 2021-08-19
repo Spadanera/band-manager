@@ -16,7 +16,6 @@
             <v-text-field
               v-model="bandMember.role"
               label="Role"
-              required
             ></v-text-field>
             <v-row
               align="center"

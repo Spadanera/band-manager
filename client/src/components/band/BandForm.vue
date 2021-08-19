@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="dialog" persistent scrollable max-width="500px">
+  <v-dialog v-model="dialog" persistent scrollable max-width="600px">
     <v-card>
       <v-card-title>
         <span v-if="localBand._id" class="headline">Edit band</span>
@@ -15,11 +15,10 @@
             @submit.prevent="submitForm"
           >
             <v-row>
-              <v-col col="12">
+              <v-col cols="12">
                 <v-text-field
                   v-model="localBand.name"
                   label="Name"
-                  required
                   :rules="[validationRules.required]"
                   ref="name"
                   :autofocus="true"
@@ -27,7 +26,7 @@
               </v-col>
             </v-row>
             <v-row align-content="center" style="margin-bottom: 15px">
-              <v-col col="12" md="8" style="position: relative">
+              <v-col cols="12" md="8" style="position: relative">
                 <v-subheader>Band Logo</v-subheader>
                 <v-img :src="bandLogo" max-width="300">
                   <v-row
@@ -58,7 +57,28 @@
               </v-col>
             </v-row>
             <v-row>
-              <v-col col="12">
+              <v-col cols="12" md="4">
+                <v-select
+                  v-model="localBand.type"
+                  :items="[
+                    { text: 'Cover', value: 'cover' },
+                    { text: 'Tribute', value: 'tribute' },
+                    { text: 'Original', value: 'original' },
+                  ]"
+                  :rules="[validationRules.required]"
+                  label="Type"
+                ></v-select>
+              </v-col>
+              <v-col cols="12" md="8" v-if="localBand.type === 'tribute'">
+                <v-text-field
+                  v-model="localBand.tributeArtist"
+                  label="Tribute Artist"
+                  :rules="localBand.type === 'trubute' ? [validationRules.required] : []"
+                ></v-text-field>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="12">
                 <v-subheader>Description</v-subheader>
                 <ckeditor
                   :editor="editor"
@@ -112,7 +132,7 @@
                 label="Events Public"
               ></v-switch>
             </v-row>
-            <v-btn type="submit" style="display: none;"></v-btn>
+            <v-btn type="submit" style="display: none"></v-btn>
           </v-form>
         </v-container>
       </v-card-text>
@@ -178,7 +198,9 @@ export default {
         this.localBand = {
           bandMembers: [],
           location_address: {},
+          type: "cover",
         };
+        this.currentPlace = {};
       }
       this.bandLogo = this.localBand.logo || this.baseLogo;
       if (this.$refs.form) {

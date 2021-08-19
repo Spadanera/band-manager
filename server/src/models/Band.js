@@ -1,6 +1,11 @@
 import mongoose from 'mongoose';
 import Song from './Song';
-import Image from './Image';
+
+const BandType = Object.freeze({
+    Cover: 'cover',
+    Tribute: 'tribute',
+    Original: 'original'
+});
 
 let BandSchema = new mongoose.Schema({
     bandId: mongoose.Schema.Types.ObjectId,
@@ -12,6 +17,8 @@ let BandSchema = new mongoose.Schema({
     setList: [Song],
     bandMembers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'BandMember' }],
     events: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Event' }],
+    type: { type: String, enum: Object.values(BandType), default: BandType.Cover },
+    tributeArtist: String,
     genres: [String],
     isPublic: Boolean,
     isMembersPublic: Boolean,

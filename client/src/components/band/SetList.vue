@@ -1,7 +1,7 @@
 <template>
   <v-container fluid class="max-height">
     <v-row class="max-height">
-      <v-col col="12" xs="12" sm="12" lg="4" md="4" class="max-height">
+      <v-col cols="12" xs="12" sm="12" lg="4" md="4" class="max-height">
         <SongList
           ref="confirmedList"
           icon="assignment_turned_in"
@@ -17,7 +17,7 @@
           @startdrag="startDrag"
         />
       </v-col>
-      <v-col col="12" xs="12" sm="12" lg="4" md="4" class="max-height">
+      <v-col cols="12" xs="12" sm="12" lg="4" md="4" class="max-height">
         <SongList
           ref="pendingList"
           icon="pending_actions"
@@ -33,7 +33,7 @@
           @startdrag="startDrag"
         />
       </v-col>
-      <v-col col="12" xs="12" sm="12" lg="4" md="4" class="max-height">
+      <v-col cols="12" xs="12" sm="12" lg="4" md="4" class="max-height">
         <SongList
           ref="removedList"
           icon="cancel"

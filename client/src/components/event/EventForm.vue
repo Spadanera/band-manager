@@ -18,7 +18,7 @@
           ref="form"
         >
           <v-row>
-            <v-col col="12" md="6">
+            <v-col cols="12" md="6">
               <v-dialog
                 ref="dialogDate"
                 v-model="dialogDate"
@@ -51,7 +51,7 @@
                 </v-date-picker>
               </v-dialog>
             </v-col>
-            <v-col col="12" md="6">
+            <v-col cols="12" md="6">
               <v-dialog
                 ref="dialogTime"
                 v-model="dialogTime"
@@ -109,7 +109,7 @@
             rows="1"
           ></v-textarea>
           <v-row justify="space-around">
-            <v-col col="12" md="6" style="position: relative">
+            <v-col cols="12" md="6" style="position: relative">
               <v-subheader>Event Poster</v-subheader>
               <v-img :src="eventPoster" max-width="300">
                 <v-row class="fill-height ma-0" align="center" justify="center">
@@ -133,7 +133,7 @@
                 label="File input"
               ></v-file-input>
             </v-col>
-            <v-col col="12" md="6">
+            <v-col cols="12" md="6">
               <v-subheader> Public Visibility </v-subheader>
               <v-switch
                 v-model="event.isPublic"
