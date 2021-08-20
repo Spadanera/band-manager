@@ -7,7 +7,19 @@
     </div>
     <v-card-text style="flex: 1">
       <v-avatar v-if="hasLogo" class="ma-3" size="130" tile style="float: left">
-        <v-img :src="band.logo"></v-img>
+        <v-hover>
+          <template v-slot:default="{ hover }">
+            <v-img style="cursor: pointer" :src="band.logo" @click="openPoster">
+              <v-fade-transition>
+                <v-overlay v-if="hover" absolute>
+                  <v-btn fab small @click="openPoster">
+                    <v-icon> zoom_in </v-icon>
+                  </v-btn>
+                </v-overlay>
+              </v-fade-transition>
+            </v-img>
+          </template>
+        </v-hover>
       </v-avatar>
       <div v-html="band.description"></div>
       <v-divider v-if="!inBand" style="clear: both"></v-divider>
@@ -80,6 +92,7 @@ export default {
       dialog: false,
       modalTitle: "",
       modalText: "",
+      hover: false,
     };
   },
   components: {
@@ -107,6 +120,9 @@ export default {
     },
     editBand() {
       this.$emit("edit");
+    },
+    openPoster() {
+      this.$root.$emit("openImage", this.band.logo);
     },
   },
   computed: {

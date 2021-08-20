@@ -1,31 +1,52 @@
 <template>
   <v-card>
     <v-expand-transition>
-      <v-img :src="event.poster" v-show="setListOpen !== 0"></v-img>
-    </v-expand-transition>
-    <v-expand-transition>
-      <v-card-subtitle v-show="setListOpen !== 0">
-        {{ moment(event.eventDate).format("LL") }}
-        <span v-if="event.eventTime"> - {{ event.eventTime }}</span>
-      </v-card-subtitle>
-    </v-expand-transition>
-    <v-expand-transition>
-      <v-card-title
-        v-show="setListOpen !== 0"
-        class="text-h5"
-        v-text="event.locationName"
-      ></v-card-title>
-    </v-expand-transition>
-    <v-expand-transition>
-      <v-card-subtitle
-        v-show="setListOpen !== 0"
-        v-text="locationAddress"
-      ></v-card-subtitle>
-    </v-expand-transition>
-    <v-expand-transition>
-      <v-card-text v-show="setListOpen !== 0">
-        {{ event.description }}
-      </v-card-text>
+      <div v-show="setListOpen !== 0">
+        <div>
+          <v-row>
+            <v-col cols="7">
+              <v-card-subtitle>
+                {{ moment(event.eventDate).format("LL") }}
+                <span v-if="event.eventTime"> - {{ event.eventTime }}</span>
+              </v-card-subtitle>
+              <v-card-title
+                class="text-h5"
+                v-text="event.locationName"
+              ></v-card-title>
+              <v-card-subtitle v-text="locationAddress"></v-card-subtitle>
+            </v-col>
+            <v-col
+              v-show="event.poster"
+              cols="5"
+              style="padding-right: 20px; padding-top: 20px"
+            >
+              <v-hover>
+                <template v-slot:default="{ hover }">
+                  <v-img
+                    style="cursor: pointer"
+                    class="rounded-lg"
+                    :src="event.poster"
+                    @click="openPoster"
+                  >
+                  <v-fade-transition>
+                    <v-overlay v-if="hover" absolute>
+                      <v-btn fab small @click="openPoster">
+                        <v-icon>
+                          zoom_in
+                        </v-icon>
+                      </v-btn>
+                    </v-overlay>
+                  </v-fade-transition>
+                  </v-img>
+                </template>
+              </v-hover>
+            </v-col>
+          </v-row>
+        </div>
+        <v-card-text>
+          {{ event.description }}
+        </v-card-text>
+      </div>
     </v-expand-transition>
     <v-expansion-panels
       id="event-expansion"
@@ -37,7 +58,7 @@
       <v-expansion-panel>
         <v-expansion-panel-header>
           <template v-slot:default="{ open }">
-            <v-row no-gutters style="margin-left: 32px;">
+            <v-row no-gutters style="margin-left: 32px">
               <v-col cols="4"> Setlist </v-col>
               <v-col cols="8" class="text-right font-weight-bold">
                 <v-fade-transition leave-absolute>
@@ -103,7 +124,13 @@ export default {
   data() {
     return {
       setListOpen: false,
+      overlay: false,
     };
+  },
+  methods: {
+    openPoster() {
+      this.$root.$emit("openImage", this.event.poster);
+    },
   },
   computed: {
     locationAddress() {

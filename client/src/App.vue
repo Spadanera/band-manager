@@ -9,13 +9,13 @@ export default {
   name: "App",
   data() {
     return {
-      darkTheme: false
+      darkTheme: false,
     };
   },
   methods: {
     toggleTheme() {
       this.darkTheme = !this.darkTheme;
-    }
+    },
   },
   mounted() {
     if (window.location.protocol === "http:" && window.location.host !== "localhost") {

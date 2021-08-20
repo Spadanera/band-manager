@@ -167,6 +167,30 @@
       :open="play.open"
       @close="closePlayer"
     ></vuetify-audio>
+    <v-dialog
+      :overlay-opacity="0.8"
+      v-model="imageDialog"
+      :scrollable="false"
+      :max-width="$vuetify.breakpoint.smAndUp ? '600px' : '100%'"
+    >
+      <v-img
+        class="text-right"
+        contain
+        :src="image"
+        max-height="100%"
+        max-width
+      >
+        <v-btn
+          small
+          fab
+          dark
+          @click="imageDialog = false"
+          style="background-color: rgba(0, 0, 0, 0.3)"
+        >
+          <v-icon> close </v-icon>
+        </v-btn>
+      </v-img>
+    </v-dialog>
   </div>
 </template>
 
@@ -199,8 +223,10 @@ export default {
         file: "",
         title: "",
         author: "",
-        open: false
+        open: false,
       },
+      image: "",
+      imageDialog: false,
     };
   },
   methods: {
@@ -252,10 +278,15 @@ export default {
     },
     closePlayer() {
       this.play.open = false;
-    }
+    },
+    openImage(image) {
+      this.image = image;
+      this.imageDialog = true;
+    },
   },
   async created() {
     this.$root.$on("startPlayer", this.startPlayer);
+    this.$root.$on("openImage", this.openImage);
     try {
       let isLoggedIn = await client.get("/auth/checkauthentication");
       this.isLoggedIn = isLoggedIn.data;
@@ -292,5 +323,14 @@ img {
 }
 .underline {
   text-decoration: underline;
+}
+
+.nomargin {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+.v-dialog {
+  box-shadow: none !important;
 }
 </style>
