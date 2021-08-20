@@ -6,10 +6,20 @@
         @click="drawer = true"
       ></v-app-bar-nav-icon>
       <router-link :to="rootMenu" custom v-slot="{ navigate }">
-          <img @click="navigate" style="padding: 3px; margin-top: 6px; cursor: pointer;" src="../assets/logo_small.png" />
+        <img
+          @click="navigate"
+          style="padding: 3px; margin-top: 6px; cursor: pointer"
+          src="../assets/logo_small.png"
+        />
       </router-link>
       <v-toolbar-title v-if="!bandPage" class="display-1 text-uppercase pl-5">
-        <router-link :to="rootMenu" id="title" v-slot="{ navigate }" custom class="cavatelo">
+        <router-link
+          :to="rootMenu"
+          id="title"
+          v-slot="{ navigate }"
+          custom
+          class="cavatelo"
+        >
           <span @click="navigate">Gig Addicted</span>
         </router-link>
 
@@ -17,11 +27,25 @@
       </v-toolbar-title>
       <v-toolbar-items class="hidden-sm-and-down">
         <v-btn text v-for="link in links" :key="link.to">
-          <router-link v-bind:class="{ underline: matchRoute(link.to) }" :to="link.to" v-slot="{ navigate }" custom> <span @click="navigate">{{ link.title }}</span> </router-link>
+          <router-link
+            v-bind:class="{ underline: matchRoute(link.to) }"
+            :to="link.to"
+            v-slot="{ navigate }"
+            custom
+          >
+            <span @click="navigate">{{ link.title }}</span>
+          </router-link>
         </v-btn>
         <v-divider vertical v-if="isLoggedIn"></v-divider>
         <v-btn v-if="isLoggedIn" text>
-          <router-link v-bind:class="{ underline: matchRoute('/bands') }" to="/bands"  v-slot="{ navigate }" custom> <span @click="navigate">My Bands</span> </router-link>
+          <router-link
+            v-bind:class="{ underline: matchRoute('/bands') }"
+            to="/bands"
+            v-slot="{ navigate }"
+            custom
+          >
+            <span @click="navigate">My Bands</span>
+          </router-link>
         </v-btn>
       </v-toolbar-items>
       <v-spacer></v-spacer>
@@ -68,13 +92,7 @@
         </v-tabs>
       </template>
     </v-app-bar>
-    <v-navigation-drawer
-      v-model="drawer"
-      fixed
-      temporary
-      dark
-      color="primary"
-    >
+    <v-navigation-drawer v-model="drawer" fixed temporary dark color="primary">
       <v-list>
         <v-list-item v-if="isLoggedIn" two-line>
           <v-list-item-avatar>
@@ -93,7 +111,14 @@
           </v-list-item-icon>
           <v-list-item-content>
             <v-list-item-title>
-              <router-link v-bind:class="{ underline: matchRoute('/bands') }" v-slot="{ navigate }" custom to="/bands"> <span @click="navigate">MY BANDS</span> </router-link>
+              <router-link
+                v-bind:class="{ underline: matchRoute('/bands') }"
+                v-slot="{ navigate }"
+                custom
+                to="/bands"
+              >
+                <span @click="navigate">MY BANDS</span>
+              </router-link>
             </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
@@ -104,7 +129,12 @@
           </v-list-item-icon>
           <v-list-item-content>
             <v-list-item-title>
-              <router-link v-bind:class="{ underline: matchRoute(link.to) }" v-slot="{ navigate }" custom :to="link.to">
+              <router-link
+                v-bind:class="{ underline: matchRoute(link.to) }"
+                v-slot="{ navigate }"
+                custom
+                :to="link.to"
+              >
                 <span @click="navigate">{{ link.title }}</span>
               </router-link>
             </v-list-item-title>
@@ -128,15 +158,26 @@
       <router-view @setband="setBand" :tab="bandTab"></router-view>
     </v-main>
     <NprogressContainer />
+    <vuetify-audio
+      ref="playerbottom"
+      flat
+      :file="play.file"
+      :title="play.title"
+      :author="play.author"
+      :open="play.open"
+      @close="closePlayer"
+    ></vuetify-audio>
   </div>
 </template>
 
 <script>
 import NprogressContainer from "vue-nprogress/src/NprogressContainer";
+import VuetifyAudio from "../components/song/VuetifyAudio.vue";
 import client from "../services/client";
 export default {
   components: {
     NprogressContainer,
+    VuetifyAudio,
   },
   data() {
     return {
@@ -154,6 +195,12 @@ export default {
         { title: "EVENTS", to: "/public-events", icon: "event" },
         { title: "ABOUT", to: "/about", icon: "info" },
       ],
+      play: {
+        file: "",
+        title: "",
+        author: "",
+        open: false
+      },
     };
   },
   methods: {
@@ -196,9 +243,19 @@ export default {
       }
       let reg = new RegExp(path);
       return reg.test(window.location.hash);
+    },
+    startPlayer(song) {
+      this.play.open = true;
+      this.play.file = song.file;
+      this.play.title = song.title;
+      this.play.author = song.author;
+    },
+    closePlayer() {
+      this.play.open = false;
     }
   },
   async created() {
+    this.$root.$on("startPlayer", this.startPlayer);
     try {
       let isLoggedIn = await client.get("/auth/checkauthentication");
       this.isLoggedIn = isLoggedIn.data;

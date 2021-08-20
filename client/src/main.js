@@ -59,6 +59,8 @@ Vue.prototype.parseTime =(second) => {
   return `${Math.floor(second / 60)}:${("00" + (second % 60)).slice(-2)}`;
 };
 
+Vue.prototype.$playerOpen = true;
+
 Vue.prototype.validationRules = {
   required: value => !!value || 'Required.',
   email: value => {
@@ -118,3 +120,5 @@ new Vue({
   },
   render: h => h(App)
 }).$mount('#app');
+
+window.Vue = Vue;

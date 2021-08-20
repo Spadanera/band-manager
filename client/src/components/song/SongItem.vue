@@ -2,15 +2,24 @@
   <div>
     <v-divider></v-divider>
     <v-list-item two-line>
-      <v-list-item-icon class="handle" v-if="(inEvent && song.live && !readOnly) || (!inEvent && (memberInfo.isAdmin || memberInfo.canEditSetList) && !readOnly)">
-        <v-icon style="margin-top: 20px;"> menu </v-icon>
+      <v-list-item-icon
+        class="handle"
+        v-if="
+          (inEvent && song.live && !readOnly) ||
+          (!inEvent &&
+            (memberInfo.isAdmin || memberInfo.canEditSetList) &&
+            !readOnly)
+        "
+      >
+        <v-icon style="margin-top: 20px"> menu </v-icon>
       </v-list-item-icon>
       <v-list-item-content v-bind:class="{ notlive: inEvent && !song.live }">
         <v-list-item-title v-text="song.title"></v-list-item-title>
         <v-list-item-subtitle v-text="song.author"></v-list-item-subtitle>
       </v-list-item-content>
       <v-list-item-action>
-        <v-list-item-action-text v-bind:class="{ notlive: inEvent && !song.live }"
+        <v-list-item-action-text
+          v-bind:class="{ notlive: inEvent && !song.live }"
           v-text="parseTime(song.duration)"
         ></v-list-item-action-text>
         <v-menu
@@ -26,6 +35,13 @@
           </template>
           <v-list dense flat>
             <v-list-item-group>
+              <v-list-item v-if="song.preview">
+                <v-list-item-content>
+                  <v-list-item-title @click="previewSong(song)"
+                    >Preview</v-list-item-title
+                  >
+                </v-list-item-content>
+              </v-list-item>
               <v-list-item>
                 <v-list-item-content>
                   <v-list-item-title @click="openSong(song)"
@@ -43,8 +59,15 @@
             </v-list-item-group>
           </v-list>
         </v-menu>
-        <v-icon v-if="inEvent && !readOnly" v-text="getIcon(song.live)" @click="toggleLive()">
-          
+        <v-icon @click="previewSong(song)" v-if="(!((memberInfo.isAdmin || memberInfo.canEditSetList) && !inEvent) || (inEvent && readOnly)) && song.preview"
+        >
+          play_circle
+        </v-icon>
+        <v-icon
+          v-if="inEvent && !readOnly"
+          v-text="getIcon(song.live)"
+          @click="toggleLive()"
+        >
         </v-icon>
       </v-list-item-action>
     </v-list-item>
@@ -58,7 +81,7 @@ export default {
     song: Object,
     memberInfo: Object,
     inEvent: Boolean,
-    readOnly: Boolean
+    readOnly: Boolean,
   },
   data() {
     return {};
@@ -73,21 +96,27 @@ export default {
     getIcon(live) {
       if (live) {
         return "remove";
-      }
-      else {
+      } else {
         return "add";
       }
     },
     toggleLive() {
       this.$emit("togglelive");
-    }
-  }
+    },
+    previewSong(song) {
+      this.$root.$emit("startPlayer", {
+        file: song.preview,
+        title: song.title,
+        author: song.author,
+      });
+    },
+  },
 };
 </script>
 
 <style>
-  .notlive {
-    opacity: 0.3;
-    text-decoration:line-through;
-  }
+.notlive {
+  opacity: 0.3;
+  text-decoration: line-through;
+}
 </style>

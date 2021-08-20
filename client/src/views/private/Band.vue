@@ -13,6 +13,7 @@
           :setList="band.setList"
           :statuses="statuses"
           :memberInfo="memberInfo"
+          :bandId="band._id"
           ref="setlist"
           @ordersetlist="orderSetList"
           @savesong="saveSong"
@@ -27,87 +28,14 @@
         <EventsList :band="band" :memberInfo="memberInfo" @reload="loadBand" />
       </v-tab-item>
     </v-tabs-items>
-    <v-dialog v-model="dialogSong" persistent max-width="600px">
-      <v-card>
-        <v-card-title>
-          <span v-if="!song.title" class="headline">Add Song</span>
-          <span v-else class="headline">Edit Song</span>
-        </v-card-title>
-        <v-card-text>
-          <v-container grid-list-md>
-            <v-form
-              autocomplete="off"
-              ref="form"
-              v-model="valid"
-              @submit.prevent="saveSong"
-            >
-              <v-text-field
-                v-if="band.type === 'original'"
-                v-model="song.title"
-                label="Title"
-                :rules="[validationRules.required]"
-                :autofocus="true"
-              ></v-text-field>
-              <v-combobox
-                v-else
-                label="Title"
-                :value="selectedSong.id"
-                :items="songs"
-                :search-input.sync="search"
-                :loading="isLoading"
-                :hide-no-data="isLoading || !search || search.length < 4"
-                clearable
-                no-filter
-                item-text="title_short"
-                item-value="id"
-                return-object
-                @input="onSelected"
-                hint="Type 5 characters to query"
-              >
-                <template slot="no-data">
-                  <v-list-item>
-                    <v-list-item-title>No results</v-list-item-title>
-                  </v-list-item>
-                </template>
-
-                <template slot="item" slot-scope="{ item }">
-                  <v-list-item-content>
-                    <v-list-item-title v-text="item.title" />
-                    <v-list-item-subtitle>
-                      {{ item.author }} - {{ item.album }}
-                    </v-list-item-subtitle>
-                  </v-list-item-content>
-                </template>
-              </v-combobox>
-              <v-text-field v-model="song.author" label="Author"></v-text-field>
-              <v-text-field
-                v-model="song.duration"
-                label="Time"
-                suffix="seconds"
-              ></v-text-field>
-              <v-select
-                v-model="song.status"
-                :items="statuses"
-                :rules="[validationRules.required]"
-                label="Status"
-              ></v-select>
-              <v-btn type="submit" style="display: none"></v-btn>
-            </v-form>
-          </v-container>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn
-            color="blue darken-1"
-            type="submit"
-            text
-            @click="dialogSong = false"
-            >Dismiss</v-btn
-          >
-          <v-btn color="blue darken-1" text @click="saveSong">Save</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+    <SongForm
+      ref="songform"
+      :dialog="dialogSong"
+      @close="closeSong"
+      @savesong="saveSong"
+      :bandType="band.type"
+      :statuses="statuses"
+    />
   </v-container>
 </template>
 
@@ -115,22 +43,20 @@
 import SetList from "../../components/band/SetList.vue";
 import GeneralInfo from "../../components/band/GeneralInfo.vue";
 import EventsList from "../../components/event/EventsList.vue";
+import SongForm from "../../components/song/SongForm.vue";
 
 export default {
   components: {
     SetList,
     GeneralInfo,
     EventsList,
+    SongForm,
   },
   props: {
     tab: Number,
   },
   data() {
     return {
-      songs: [],
-      selectedSong: {},
-      search: null,
-      isLoading: false,
       band: {
         setList: [],
         bandMembers: [],
@@ -142,25 +68,23 @@ export default {
       loaded: false,
       event: {},
       song: {},
-      valid: false,
       statuses: [
         { text: "Confirmed", value: "confirmed" },
         { text: "Pending", value: "pending" },
         { text: "Removed", value: "removed" },
       ],
       memberInfo: {},
-      tempText: ""
     };
   },
   methods: {
     async loadBand() {
       this.band = await this.Service.bandService.getBand(this.$route.params.id);
       this.loaded = true;
-      this.getSubList();
       if (this.band.location) {
         this.band.location_address = JSON.parse(this.band.location);
       }
       this.$emit("setband", this.band.name);
+      this.getSubList();
     },
     async updateBand() {
       await this.Service.bandService.upsertBand(this.band);
@@ -196,63 +120,35 @@ export default {
           song.author = this.band.name;
         }
       }
-      this.song = this.copy(song);
+      this.$refs.songform.reloadSong(song);
       this.dialogSong = true;
-      if (this.$refs.form) {
-        this.$refs.form.resetValidation();
-      }
     },
-    saveSong() {
-      this.$refs.form.validate();
-      if (this.valid) {
-        if (this.song.duration) {
-          this.song.duration = Math.floor(this.song.duration);
-        } else {
-          this.song.duration = 0;
-        }
-        if (!this.song._id) {
-          this.song.position = this.band.setList.length + 2;
-          this.band.setList.push(this.copy(this.song));
-        } else {
-          for (let i = 0; i < this.band.setList.length; i++) {
-            if (this.band.setList[i]._id === this.song._id) {
-              this.band.setList[i] = this.copy(this.song);
-              break;
-            }
+    saveSong(song) {
+      if (song.duration) {
+        song.duration = Math.floor(song.duration);
+      } else {
+        song.duration = 0;
+      }
+      if (!song._id) {
+        song.position = this.band.setList.length + 2;
+        this.band.setList.push(this.copy(song));
+      } else {
+        for (let i = 0; i < this.band.setList.length; i++) {
+          if (this.band.setList[i]._id === song._id) {
+            this.band.setList[i] = this.copy(song);
+            break;
           }
         }
-        this.updateBand();
-        this.dialogSong = false;
-        this.song = {};
       }
+      this.updateBand();
+      this.dialogSong = false;
+    },
+    closeSong() {
+      this.dialogSong = false;
     },
     deleteSong(song) {
       this.band.setList = this.band.setList.filter((s) => s._id !== song._id);
       this.updateBand();
-    },
-    onSelected(selectedItem) {
-      this.song.title = selectedItem.title_short;
-      this.song.author = selectedItem.author;
-      this.song.duration = selectedItem.duration;
-    },
-  },
-  watch: {
-    search(text) {
-      if (text && text.length > 4) {
-        this.isLoading = true;
-        this.tempText = text;
-        let self = this;
-        window.setTimeout(() => {
-          if (text === self.tempText) {
-            self.Service.bandService.searchSong(text).then((r) => {
-              self.songs = r;
-              self.isLoading = false;
-            });
-          }
-        }, 300);
-      } else {
-        this.songs = [];
-      }
     },
   },
   async created() {

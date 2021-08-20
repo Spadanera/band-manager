@@ -65,6 +65,7 @@ export default {
     setList: Array,
     status: Array,
     memberInfo: Object,
+    bandId: String
   },
   data() {
     return {
@@ -77,7 +78,9 @@ export default {
     };
   },
   created() {
-    this.getSubList();
+    if (this.bandId) {
+      this.getSubList();
+    }
   },
   methods: {
     getSubList() {
@@ -133,6 +136,13 @@ export default {
       return this.getDuration("removed");
     },
   },
+  watch: {
+    bandId(newVal) {
+      if (newVal) {
+        this.getSubList();
+      }
+    }
+  }
 };
 </script>
 
