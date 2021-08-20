@@ -27,14 +27,14 @@
               :items="virtualItems"
               :search-input.sync="search"
               :loading="isLoading"
-              :hide-no-data="isLoading || !search || search.length < 4"
+              :hide-no-data="isLoading || !search || search.length < 3"
               clearable
               no-filter
               item-text="title_short"
               item-value="id"
               return-object
               @input="onSelected"
-              hint="Type 5 characters to query"
+              hint="Type 3 characters to query"
             >
               <template slot="no-data">
                 <v-list-item>
@@ -161,7 +161,7 @@ export default {
   },
   watch: {
     search(text) {
-      if (text && text.length > 4) {
+      if (text && text.length > 2) {
         this.isLoading = true;
         this.tempText = text;
         let self = this;
@@ -172,7 +172,7 @@ export default {
               self.isLoading = false;
             });
           }
-        }, 300);
+        }, 500);
       } else {
         this.songs = [];
       }

@@ -35,7 +35,7 @@
           </template>
           <v-list dense flat>
             <v-list-item-group>
-              <v-list-item v-if="song.preview">
+              <v-list-item v-show="song.preview">
                 <v-list-item-content>
                   <v-list-item-title @click="previewSong(song)"
                     >Preview</v-list-item-title
