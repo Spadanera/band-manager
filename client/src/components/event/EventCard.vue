@@ -108,7 +108,12 @@
         Delete
       </v-btn>
       <v-spacer></v-spacer>
-      <v-btn text :href="waShareLink" data-action="share/whatsapp/share">
+      <v-btn
+        v-show="this.waShareLink"
+        text
+        :href="waShareLink"
+        data-action="share/whatsapp/share"
+      >
         <v-icon>whatsapp</v-icon>
       </v-btn>
     </v-card-actions>
@@ -145,9 +150,15 @@ export default {
     },
   },
   created() {
-    this.waShareLink = `whatsapp://send?text=
-      ${encodeURIComponent(this.event.locationName)}%0a
-      ${encodeURIComponent(this.locationAddress)}
+    this.waShareLink = `whatsapp://send?text=*${encodeURIComponent(
+      this.event.locationName
+    )}*%20-%20${this.moment(this.event.eventDate).format("LL")}%20-%20${
+      this.event.eventTime
+    }%0a_${this.locationAddress}_%0a${encodeURIComponent(
+      this.event.locationURL
+    )}%0a%0a*Setlist*%20-%20Duration%3A%20${this.duration}%0a${this.event.setList
+      .map((s) => encodeURIComponent(`${s.position} - ${s.title}`))
+      .join("%0a")}
     `;
   },
   computed: {
