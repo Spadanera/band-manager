@@ -4,7 +4,7 @@
       <div v-show="setListOpen !== 0">
         <div>
           <v-row>
-            <v-col cols="7">
+            <v-col :cols="event.poster ? 7 : 12">
               <v-card-subtitle>
                 {{ moment(event.eventDate).format("LL") }}
                 <span v-if="event.eventTime"> - {{ event.eventTime }}</span>
@@ -13,7 +13,11 @@
                 class="text-h5"
                 v-text="event.locationName"
               ></v-card-title>
-              <v-card-subtitle v-text="locationAddress"></v-card-subtitle>
+              <v-card-subtitle
+                style="cursor: pointer"
+                @click="openLink(event.locationURL)"
+                v-text="locationAddress"
+              ></v-card-subtitle>
             </v-col>
             <v-col
               v-show="event.poster"
@@ -28,15 +32,13 @@
                     :src="event.poster"
                     @click="openPoster"
                   >
-                  <v-fade-transition>
-                    <v-overlay v-if="hover" absolute>
-                      <v-btn fab small @click="openPoster">
-                        <v-icon>
-                          zoom_in
-                        </v-icon>
-                      </v-btn>
-                    </v-overlay>
-                  </v-fade-transition>
+                    <v-fade-transition>
+                      <v-overlay v-if="hover" absolute>
+                        <v-btn fab small @click="openPoster">
+                          <v-icon> zoom_in </v-icon>
+                        </v-btn>
+                      </v-overlay>
+                    </v-fade-transition>
                   </v-img>
                 </template>
               </v-hover>
@@ -105,6 +107,10 @@
       >
         Delete
       </v-btn>
+      <v-spacer></v-spacer>
+      <v-btn text :href="waShareLink" data-action="share/whatsapp/share">
+        <v-icon>whatsapp</v-icon>
+      </v-btn>
     </v-card-actions>
   </v-card>
 </template>
@@ -125,12 +131,24 @@ export default {
     return {
       setListOpen: false,
       overlay: false,
+      waShareLink: "",
     };
   },
   methods: {
     openPoster() {
       this.$root.$emit("openImage", this.event.poster);
     },
+    openLink(url) {
+      if (url) {
+        window.open(url, "_blank");
+      }
+    },
+  },
+  created() {
+    this.waShareLink = `whatsapp://send?text=
+      ${encodeURIComponent(this.event.locationName)}%0a
+      ${encodeURIComponent(this.locationAddress)}
+    `;
   },
   computed: {
     locationAddress() {

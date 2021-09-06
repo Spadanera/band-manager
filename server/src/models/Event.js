@@ -16,10 +16,11 @@ let EventSchema = new mongoose.Schema({
     locationName: String,
     locationAddress: String,
     description: String,
+    locationURL: String,
     setList: [Song],
     isPublic: Boolean,
     isSetListPublic: Boolean,
-    poster: Image
+    poster: Image,
 });
 
 export default mongoose.model("Event", EventSchema);

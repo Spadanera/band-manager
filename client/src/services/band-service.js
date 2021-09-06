@@ -66,6 +66,9 @@ const band = {
     },
     searchSong: async (text) => {
         return (await client.get(`/api/deezer/songs?q=${text}`)).data;
+    },
+    getGmapsLink: (place) => {
+        return `https://www.google.com/maps/search/?api=1&query_place_id=${place.place_id}&query=${encodeURIComponent(place.formatted_address)}`;
     }
 };
 

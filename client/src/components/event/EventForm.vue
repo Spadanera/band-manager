@@ -30,6 +30,7 @@
                   <v-text-field
                     v-model="event.eventDate"
                     label="Event date"
+                    append-icon="event"
                     readonly
                     v-bind="attrs"
                     v-on="on"
@@ -63,7 +64,7 @@
                   <v-text-field
                     v-model="event.eventTime"
                     label="Event Time"
-                    prepend-icon="mdi-clock-time-four-outline"
+                    append-icon="schedule"
                     readonly
                     v-bind="attrs"
                     v-on="on"
@@ -243,6 +244,7 @@ export default {
     },
     setPlace(place) {
       this.currentPlace = place;
+      this.event.locationURL = this.Service.bandService.getGmapsLink(place);
     },
     onFilePicket(file) {
       if (file) {
