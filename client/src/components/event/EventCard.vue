@@ -136,7 +136,6 @@ export default {
     return {
       setListOpen: false,
       overlay: false,
-      waShareLink: "",
     };
   },
   methods: {
@@ -149,19 +148,21 @@ export default {
       }
     },
   },
-  created() {
-    this.waShareLink = `whatsapp://send?text=*${encodeURIComponent(
-      this.event.locationName
-    )}*%20-%20${this.moment(this.event.eventDate).format("LL")}%20-%20${
-      this.event.eventTime
-    }%0a_${this.locationAddress}_%0a${encodeURIComponent(
-      this.event.locationURL
-    )}%0a%0a*Setlist*%20-%20Duration%3A%20${this.duration}%0a${this.event.setList
-      .map((s) => encodeURIComponent(`${s.position} - ${s.title}`))
-      .join("%0a")}
-    `;
-  },
   computed: {
+    waShareLink() {
+      return `whatsapp://send?text=*${encodeURIComponent(
+        this.event.locationName
+      )}*%20-%20${this.moment(this.event.eventDate).format("LL")}%20-%20${
+        this.event.eventTime
+      }%0a_${this.locationAddress}_%0a${encodeURIComponent(
+        this.event.locationURL
+      )}%0a%0a*Setlist*%20-%20Duration%3A%20${
+        this.duration
+      }%0a${this.songList
+        .map((s, index) => encodeURIComponent(`${index + 1} - ${s.title}`))
+        .join("%0a")}
+    `;
+    },
     locationAddress() {
       if (this.event.locationAddress) {
         return JSON.parse(this.event.locationAddress).formatted_address;
