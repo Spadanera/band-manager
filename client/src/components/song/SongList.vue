@@ -15,6 +15,12 @@
           }}</v-list-item-title>
         </v-list-item-content>
         <v-list-item-action>
+          <v-list-item-action-text v-if="showPreview">
+            <v-btn small text @click="playSetlist">
+              <v-icon left> play_arrow </v-icon>
+              Play
+            </v-btn>
+          </v-list-item-action-text>
           <v-list-item-action-text
             >Time: {{ duration }}</v-list-item-action-text
           >
@@ -85,7 +91,8 @@ export default {
     icon: String,
     drag: Boolean,
     readOnly: Boolean,
-    elevation: Number
+    elevation: Number,
+    showPreview: Boolean,
   },
   data() {
     return {
@@ -118,6 +125,9 @@ export default {
     reloadSetList() {
       this.$emit("reloadsetlist");
     },
+    playSetlist() {
+      this.$root.$emit("playSetlist", this.localSongList);
+    }
   },
   created() {
     this.localSongList = this.copy(this.songList);

@@ -1,6 +1,6 @@
 <template>
   <v-container fluid class="max-height" style="overflow: auto;">
-    <v-row v-if="futureEvents.length" justify="space-around">
+    <v-row v-if="futureEvents.length" justify="space-around" style="padding-top: 12px;">
       <v-col
         cols="12"
         sm="6"

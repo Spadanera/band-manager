@@ -11,6 +11,7 @@
           :songList="confirmedList"
           :memberInfo="memberInfo"
           :drag="drag"
+          :showPreview="true"
           @ordersetlist="orderSetList"
           @opensong="openSong"
           @deletesong="deleteSong"

@@ -161,7 +161,7 @@ export default {
 </script>
 
 <style>
-@media screen and (min-width: 960px) {
+@media screen and (min-width: 855px) {
   .max-height {
     height: 100%;
     max-height: 100%;

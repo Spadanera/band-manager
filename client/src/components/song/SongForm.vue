@@ -137,7 +137,7 @@ export default {
     },
     startPlay() {
       this.$root.$emit("startPlayer", {
-        file: this.localSong.preview,
+        preview: this.localSong.preview,
         title: this.localSong.title,
         author: this.localSong.author,
       });

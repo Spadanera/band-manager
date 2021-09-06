@@ -105,7 +105,7 @@ export default {
     },
     previewSong(song) {
       this.$root.$emit("startPlayer", {
-        file: song.preview,
+        preview: song.preview,
         title: song.title,
         author: song.author,
       });

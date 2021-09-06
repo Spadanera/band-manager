@@ -9,7 +9,7 @@
       <v-avatar v-if="hasLogo" class="ma-3" size="130" tile style="float: left">
         <v-hover>
           <template v-slot:default="{ hover }">
-            <v-img style="cursor: pointer" :src="band.logo" @click="openPoster">
+            <v-img style="cursor: pointer" :src="band.logo" @click="openPoster" contain>
               <v-fade-transition>
                 <v-overlay v-if="hover" absolute>
                   <v-btn fab small @click="openPoster">

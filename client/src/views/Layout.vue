@@ -161,11 +161,15 @@
     <vuetify-audio
       ref="playerbottom"
       flat
-      :file="play.file"
+      :file="play.preview"
       :title="play.title"
       :author="play.author"
       :open="play.open"
+      :isList="setList.length ? true : false"
       @close="closePlayer"
+      @ended="endedSong"
+      @next="nextSong"
+      @previous="previousSong"
     ></vuetify-audio>
     <v-dialog
       :overlay-opacity="0.8"
@@ -220,13 +224,15 @@ export default {
         { title: "ABOUT", to: "/about", icon: "info" },
       ],
       play: {
-        file: "",
+        preview: "",
         title: "",
         author: "",
         open: false,
       },
       image: "",
       imageDialog: false,
+      setList: [],
+      playIndex: 0,
     };
   },
   methods: {
@@ -274,20 +280,46 @@ export default {
     },
     startPlayer(song) {
       this.play.open = true;
-      this.play.file = song.file;
+      this.play.preview = song.preview;
       this.play.title = song.title;
       this.play.author = song.author;
     },
     closePlayer() {
       this.play.open = false;
+      this.setList = [];
+      this.playIndex = 0;
     },
     openImage(image) {
       this.image = image;
       this.imageDialog = true;
     },
+    playSetlist(setList) {
+      this.setList = setList.filter(s => s.preview);
+      this.playIndex = 0;
+      this.startPlayer(this.setList[0]);
+    },
+    endedSong() {
+      this.playIndex++;
+      if (this.setList.length > this.playIndex) {
+        this.startPlayer(this.setList[this.playIndex]);
+      }
+      else {
+        this.closePlayer();
+      }
+    },
+    nextSong() {
+      this.endedSong();
+    },
+    previousSong() {
+      if (this.playIndex > 0) {
+        this.playIndex--;
+        this.startPlayer(this.setList[this.playIndex]);
+      }
+    }
   },
   async created() {
     this.$root.$on("startPlayer", this.startPlayer);
+    this.$root.$on("playSetlist", this.playSetlist);
     this.$root.$on("openImage", this.openImage);
     try {
       let isLoggedIn = await client.get("/auth/checkauthentication");
