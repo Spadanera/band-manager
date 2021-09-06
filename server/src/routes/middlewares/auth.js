@@ -8,10 +8,12 @@ import BandMember from "../../models/BandMember";
 import Invitation from "../../models/Invitation";
 
 router.get('/', (req, res) => {
+    if (req.query.from)
+    req.session.from = req.query.from;
     res.redirect('/auth/google');
 });
 
-router.get('/google-join/:invitation', (req, res) => {
+router.get('/google-join/:invitation', (req, res) => {  
     req.session.invitation = req.params.invitation;
     res.redirect('/auth/google');
 });
@@ -67,8 +69,13 @@ router.get('/google/callback',
                 await Invitation.findOneAndDelete({ token: req.session.invitation });
                 res.redirect(`${process.env.PROTOCOL || "http"}://${process.env.ORIGIN || "localhost"}/#/band/${invitation.bandId}`);
             }
-
-            res.redirect(`${process.env.PROTOCOL || "http"}://${process.env.ORIGIN || "localhost"}/#/bands`);
+            else if (req.session.from) {
+                res.redirect(decodeURIComponent(req.session.from));
+                delete req.session.from;
+            }
+            else {
+                res.redirect(`${process.env.PROTOCOL || "http"}://${process.env.ORIGIN || "localhost"}/#/bands`);
+            }
         } catch (error) {
             console.log(error);
             res.redirect(`${process.env.PROTOCOL || "http"}://${process.env.ORIGIN || "localhost"}/`);

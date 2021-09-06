@@ -113,7 +113,7 @@ new Vue({
         }, 500);
       }
       if (error.response.status === 401) {
-        window.location.href = window.origin;
+        window.location.href = `${window.origin}?from=${encodeURIComponent(window.location.href)}`;
       }
       return Promise.reject(error);
     });

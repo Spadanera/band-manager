@@ -8,7 +8,7 @@
       <router-link :to="rootMenu" custom v-slot="{ navigate }">
         <img
           @click="navigate"
-          style="padding: 3px; margin-top: 6px; cursor: pointer"
+          style="padding: 3px; cursor: pointer"
           src="../assets/logo_small.png"
         />
       </router-link>
@@ -237,7 +237,9 @@ export default {
       this.$emit("theme");
     },
     login() {
-      location.href = `/auth`;
+      const urlParams = new URLSearchParams(window.location.search);
+      const from = urlParams.get("from");
+      window.location.href = `/auth${from ? `?from=${encodeURIComponent(from)}` : ''}`;
     },
     logout() {
       this.menu = false;
