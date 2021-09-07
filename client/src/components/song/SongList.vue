@@ -132,6 +132,15 @@ export default {
   created() {
     this.localSongList = this.copy(this.songList);
   },
+  watch: {
+    songList: {
+      handler: function () {
+        console.log('songList changed')
+        this.reload();
+      },
+      deep: true
+    }
+  },
 };
 </script>
 

@@ -147,7 +147,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 @media screen and (min-width: 960px) {
   .max-height-list {
     height: calc(100% - 76px);
