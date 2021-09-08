@@ -15,7 +15,7 @@
           }}</v-list-item-title>
         </v-list-item-content>
         <v-list-item-action>
-          <v-list-item-action-text v-if="showPreview">
+          <v-list-item-action-text v-if="showPreview && localSongList.filter(s => s.preview).length">
             <v-btn small text @click="playSetlist">
               <v-icon left> play_arrow </v-icon>
               Play

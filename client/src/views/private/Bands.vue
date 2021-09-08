@@ -1,17 +1,13 @@
 <template>
   <v-container fluid grid-list-md>
     <div v-if="!bands.length && loaded">
-      <v-layout row wrap>
-        <v-flex
-          xs12
-          sm10
-          md8
-          lg6
-          xl4
-          offset-sm1
-          offset-md2
-          offset-lg3
-          offset-xl4
+      <v-row wrap justify="space-around">
+        <v-col
+          cols="12"
+          sm="10"
+          md="8"
+          lg="6"
+          xl="4"
         >
           <v-card>
             <v-card-title primary-title>
@@ -24,17 +20,17 @@
               <v-btn @click="dialog = true">Create Band</v-btn>
             </v-card-actions>
           </v-card>
-        </v-flex>
-      </v-layout>
+        </v-col>
+      </v-row>
     </div>
     <div v-if="bands.length">
-      <v-layout wrap justify-space-around>
-        <v-flex
-          xs12
-          sm6
-          md6
-          lg4
-          xl3
+      <v-row wrap justify="space-around">
+        <v-col
+          cols="12"
+          sm="6"
+          md="6"
+          lg="4"
+          xl="3"
           v-for="band in bands"
           v-bind:key="band._id"
           class="my-2"
@@ -44,8 +40,8 @@
             @submitted="submitted"
             :memberInfo="band.memberInfo"
           />
-        </v-flex>
-      </v-layout>
+        </v-col>
+      </v-row>
       <BandForm
         :dialog="dialog"
         @submitted="submitted"

@@ -12,7 +12,8 @@ const Song = {
     live: Boolean,
     position: { type: Number, default: 1 },
     audio: String,
-    preview: String
+    preview: String,
+    cover: Boolean
 };
 
 export default Song;

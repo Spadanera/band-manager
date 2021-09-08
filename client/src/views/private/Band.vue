@@ -114,10 +114,12 @@ export default {
         song = {
           status: "confirmed",
         };
+        song.cover = true;
         if (this.band.type === "tribute") {
           song.author = this.band.tributeArtist;
         } else if (this.band.type === "original") {
           song.author = this.band.name;
+          song.cover = false;
         }
       }
       this.$refs.songform.reloadSong(song);
@@ -161,10 +163,13 @@ export default {
 </script>
 
 <style>
-@media screen and (min-width: 855px) {
+@media screen and (min-width: 960px) {
   .max-height {
     height: 100%;
     max-height: 100%;
   }
+}
+.max-height {
+  min-height: 100%;
 }
 </style>

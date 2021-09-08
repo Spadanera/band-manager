@@ -73,7 +73,7 @@
           </template>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
-          <v-btn small text @click="playSetlist">
+          <v-btn small text @click="playSetlist" v-if="songList.filter(s => s.preview).length">
             <v-icon left> play_arrow </v-icon>
             Play Setlist
           </v-btn>

@@ -13,8 +13,13 @@
             v-model="valid"
             @submit.prevent="saveSong"
           >
+            <v-switch
+              v-model="localSong.cover"
+              label="Cover"
+              style="position: absolute; right: 20px; top: 5px;"
+            ></v-switch>
             <v-text-field
-              v-if="bandType === 'original'"
+              v-if="!localSong.cover"
               v-model="localSong.title"
               label="Title"
               :rules="[validationRules.required]"

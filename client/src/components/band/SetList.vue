@@ -148,15 +148,11 @@ export default {
 </script>
 
 <style scoped>
-@media screen and (min-width: 960px) {
+@media screen and (min-width: 600px) {
   .max-height-list {
     height: calc(100% - 76px);
     max-height: calc(100% - 76px);
     overflow-y: auto;
-  }
-  .max-height {
-    height: 100%;
-    max-height: 100%;
   }
 }
 </style>

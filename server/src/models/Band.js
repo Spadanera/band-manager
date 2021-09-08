@@ -23,7 +23,6 @@ let BandSchema = new mongoose.Schema({
     isPublic: Boolean,
     isMembersPublic: Boolean,
     isSetlistPublic: Boolean,
-    isEventsPublic: Boolean
 });
 
 export default mongoose.model("Band", BandSchema);

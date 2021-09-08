@@ -126,11 +126,6 @@
                 class="ma-1"
                 label="Setlist Public"
               ></v-switch>
-              <v-switch
-                v-model="localBand.isEventsPublic"
-                class="ma-1"
-                label="Events Public"
-              ></v-switch>
             </v-row>
             <v-btn type="submit" style="display: none"></v-btn>
           </v-form>
@@ -235,7 +230,6 @@ export default {
         if (!newValue) {
           this.localBand.isMembersPublic = false;
           this.localBand.isSetlistPublic = false;
-          this.localBand.isEventsPublic = false;
         }
       },
     },
