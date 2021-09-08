@@ -7,7 +7,7 @@
         v-if="
           (inEvent && song.live && !readOnly) ||
           (!inEvent &&
-            (memberInfo.isAdmin || memberInfo.canEditSetList) &&
+            (memberInfo.isAdmin || memberInfo.canEditSetlist) &&
             !readOnly)
         "
       >
@@ -26,7 +26,7 @@
           close-on-content-click
           close-on-click
           absolute
-          v-if="(memberInfo.isAdmin || memberInfo.canEditSetList) && !inEvent"
+          v-if="(memberInfo.isAdmin || memberInfo.canEditSetlist) && !inEvent"
         >
           <template v-slot:activator="{ on, attrs }">
             <v-btn icon
@@ -59,7 +59,7 @@
             </v-list-item-group>
           </v-list>
         </v-menu>
-        <v-icon @click="previewSong(song)" v-if="(!((memberInfo.isAdmin || memberInfo.canEditSetList) && !inEvent) || (inEvent && readOnly)) && song.preview"
+        <v-icon @click="previewSong(song)" v-if="(!((memberInfo.isAdmin || memberInfo.canEditSetlist) && !inEvent) || (inEvent && readOnly)) && song.preview"
         >
           play_circle
         </v-icon>

@@ -12,7 +12,7 @@ let BandMemberSchema = new mongoose.Schema({
     isCreator: Boolean,
     canEditMembers: Boolean,
     canEditInfo: Boolean,
-    canEditSetList: Boolean,
+    canEditSetlist: Boolean,
     canEditEvents: Boolean
 });
 

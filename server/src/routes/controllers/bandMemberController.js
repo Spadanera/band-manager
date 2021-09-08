@@ -12,7 +12,7 @@ router.put("/:id", async (req, res) => {
         if (bandMember.isAdmin) {
             bandMember.canEditMembers = true;
             bandMember.canEditInfo = true;
-            bandMember.canEditSetList = true;
+            bandMember.canEditSetlist = true;
             bandMember.canEditEvents = true;
         }
         await BandMember.findOneAndUpdate({ _id: req.body._id, bandId: req.params.id }, req.body);

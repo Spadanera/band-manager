@@ -9,13 +9,13 @@
         />
       </v-tab-item>
       <v-tab-item class="max-height">
-        <SetList
+        <Setlist
           :setList="band.setList"
           :statuses="statuses"
           :memberInfo="memberInfo"
           :bandId="band._id"
           ref="setlist"
-          @ordersetlist="orderSetList"
+          @ordersetlist="orderSetlist"
           @savesong="saveSong"
           @opensong="openSong"
           @deletesong="deleteSong"
@@ -40,14 +40,14 @@
 </template>
 
 <script>
-import SetList from "../../components/band/SetList.vue";
+import Setlist from "../../components/song/Setlist.vue";
 import GeneralInfo from "../../components/band/GeneralInfo.vue";
 import EventsList from "../../components/event/EventsList.vue";
 import SongForm from "../../components/song/SongForm.vue";
 
 export default {
   components: {
-    SetList,
+    Setlist,
     GeneralInfo,
     EventsList,
     SongForm,
@@ -99,7 +99,7 @@ export default {
       band = await this.Service.bandService.upsertBand(band, 'setlist');
       await this.loadBand(band);
     },
-    orderSetList(lists) {
+    orderSetlist(lists) {
       lists.confirmedList.forEach((s) => (s.status = "confirmed"));
       lists.pendingList.forEach((s) => (s.status = "pending"));
       lists.removedList.forEach((s) => (s.status = "removed"));

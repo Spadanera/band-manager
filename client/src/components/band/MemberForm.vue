@@ -26,7 +26,7 @@
               label="Edit Info"
             ></v-switch>
             <v-switch
-              v-model="localBandMember.canEditSetList"
+              v-model="localBandMember.canEditSetlist"
               class="ma-1"
               label="Edit Setlist"
             ></v-switch>
@@ -97,7 +97,7 @@ export default {
         if (newValue) {
           this.localBandMember.canEditMembers = true;
           this.localBandMember.canEditInfo = true;
-          this.localBandMember.canEditSetList = true;
+          this.localBandMember.canEditSetlist = true;
           this.localBandMember.canEditEvents = true;
         }
       },

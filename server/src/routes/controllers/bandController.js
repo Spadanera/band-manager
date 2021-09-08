@@ -66,7 +66,7 @@ router.post("/", async (req, res) => {
             isCreator: true,
             canEditMembers: true,
             canEditInfo: true,
-            canEditSetList: true,
+            canEditSetlist: true,
             canEditEvents: true
         });
         await bandMember.save();
@@ -83,7 +83,7 @@ router.put("/:id/:element", async (req, res) => {
     try {
         let bandMember = await BandMember({ userId: req.session.userId, bandId: req.params.id, isAdmin: true });
         if (bandMember && req.params.id === req.body._id) {
-            let band = formatSetList(req.body);
+            let band = formatSetlist(req.body);
             let _band = await Band.findOne({ _id: req.params.id }).populate("bandMembers events");
             switch (req.params.element) {
                 case 'generalinfo':
@@ -145,7 +145,7 @@ router.delete("/:id", async (req, res) => {
     }
 });
 
-function formatSetList(band) {
+function formatSetlist(band) {
     let setList = band.setList;
     if (setList) {
         for (let i = 0; i < setList.length; i++) {

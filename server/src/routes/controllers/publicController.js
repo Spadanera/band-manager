@@ -53,7 +53,7 @@ router.get("/band/:id", async (req, res) => {
         band.events = band.events.filter(e => e.isPublic);
         for (let i = 0; i < band.events.length; i++) {
             let event = band.events[i];
-            if (!event.isSetListPublic) {
+            if (!event.isSetlistPublic) {
                 delete event.setList;
             }
         }
@@ -82,7 +82,7 @@ router.get("/event", async (req, res) => {
         let events = await Event.find({ isPublic: true });
         if (events) {
             for (let i = 0; i < events.length; i++) {
-                if (!events[i].isSetListPublic) {
+                if (!events[i].isSetlistPublic) {
                     delete events[i].setList;
                 }
                 events[i].band = Band.find({ _id: events[i]._id }).select("name description logo location type tributeArtist genres isPublic");

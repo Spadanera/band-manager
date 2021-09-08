@@ -3,7 +3,7 @@
     <v-expand-transition>
       <div
         v-show="
-          setListOpen === undefined ||
+          setlistOpen === undefined ||
           $vuetify.breakpoint.xs ||
           !memberInfo.publicUser
         "
@@ -116,7 +116,7 @@
       flat
       tile
       accordion
-      v-model="setListOpen"
+      v-model="setlistOpen"
       v-if="memberInfo.publicUser"
     >
       <v-expansion-panel v-if="band.events && band.events.length">
@@ -240,7 +240,7 @@ export default {
       modalTitle: "",
       modalText: "",
       hover: false,
-      setListOpen: undefined,
+      setlistOpen: undefined,
     };
   },
   components: {

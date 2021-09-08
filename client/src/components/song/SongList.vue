@@ -39,7 +39,7 @@
         <span
           v-if="inEvent && !readOnly"
           style="cursor: pointer"
-          @click="reloadSetList()"
+          @click="reloadSetlist()"
           >RELOAD MAIN SETLIST</span
         >
       </v-subheader>
@@ -48,7 +48,7 @@
           group="songs"
           v-model="localSongList"
           @start="startDrag"
-          @end="orderSetList"
+          @end="orderSetlist"
           draggable=".song"
           handle=".handle"
         >
@@ -106,7 +106,7 @@ export default {
     deleteSong(song) {
       this.$emit("deletesong", song);
     },
-    orderSetList() {
+    orderSetlist() {
       this.$emit("ordersetlist");
     },
     getList() {
@@ -117,12 +117,12 @@ export default {
     },
     toggleLive(index) {
       this.localSongList[index].live = !this.localSongList[index].live;
-      this.orderSetList();
+      this.orderSetlist();
     },
     reload(songList) {
       this.localSongList = this.copy(songList || this.songList);
     },
-    reloadSetList() {
+    reloadSetlist() {
       this.$emit("reloadsetlist");
     },
     playSetlist() {

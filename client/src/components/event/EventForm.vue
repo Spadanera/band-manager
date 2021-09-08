@@ -142,7 +142,7 @@
                 label="Event Public"
               ></v-switch>
               <v-switch
-                v-model="event.isSetListPublic"
+                v-model="event.isSetlistPublic"
                 class="ma-1"
                 label="Setlist Public"
               ></v-switch>
@@ -158,8 +158,8 @@
           :songList="event.setList"
           :memberInfo="memberInfo"
           :drag="drag"
-          @ordersetlist="orderSetList"
-          @reloadsetlist="reloadSetList"
+          @ordersetlist="orderSetlist"
+          @reloadsetlist="reloadSetlist"
           @startdrag="startDrag"
           ref="songlist"
           :elevation="0"
@@ -187,7 +187,7 @@ export default {
   },
   props: {
     dialog: Boolean,
-    baseSetList: Array,
+    baseSetlist: Array,
     band: Object,
     memberInfo: Object,
   },
@@ -240,7 +240,7 @@ export default {
         this.$refs.songlist.reload(this.event.setList);
       }
       this.eventPoster = this.event.poster || this.basePoster;
-      this.setListDuration();
+      this.setlistDuration();
     },
     setPlace(place) {
       this.currentPlace = place;
@@ -255,16 +255,16 @@ export default {
         });
       }
     },
-    orderSetList() {
+    orderSetlist() {
       this.event.setList = this.$refs.songlist.getList();
-      this.setListDuration();
+      this.setlistDuration();
       this.drag = false;
     },
-    liveSetList() {
+    liveSetlist() {
       return this.event.setList.filter((s) => s.live);
     },
-    setListDuration() {
-      let setList = this.liveSetList();
+    setlistDuration() {
+      let setList = this.liveSetlist();
       if (setList.length) {
         this.duration = this.parseTime(
           setList.map((s) => s.duration).reduce((a, c) => a + c)
@@ -273,9 +273,9 @@ export default {
         this.duration = "0:00";
       }
     },
-    reloadSetList() {
+    reloadSetlist() {
       this.event.setList = this.copy(this.band.setList.filter((s) => s.live));
-      this.setListDuration();
+      this.setlistDuration();
       this.$refs.songlist.reload(this.event.setList);
     },
     startDrag() {
@@ -291,7 +291,7 @@ export default {
     isPublic: {
       handler(newValue) {
         if (!newValue) {
-          this.event.isSetListPublic = false;
+          this.event.isSetlistPublic = false;
         }
       },
     },

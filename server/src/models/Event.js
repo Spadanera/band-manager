@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 import Song from './Song';
 import Image from './Image';
 
-const SetListType = Object.freeze({
+const SetlistType = Object.freeze({
     Unplugged: 'unplugged',
     Hybrid: 'hybrid',
     Electric: 'electric'
@@ -19,7 +19,7 @@ let EventSchema = new mongoose.Schema({
     locationURL: String,
     setList: [Song],
     isPublic: Boolean,
-    isSetListPublic: Boolean,
+    isSetlistPublic: Boolean,
     poster: Image,
 });
 

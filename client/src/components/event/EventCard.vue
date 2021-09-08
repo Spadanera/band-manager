@@ -1,7 +1,7 @@
 <template>
   <v-card>
     <v-expand-transition>
-      <div v-show="setListOpen !== 0">
+      <div v-show="setlistOpen !== 0">
         <div>
           <v-row>
             <v-col :cols="event.poster ? 7 : 12">
@@ -55,7 +55,7 @@
       flat
       tile
       accordion
-      v-model="setListOpen"
+      v-model="setlistOpen"
     >
       <v-expansion-panel>
         <v-expansion-panel-header>
@@ -138,7 +138,7 @@ export default {
   },
   data() {
     return {
-      setListOpen: false,
+      setlistOpen: false,
       overlay: false,
     };
   },

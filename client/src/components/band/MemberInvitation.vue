@@ -33,7 +33,7 @@
                 label="Edit Info"
               ></v-switch>
               <v-switch
-                v-model="bandMember.canEditSetList"
+                v-model="bandMember.canEditSetlist"
                 class="ma-1"
                 label="Edit Setlist"
               ></v-switch>
@@ -105,7 +105,7 @@ export default {
         isCreator: false,
         canEditMembers: false,
         canEditInfo: false,
-        canEditSetList: false,
+        canEditSetlist: false,
         canEditEvents: false,
       };
       if (this.$refs.form) {
@@ -149,7 +149,7 @@ export default {
         if (newValue) {
           this.bandMember.canEditMembers = true;
           this.bandMember.canEditInfo = true;
-          this.bandMember.canEditSetList = true;
+          this.bandMember.canEditSetlist = true;
           this.bandMember.canEditEvents = true;
         }
       },

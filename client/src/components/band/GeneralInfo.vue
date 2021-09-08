@@ -44,7 +44,7 @@
                       </v-chip>
                       <v-chip
                         class="ma-1"
-                        v-if="bandMember.isAdmin || bandMember.canEditSetList"
+                        v-if="bandMember.isAdmin || bandMember.canEditSetlist"
                         small
                       >
                         Edit Setlist

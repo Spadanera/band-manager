@@ -12,7 +12,7 @@
           :memberInfo="memberInfo"
           :drag="drag"
           :showPreview="true"
-          @ordersetlist="orderSetList"
+          @ordersetlist="orderSetlist"
           @opensong="openSong"
           @deletesong="deleteSong"
           @startdrag="startDrag"
@@ -28,7 +28,7 @@
           :songList="pendingList"
           :memberInfo="memberInfo"
           :drag="drag"
-          @ordersetlist="orderSetList"
+          @ordersetlist="orderSetlist"
           @opensong="openSong"
           @deletesong="deleteSong"
           @startdrag="startDrag"
@@ -44,7 +44,7 @@
           :songList="removedList"
           :memberInfo="memberInfo"
           :drag="drag"
-          @ordersetlist="orderSetList"
+          @ordersetlist="orderSetlist"
           @opensong="openSong"
           @deletesong="deleteSong"
           @startdrag="startDrag"
@@ -58,7 +58,7 @@
 import SongList from "../song/SongList.vue";
 
 export default {
-  name: "SetList",
+  name: "Setlist",
   components: {
     SongList,
   },
@@ -101,7 +101,7 @@ export default {
     deleteSong(song) {
       this.$emit("deletesong", song);
     },
-    orderSetList() {
+    orderSetlist() {
       for (let i = 0; i < this.listArray.length; i++) {
         this[this.listArray[i]] = this.$refs[this.listArray[i]].getList();
       }
@@ -112,8 +112,8 @@ export default {
       });
       this.drag = false;
     },
-    getDuration(setListType) {
-      let list = this.setList.filter((s) => s.status === setListType);
+    getDuration(setlistType) {
+      let list = this.setList.filter((s) => s.status === setlistType);
       if (list.length) {
         return this.parseTime(
           list.map((s) => s.duration).reduce((a, c) => a + c)
