@@ -79,12 +79,38 @@ router.post("/", async (req, res) => {
     }
 });
 
-router.put("/:id", async (req, res) => {
+router.put("/:id/:element", async (req, res) => {
     try {
         let bandMember = await BandMember({ userId: req.session.userId, bandId: req.params.id, isAdmin: true });
         if (bandMember && req.params.id === req.body._id) {
             let band = formatSetList(req.body);
-            res.json(await Band.findOneAndUpdate({ _id: req.params.id }, band));
+            let _band = await Band.findOne({ _id: req.params.id }).populate("bandMembers events");
+            switch (req.params.element) {
+                case 'generalinfo':
+                    band.setList = _band.setList;
+                    band.bandMembers = _band.bandMembers;
+                    band.events = _band.events;
+                    await Band.findOneAndUpdate({ _id: req.params.id }, band);
+                    break;
+                case 'setlist':
+                    _band.setList = band.setList;
+                    await _band.save();
+                    break;
+                case 'bandmembers':
+                    _band.bandMembers = band.bandmembers;
+                    await _band.save();
+                    break;
+                case 'events':
+                    _band.events = band.events;
+                    await _band.save();
+                    break;
+                default:
+                    break;
+                
+            }
+            
+            await _band.populate("bandMembers events").execPopulate();
+            res.json(_band);
         }
         else {
             res.status(401).send("Unauthorized");

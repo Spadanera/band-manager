@@ -1,7 +1,13 @@
 <template>
   <v-card>
     <v-expand-transition>
-      <div v-show="setListOpen === undefined || $vuetify.breakpoint.xs || !memberInfo.publicUser">
+      <div
+        v-show="
+          setListOpen === undefined ||
+          $vuetify.breakpoint.xs ||
+          !memberInfo.publicUser
+        "
+      >
         <div>
           <v-subheader>{{ formatted_address }}</v-subheader>
           <v-card-title style="padding-top: 0" class="headline">{{
@@ -120,7 +126,13 @@
               <v-col cols="4"> Events </v-col>
               <v-col cols="8" class="text-right font-weight-bold">
                 <v-fade-transition leave-absolute>
-                  <span v-if="open && (!memberInfo.publicUser || $vuetify.breakpoint.smAndUp)" key="0">
+                  <span
+                    v-if="
+                      open &&
+                      (!memberInfo.publicUser || $vuetify.breakpoint.smAndUp)
+                    "
+                    key="0"
+                  >
                     {{ band.name }}
                   </span>
                 </v-fade-transition>
@@ -130,7 +142,10 @@
         </v-expansion-panel-header>
         <v-expansion-panel-content>
           <v-list three-line>
-            <v-list-item v-for="event in band.events" v-bind:key="event._id">
+            <v-list-item
+              v-for="event in sortEvents(band.events)"
+              v-bind:key="event._id"
+            >
               <v-list-item-avatar size="60" v-if="event.poster">
                 <v-img :src="event.poster"></v-img>
               </v-list-item-avatar>
@@ -162,7 +177,13 @@
               <v-col cols="4"> Setlist </v-col>
               <v-col cols="8" class="text-right font-weight-bold">
                 <v-fade-transition leave-absolute>
-                  <span v-if="open && (!memberInfo.publicUser || $vuetify.breakpoint.smAndUp)" key="0">
+                  <span
+                    v-if="
+                      open &&
+                      (!memberInfo.publicUser || $vuetify.breakpoint.smAndUp)
+                    "
+                    key="0"
+                  >
                     {{ band.name }}
                   </span>
                 </v-fade-transition>
@@ -259,6 +280,23 @@ export default {
       if (address) {
         return JSON.parse(address).formatted_address;
       }
+    },
+    sortEvents(events) {
+      let _events = this.copy(events);
+      return _events.sort((e1, e2) => {
+        if (e1.eventDate < e2.eventDate) {
+          return 1;
+        } else if (e1.eventDate > e2.eventDate) {
+          return -1;
+        } else {
+          if (e1.eventTime < e2.eventTime) {
+            return 1;
+          } else if (e1.eventTime > e2.eventTime) {
+            return -1;
+          }
+        }
+        return 0;
+      });
     },
   },
   computed: {

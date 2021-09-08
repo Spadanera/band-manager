@@ -123,7 +123,7 @@
       :dialog="dialogBand"
       :band="band"
       @close="dialogBand = false"
-      @submitted="$emit('reload')"
+      @submitted="reload"
       :memberInfo="memberInfo"
     />
     <MemberInvitation
@@ -190,8 +190,8 @@ export default {
   },
   methods: {
     async deleteBandMember() {
-        await this.Service.bandService.deleteBandMember(this.memberToDeleteId);
-        this.$emit("reload");
+        let band = await this.Service.bandService.deleteBandMember(this.memberToDeleteId);
+        this.$emit("reload", band);
     },
     confirmDeleteBandMember(bandMemberId) {
       this.modalTitle = "Are you sure?";
@@ -215,8 +215,8 @@ export default {
         that.dialogMember = true;
       }, 100);
     },
-    reload() {
-      this.$emit("reload");
+    reload(band) {
+      this.$emit("reload", band);
     },
   },
 };

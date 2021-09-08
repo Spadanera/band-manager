@@ -21,7 +21,6 @@
                   label="Name"
                   :rules="[validationRules.required]"
                   ref="name"
-                  :autofocus="true"
                 ></v-text-field>
               </v-col>
             </v-row>
@@ -176,10 +175,14 @@ export default {
       this.$refs.form.validate();
       if (this.valid) {
         this.localBand.location = JSON.stringify(this.currentPlace);
+        let band = this.copy(this.localBand);
+        delete band.events;
+        delete band.bandMembers;
+        delete band.setList;
         this.localBand = await this.Service.bandService.upsertBand(
-          this.localBand
+          band, 'generalinfo'
         );
-        this.$emit("submitted", "Band successfully created");
+        this.$emit("submitted", this.localBand);
         this.$emit("close", false);
       }
     },

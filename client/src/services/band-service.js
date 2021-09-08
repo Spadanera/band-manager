@@ -30,13 +30,13 @@ const band = {
         );
         return response.data;
     },
-    upsertBand: async (band) => {
+    upsertBand: async (band, element) => {
         let response;
         if (!band._id) {
             response = await client.post("/api/band", band);
         }
         else {
-            response = await client.put(`/api/band/${band._id}`, band);
+            response = await client.put(`/api/band/${band._id}/${element}`, band);
         }
         return response.data;
     },

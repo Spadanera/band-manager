@@ -135,7 +135,6 @@ export default {
   watch: {
     songList: {
       handler: function () {
-        console.log('songList changed')
         this.reload();
       },
       deep: true

@@ -151,15 +151,15 @@ export default {
       this.dialogConfirm = true;
     },
     async deleteEvent() {
-      await this.Service.bandService.deleteEvent(this.band._id, this.eventId);
+      let band = await this.Service.bandService.deleteEvent(this.band._id, this.eventId);
       this.snackbar = {
         enabled: true,
         text: "Event deleted",
       };
-      this.reload();
+      this.reload(band);
     },
-    reload() {
-      this.$emit("reload");
+    reload(band) {
+      this.$emit("reload", band);
     },
     copyEvent(bandEvent) {
       let bandCopied = this.copy(bandEvent);

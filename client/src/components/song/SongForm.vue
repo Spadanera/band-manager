@@ -23,7 +23,6 @@
               v-model="localSong.title"
               label="Title"
               :rules="[validationRules.required]"
-              :autofocus="true"
             ></v-text-field>
             <v-combobox
               v-else

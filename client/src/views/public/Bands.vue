@@ -14,7 +14,7 @@
       </v-row>
     </div>
     <div v-if="bands.length" class="max-height">
-      <v-row :justify="$vuetify.breakpoint.smAndUp ? 'space-between' : ''" dense>
+      <v-row :justify="$vuetify.breakpoint.smAndUp ? 'space-between' : undefined" dense>
         <v-col v-if="$vuetify.breakpoint.mdAndUp" cols="0" md="1"></v-col>
         <v-col cols="8" sm="8" md="8" lg="3" xl="2">
           <v-text-field
@@ -93,6 +93,7 @@
 <script>
 import BandCard from "../../components/band/BandCard.vue";
 export default {
+  name: "PublicBand",
   components: {
     BandCard,
   },
@@ -169,7 +170,7 @@ export default {
     filteredBands() {
       return this.bands.filter(
         (b) =>
-          this.search === "" || b.name.search(new RegExp(this.search, "i")) > -1
+          this.search === "" || this.search === null || b.name.search(new RegExp(this.search, "i")) > -1
       );
     },
   },

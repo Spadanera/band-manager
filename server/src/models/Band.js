@@ -15,6 +15,8 @@ let BandSchema = new mongoose.Schema({
     logo: String,
     location: String,
     setList: [Song],
+    setListName: String,
+    setLists: [],
     bandMembers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'BandMember' }],
     events: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Event' }],
     type: { type: String, enum: Object.values(BandType), default: BandType.Cover },

@@ -77,8 +77,13 @@ export default {
     };
   },
   methods: {
-    async loadBand() {
-      this.band = await this.Service.bandService.getBand(this.$route.params.id);
+    async loadBand(band) {
+      if (band) {
+        this.band = band;
+      }
+      else {
+        this.band = await this.Service.bandService.getBand(this.$route.params.id);
+      }
       this.loaded = true;
       if (this.band.location) {
         this.band.location_address = JSON.parse(this.band.location);
@@ -86,9 +91,13 @@ export default {
       this.$emit("setband", this.band.name);
       this.getSubList();
     },
-    async updateBand() {
-      await this.Service.bandService.upsertBand(this.band);
-      await this.loadBand();
+    async updateSetlist() {
+      let band = {
+        _id: this.band._id,
+        setList: this.band.setList
+      }
+      band = await this.Service.bandService.upsertBand(band, 'setlist');
+      await this.loadBand(band);
     },
     orderSetList(lists) {
       lists.confirmedList.forEach((s) => (s.status = "confirmed"));
@@ -102,7 +111,7 @@ export default {
         ...lists.pendingList,
         ...lists.removedList,
       ];
-      this.updateBand();
+      this.updateSetlist();
     },
     getSubList() {
       if (this.$refs.setlist) {
@@ -142,7 +151,7 @@ export default {
           }
         }
       }
-      this.updateBand();
+      this.updateSetlist();
       this.dialogSong = false;
     },
     closeSong() {
@@ -150,7 +159,7 @@ export default {
     },
     deleteSong(song) {
       this.band.setList = this.band.setList.filter((s) => s._id !== song._id);
-      this.updateBand();
+      this.updateSetlist();
     },
   },
   async created() {

@@ -34,7 +34,8 @@ router.post("/:bandId", async (req, res) => {
             band.events = band.events || [];
             band.events.push(event._id);
             await band.save();
-            res.json(event);
+            await band.populate("bandMembers events").execPopulate();
+            res.json(band);
         }
         else {
             res.status(401).send("Unauthorized");
@@ -50,9 +51,11 @@ router.put("/:bandId/:id", async (req, res) => {
     try {
         let band = await getBand(req.params.bandId, req.session.userId);
         if (band) {
-            res.json(await Event.findOneAndUpdate({
+            await Event.findOneAndUpdate({
                 _id: req.params.id
-            }, req.body));
+            }, req.body);
+            await band.populate("bandMembers events").execPopulate();
+            res.json(band);
         }
         else {
             res.status(401).send("Unauthorized");
@@ -71,8 +74,9 @@ router.delete("/:bandId/:id", async (req, res) => {
             let event = await Event.findOne({ _id: req.params.id });
             await event.remove();
             band.events.splice(band.events.indexOf(event._id), 1);
-            band.save();
-            res.send("Deleted");
+            await band.save();
+            await band.populate("bandMembers events").execPopulate();
+            res.send(band);
         }
         else {
             res.status(401).send("Unauthorized");

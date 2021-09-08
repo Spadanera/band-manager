@@ -73,12 +73,12 @@ export default {
       this.localBandMember = {};
       this.$emit("close");
     },
-    submitForm() {
-      this.Service.bandService.updateBandMember(
+    async submitForm() {
+      let band = await this.Service.bandService.updateBandMember(
         this.bandId,
         this.localBandMember
       );
-      this.$emit("reload");
+      this.$emit("reload", band);
       this.closeModal();
     },
     reload() {
