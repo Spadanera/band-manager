@@ -39,7 +39,7 @@
         <EventCard
           :event="event"
           :memberInfo="memberInfo"
-          :baseSetlist="band.setList"
+          :baseSetlist="band.setlists[0]"
           @openevent="openEvent(event)"
           @deleteevent="confirmDeleteEvent"
           @copyevent="copyEvent"
@@ -140,7 +140,7 @@ export default {
       if (!bandEvent || !bandEvent._id) {
         bandEvent = {
           bandId: this.band._id,
-          setList: this.band.setList.filter(s => s.live ),
+          setlist: [],
         };
       }
       this.$refs.eventform.reload(bandEvent);

@@ -16,7 +16,7 @@ router.put("/:id", async (req, res) => {
             bandMember.canEditEvents = true;
         }
         await BandMember.findOneAndUpdate({ _id: req.body._id, bandId: req.params.id }, req.body);
-        await band.populate("bandMembers events").execPopulate();
+        await band.populate("bandMembers events setlists").execPopulate();
         res.json(band);
     }
     catch (e) {
@@ -36,7 +36,7 @@ router.delete("/:id", async (req, res) => {
             await band.save();
         }
         await bandMember.delete();
-        await band.populate("bandMembers events").execPopulate();
+        await band.populate("bandMembers events setlists").execPopulate();
         res.json(band);
     }
     catch (e) {

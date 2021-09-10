@@ -15,7 +15,9 @@
           }}</v-list-item-title>
         </v-list-item-content>
         <v-list-item-action>
-          <v-list-item-action-text v-if="showPreview && localSongList.filter(s => s.preview).length">
+          <v-list-item-action-text
+            v-if="showPreview && localSongList.filter((s) => s.preview).length"
+          >
             <v-btn small text @click="playSetlist">
               <v-icon left> play_arrow </v-icon>
               Play
@@ -36,12 +38,18 @@
       <v-subheader v-if="inEvent">
         <span>Time: {{ duration }}</span>
         <v-spacer></v-spacer>
-        <span
-          v-if="inEvent && !readOnly"
-          style="cursor: pointer"
-          @click="reloadSetlist()"
-          >RELOAD MAIN SETLIST</span
-        >
+        <v-menu offset-y v-if="inEvent && !readOnly">
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn text small v-bind="attrs" v-on="on"> LOAD SETLIST </v-btn>
+          </template>
+          <v-list dense>
+            <v-list-item dense style="cursor: pointer;" v-for="setlist in setlists" :key="setlist._id">
+              <v-list-item-title @click="reloadSetlist(setlist._id)">{{
+                setlist.title
+              }}</v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-menu>
       </v-subheader>
       <v-list-item-group>
         <draggable
@@ -84,6 +92,7 @@ export default {
   props: {
     inEvent: Boolean,
     songList: Array,
+    setlists: Array,
     memberInfo: Object,
     listName: String,
     listLabel: String,
@@ -122,12 +131,12 @@ export default {
     reload(songList) {
       this.localSongList = this.copy(songList || this.songList);
     },
-    reloadSetlist() {
-      this.$emit("reloadsetlist");
+    reloadSetlist(setlistId) {
+      this.$emit("reloadsetlist", setlistId);
     },
     playSetlist() {
       this.$root.$emit("playSetlist", this.localSongList);
-    }
+    },
   },
   created() {
     this.localSongList = this.copy(this.songList);
@@ -137,8 +146,8 @@ export default {
       handler: function () {
         this.reload();
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
 };
 </script>

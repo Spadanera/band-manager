@@ -34,7 +34,7 @@ router.post("/:bandId", async (req, res) => {
             band.events = band.events || [];
             band.events.push(event._id);
             await band.save();
-            await band.populate("bandMembers events").execPopulate();
+            await band.populate("bandMembers events setlists").execPopulate();
             res.json(band);
         }
         else {
@@ -54,7 +54,7 @@ router.put("/:bandId/:id", async (req, res) => {
             await Event.findOneAndUpdate({
                 _id: req.params.id
             }, req.body);
-            await band.populate("bandMembers events").execPopulate();
+            await band.populate("bandMembers events setlists").execPopulate();
             res.json(band);
         }
         else {
@@ -75,7 +75,7 @@ router.delete("/:bandId/:id", async (req, res) => {
             await event.remove();
             band.events.splice(band.events.indexOf(event._id), 1);
             await band.save();
-            await band.populate("bandMembers events").execPopulate();
+            await band.populate("bandMembers events setlists").execPopulate();
             res.send(band);
         }
         else {

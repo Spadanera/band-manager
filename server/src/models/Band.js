@@ -8,15 +8,13 @@ const BandType = Object.freeze({
 });
 
 let BandSchema = new mongoose.Schema({
-    bandId: mongoose.Schema.Types.ObjectId,
     creatorUserId: mongoose.Schema.Types.ObjectId,
     name: String,
     description: String,
     logo: String,
     location: String,
     setList: [Song],
-    setListName: String,
-    setLists: [],
+    setlists: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Setlist' }],
     bandMembers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'BandMember' }],
     events: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Event' }],
     type: { type: String, enum: Object.values(BandType), default: BandType.Cover },
@@ -25,6 +23,7 @@ let BandSchema = new mongoose.Schema({
     isPublic: Boolean,
     isMembersPublic: Boolean,
     isSetlistPublic: Boolean,
+    newSchema: Boolean,
 });
 
 export default mongoose.model("Band", BandSchema);

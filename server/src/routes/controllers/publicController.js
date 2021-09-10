@@ -6,7 +6,7 @@ import Event from '../../models/Event';
 
 router.get("/band", async (req, res) => {
     try {
-        let bands = await Band.find({ isPublic: true }).populate("bandMembers events");
+        let bands = await Band.find({ isPublic: true }).populate("bandMembers events setlists");
         let outputBands = [];
         for (let i = 0; i < bands.length; i++) {
             let band = bands[i];
@@ -47,7 +47,7 @@ router.get("/band", async (req, res) => {
 
 router.get("/band/:id", async (req, res) => {
     try {
-        let band = await Band.findOne({ _id: req.params.id, isPublic: true }).populate("bandMembers events");
+        let band = await Band.findOne({ _id: req.params.id, isPublic: true }).populate("bandMembers events setlists");
         delete band.creatorUserId;
         band.events = band.events || [];
         band.events = band.events.filter(e => e.isPublic);

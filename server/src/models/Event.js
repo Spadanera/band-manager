@@ -9,7 +9,6 @@ const SetlistType = Object.freeze({
 });
 
 let EventSchema = new mongoose.Schema({
-    eventId: mongoose.Schema.Types.ObjectId,
     bandId: mongoose.Schema.Types.ObjectId,
     eventDate: String,
     eventTime: String,
@@ -18,6 +17,7 @@ let EventSchema = new mongoose.Schema({
     description: String,
     locationURL: String,
     setList: [Song],
+    setlist: [Song],
     isPublic: Boolean,
     isSetlistPublic: Boolean,
     poster: Image,

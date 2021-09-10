@@ -1,10 +1,6 @@
 <template>
   <v-dialog v-model="dialog" persistent scrollable max-width="600px">
     <v-card>
-      <v-card-title>
-        <span v-if="localBand._id" class="headline">Edit band</span>
-        <span v-else class="headline">New band</span>
-      </v-card-title>
       <v-divider></v-divider>
       <v-card-text style="max-height: 600px">
         <v-container grid-list-md>
@@ -179,6 +175,7 @@ export default {
         delete band.events;
         delete band.bandMembers;
         delete band.setList;
+        delete band.setlist;
         this.localBand = await this.Service.bandService.upsertBand(
           band, 'generalinfo'
         );

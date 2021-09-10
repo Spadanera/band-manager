@@ -1,10 +1,6 @@
 <template>
   <v-dialog v-model="dialog" scrollable persistent max-width="700px">
     <v-card>
-      {{ event.date }}
-      <v-card-title v-if="event._id">Edit Event</v-card-title>
-      <v-card-title v-else>Create Event</v-card-title>
-      <v-divider></v-divider>
       <v-tabs v-model="tab">
         <v-tab> INFO </v-tab>
         <v-tab> SETLIST </v-tab>
@@ -151,13 +147,14 @@
           <v-btn type="submit" style="display: none"></v-btn>
         </v-form>
       </v-card-text>
-      <v-card-text style="max-height: 700px; padding: 0;" v-show="tab === 1">
+      <v-card-text style="max-height: 700px; padding: 0" v-show="tab === 1">
         <SongList
           :inEvent="true"
           :duration="duration"
-          :songList="event.setList"
+          :songList="event.setlist"
           :memberInfo="memberInfo"
           :drag="drag"
+          :setlists="band.setlists"
           @ordersetlist="orderSetlist"
           @reloadsetlist="reloadSetlist"
           @startdrag="startDrag"
@@ -194,7 +191,7 @@ export default {
   data() {
     return {
       event: {
-        setList: [],
+        setlist: [],
       },
       valid: true,
       dialogDate: false,
@@ -220,7 +217,10 @@ export default {
           this.currentPlace.placeId = this.currentPlace.place_id;
           this.event.locationAddress = JSON.stringify(this.currentPlace);
         }
-        let band = await this.Service.bandService.upsertEvent(this.band._id, this.event);
+        let band = await this.Service.bandService.upsertEvent(
+          this.band._id,
+          this.event
+        );
         this.$emit("reload", band);
         this.closeModal();
       }
@@ -237,7 +237,7 @@ export default {
         this.currentPlace = {};
       }
       if (this.$refs.songlist) {
-        this.$refs.songlist.reload(this.event.setList);
+        this.$refs.songlist.reload(this.event.setlist);
       }
       this.eventPoster = this.event.poster || this.basePoster;
       this.setlistDuration();
@@ -256,27 +256,31 @@ export default {
       }
     },
     orderSetlist() {
-      this.event.setList = this.$refs.songlist.getList();
+      this.event.setlist = this.$refs.songlist.getList();
       this.setlistDuration();
       this.drag = false;
     },
     liveSetlist() {
-      return this.event.setList.filter((s) => s.live);
+      return this.event.setlist.filter((s) => s.live);
     },
     setlistDuration() {
-      let setList = this.liveSetlist();
-      if (setList.length) {
+      let setlist = this.liveSetlist();
+      if (setlist.length) {
         this.duration = this.parseTime(
-          setList.map((s) => s.duration).reduce((a, c) => a + c)
+          setlist.map((s) => s.duration).reduce((a, c) => a + c)
         );
       } else {
         this.duration = "0:00";
       }
     },
-    reloadSetlist() {
-      this.event.setList = this.copy(this.band.setList.filter((s) => s.live));
+    reloadSetlist(setlistId) {
+      this.event.setlist = this.copy(
+        this.band.setlists
+          .find((s) => s._id === setlistId).songs
+          .filter((s) => s.status === 'confirmed')
+      );
       this.setlistDuration();
-      this.$refs.songlist.reload(this.event.setList);
+      this.$refs.songlist.reload(this.event.setlist);
     },
     startDrag() {
       this.drag = true;

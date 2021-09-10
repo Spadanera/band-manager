@@ -66,7 +66,7 @@ export default {
     setList: Array,
     status: Array,
     memberInfo: Object,
-    bandId: String
+    bandId: String,
   },
   data() {
     return {

@@ -175,7 +175,7 @@ export default {
       return "";
     },
     songList() {
-      return this.event.setList.filter((s) => s.live);
+      return this.event.setlist.filter((s) => s.live);
     },
     duration() {
       let setList = this.songList;
