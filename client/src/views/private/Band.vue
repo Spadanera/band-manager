@@ -308,13 +308,15 @@ export default {
             songs: this.toCopy
               ? this.band.setlists[this.listIndex].songs.map((s) => {
                   return {
+                    title: s.title,
                     author: s.author,
-                    cover: s.cover,
                     duration: s.duration,
+                    status: s.status,
                     live: s.live,
                     position: s.position,
-                    status: s.status,
-                    title: s.title,
+                    audio: s.audio,
+                    preview: s.preview,
+                    cover: s.cover,
                   };
                 })
               : [],
