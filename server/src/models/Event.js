@@ -16,7 +16,6 @@ let EventSchema = new mongoose.Schema({
     locationAddress: String,
     description: String,
     locationURL: String,
-    setList: [Song],
     setlist: [Song],
     isPublic: Boolean,
     isSetlistPublic: Boolean,

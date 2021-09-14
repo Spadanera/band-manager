@@ -13,7 +13,7 @@
         <EventCard
           :event="event"
           :memberInfo="memberInfo"
-          :baseSetlist="band.setList"
+          :baseSetlist="band.setlists[0]"
           @openevent="openEvent(event)"
           @deleteevent="confirmDeleteEvent"
           @copyevent="copyEvent"

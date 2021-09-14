@@ -141,33 +141,68 @@
           </template>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
-          <v-list three-line>
-            <v-list-item
+          <v-expansion-panels>
+            <v-expansion-panel
               v-for="event in sortEvents(band.events)"
               v-bind:key="event._id"
             >
-              <v-list-item-avatar size="60" v-if="event.poster">
-                <v-img :src="event.poster"></v-img>
-              </v-list-item-avatar>
-              <v-list-item-content>
-                <v-list-item-title
-                  v-html="event.locationName"
-                ></v-list-item-title>
-                <v-list-item-subtitle
-                  v-text="getAddress(event.locationAddress)"
-                ></v-list-item-subtitle>
-                <v-list-item-subtitle>
-                  {{ moment(event.eventDate).format("LL") }}
-                  <span v-if="event.eventTime"> - {{ event.eventTime }}</span>
-                </v-list-item-subtitle>
-              </v-list-item-content>
-              <v-list-item-action>
-                <v-btn icon :href="event.locationURL" target="_blank">
-                  <v-icon>near_me</v-icon>
-                </v-btn>
-              </v-list-item-action>
-            </v-list-item>
-          </v-list>
+              <v-expansion-panel-header>
+                <v-list three-line style="max-width: calc(100% - -24px);">
+                  <v-list-item>
+                    <v-list-item-avatar size="60" v-if="event.poster">
+                      <v-img :src="event.poster"></v-img>
+                    </v-list-item-avatar>
+                    <v-list-item-content>
+                      <v-list-item-title class="text-truncate"
+                        v-html="event.locationName"
+                      ></v-list-item-title>
+                      <v-list-item-subtitle
+                        v-text="getAddress(event.locationAddress)"
+                      ></v-list-item-subtitle>
+                      <v-list-item-subtitle>
+                        {{ moment(event.eventDate).format("LL") }}
+                        <span v-if="event.eventTime">
+                          - {{ event.eventTime }}</span
+                        >
+                      </v-list-item-subtitle>
+                    </v-list-item-content>
+                    <v-list-item-action>
+                      <v-btn
+                        icon
+                        :href="event.locationURL"
+                        target="_blank"
+                        @click.stop="stopTheEvent"
+                      >
+                        <v-icon>near_me</v-icon>
+                      </v-btn>
+                    </v-list-item-action>
+                  </v-list-item>
+                </v-list>
+              </v-expansion-panel-header>
+              <v-expansion-panel-content>
+                <v-card>
+                  <v-card-text style="padding-bottom: 0;">
+                    <strong>{{event.locationName}}</strong>
+                  </v-card-text>
+                  <v-card-text>
+                    {{ event.description }}
+                  </v-card-text>
+                  <v-subheader v-if="event.isSetlistPublic">
+                    Event Setlist
+                  </v-subheader>
+                  <SongList
+                    :memberInfo="memberInfo"
+                    :songList="event.setlist.filter(s => s.live)"
+                    :inEvent="true"
+                    :readOnly="true"
+                    :duration="duration"
+                    :elevation="0"
+                    v-if="event.isSetlistPublic"
+                  />
+                </v-card>
+              </v-expansion-panel-content>
+            </v-expansion-panel>
+          </v-expansion-panels>
         </v-expansion-panel-content>
       </v-expansion-panel>
       <v-expansion-panel v-if="band.isSetlistPublic">
@@ -298,6 +333,7 @@ export default {
         return 0;
       });
     },
+    stopTheEvent: (event) => event.stopPropagation(),
   },
   computed: {
     hasLogo() {
@@ -311,13 +347,15 @@ export default {
       }
     },
     songList() {
-      return this.band.setList.filter((s) => s.status === "confirmed");
+      return this.band.setlists
+        ? this.band.setlists[0].songs.filter((s) => s.status === "confirmed")
+        : [];
     },
     duration() {
-      let setList = this.songList;
-      if (setList && setList.length) {
+      let setlist = this.songList;
+      if (setlist && setlist.length) {
         return this.parseTime(
-          setList.map((s) => s.duration).reduce((a, c) => a + c)
+          setlist.map((s) => s.duration).reduce((a, c) => a + c)
         );
       } else {
         return "0:00";

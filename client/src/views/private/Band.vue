@@ -54,10 +54,10 @@
             <span>New Setlist</span>
           </v-tooltip>
         </v-tabs>
-        <v-tabs-items v-model="listIndex" touchless>
-          <v-tab-item v-for="setlist in band.setlists" v-bind:key="setlist._id">
+        <v-tabs-items v-model="listIndex" touchless class="max-height-alt">
+          <v-tab-item v-for="setlist in band.setlists" v-bind:key="setlist._id" class="max-height">
             <Setlist
-              :setList="setlist.songs"
+              :setlist="setlist.songs"
               :statuses="statuses"
               :memberInfo="memberInfo"
               :bandId="band._id"
@@ -166,7 +166,7 @@ export default {
   data() {
     return {
       band: {
-        setList: [],
+        setlist: [],
         bandMembers: [],
         events: [],
       },
@@ -212,7 +212,6 @@ export default {
     async updateSetlist() {
       let band = {
         _id: this.band._id,
-        setList: this.band.setList,
         setlists: this.band.setlists,
       };
       band = await this.Service.bandService.upsertBand(band, "setlist");
@@ -340,7 +339,7 @@ export default {
       }
       this.band.setlists = setlists;
       await this.updateSetlist();
-      if (this.tabIndex > this.band.setlists.length) {
+      if (this.tabIndex > this.band.setlists.length - 1) {
         this.tabIndex--;
       }
       this.dialogConfirm = false;

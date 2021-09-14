@@ -4,28 +4,26 @@
     :elevation="elevation"
     class="setlist"
   >
-    <v-list color="primary" dark v-if="!inEvent">
+    <v-list dense color="primary" dark v-if="!inEvent">
       <v-list-item>
         <v-list-item-icon>
-          <v-icon style="margin-top: 9px"> {{ icon }} </v-icon>
+          <v-icon> {{ icon }} </v-icon>
         </v-list-item-icon>
         <v-list-item-content>
-          <v-list-item-title class="headline">{{
+          <v-list-item-title class="subtitle-1">{{
             listLabel
           }}</v-list-item-title>
         </v-list-item-content>
         <v-list-item-action>
-          <v-list-item-action-text
+          <v-list-item-action-text>
+            Time: {{ duration }} <span style="margin-left: 10px;"
             v-if="showPreview && localSongList.filter((s) => s.preview).length"
           >
-            <v-btn small text @click="playSetlist">
-              <v-icon left> play_arrow </v-icon>
-              Play
+            <v-btn small icon @click="playSetlist">
+              <v-icon left> play_circle_outline </v-icon>
             </v-btn>
+          </span>
           </v-list-item-action-text>
-          <v-list-item-action-text
-            >Time: {{ duration }}</v-list-item-action-text
-          >
         </v-list-item-action>
       </v-list-item>
     </v-list>
@@ -43,7 +41,12 @@
             <v-btn text small v-bind="attrs" v-on="on"> LOAD SETLIST </v-btn>
           </template>
           <v-list dense>
-            <v-list-item dense style="cursor: pointer;" v-for="setlist in setlists" :key="setlist._id">
+            <v-list-item
+              dense
+              style="cursor: pointer"
+              v-for="setlist in setlists"
+              :key="setlist._id"
+            >
               <v-list-item-title @click="reloadSetlist(setlist._id)">{{
                 setlist.title
               }}</v-list-item-title>
@@ -167,5 +170,13 @@ export default {
 .setlist .v-list-item__action {
   margin-top: 5px;
   margin-bottom: 5px;
+}
+
+@media screen and (min-width: 900px) {
+  .max-height-list {
+    height: calc(100% - 70px);
+    max-height: calc(100% - 70px);
+    overflow-y: auto;
+  }
 }
 </style>

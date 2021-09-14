@@ -13,7 +13,6 @@ let BandSchema = new mongoose.Schema({
     description: String,
     logo: String,
     location: String,
-    setList: [Song],
     setlists: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Setlist' }],
     bandMembers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'BandMember' }],
     events: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Event' }],

@@ -13,23 +13,6 @@ router.get("/", async (req, res) => {
         let bands = await Band.find({ bandMembers: { "$in": bandMembers } }).populate("bandMembers");
         for (var i = 0; i < bands.length; i++) {
             bands[i].memberInfo = await BandMember.findOne({ userId: req.session.userId, bandId: bands[i]._id });
-            if (!bands[i].newSchema) {
-                let setlist = new Setlist({
-                    bandId: bands[i]._id,
-                    title: "Principal",
-                    songs: bands[i].setList
-                });
-                for (var j = 0; j < bands[i].events.length; j++) {
-                    let event = await Event.findOne({ _id: bands[i].events[j] });
-                    event.setlist = event.setList;
-                    await event.save();
-                }
-                await setlist.save();
-                bands[i].setlists = [];
-                bands[i].setlists.push(setlist._id);
-                bands[i].newSchema = true;
-                await bands[i].save();
-            }
         }
         res.json(bands);
     }
@@ -69,13 +52,17 @@ router.post("/", async (req, res) => {
         if (!band.genres) {
             band.genres = [];
         }
-        if (!band.setList) {
-            band.setList = [];
-        }
-        if (!band.setlists) {
-            band.setlists = [];
-        }
         await band.save();
+
+        let setlist = new Setlist({
+            bandId: band._id,
+            title: "Principal"
+        });
+        await setlist.save();
+        band.setlists = [];
+        band.setlists.push(setlist);
+        await band.save();
+
         let user = await User.findOne({ _id: req.session.userId });
         let bandMember = new BandMember({
             userId: req.session.userId,
@@ -108,7 +95,6 @@ router.put("/:id/:element", async (req, res) => {
             let _band = await Band.findOne({ _id: req.params.id }).populate("bandMembers events setlists");
             switch (req.params.element) {
                 case 'generalinfo':
-                    band.setList = _band.setList;
                     band.setlists = _band.setlists;
                     band.bandMembers = _band.bandMembers;
                     band.events = _band.events;
@@ -129,14 +115,14 @@ router.put("/:id/:element", async (req, res) => {
                             _band.setlists.push(band.setlists[i]._id);
                         }
                     }
-                    // for (i = 0; i < setlists.length; i++) {
-                    //     let _id = setlists[i]._id;
-                    //     if (!(band.setlists.find(function (s) {
-                    //         return s._id === _id;    
-                    //     }))) {
-                    //         await Setlist.findOneAndDelete({ _id: setlists._id });
-                    //     }
-                    // }
+                    for (i = 0; i < setlists.length; i++) {
+                        const _id = setlists[i]._id;
+                        if (!(band.setlists.find(function (s) {
+                            return s._id === _id;    
+                        }))) {
+                            await Setlist.findOneAndDelete({ _id: setlists._id });
+                        }
+                    }
                     await _band.save();
                     break;
                 case 'bandmembers':
@@ -176,6 +162,9 @@ router.delete("/:id", async (req, res) => {
             for (let i = 0; i < band.events.length; i++) {
                 await Event.findOneAndDelete({ _id: band.events[i]._id });
             }
+            for (let i = 0; i < band.setlists.length; i++) {
+                await Setlist.findOneAndDelete({ _id: band.setlists[i]._id });
+            }
             res.json(await Band.findOneAndDelete({ _id: req.params.id }));
         }
         else {
@@ -189,15 +178,18 @@ router.delete("/:id", async (req, res) => {
 });
 
 function formatSetlist(band) {
-    let setList = band.setList;
-    if (setList) {
-        for (let i = 0; i < setList.length; i++) {
-            let song = setList[i];
-            if (song.status === "confirmed") {
-                song.live = true;
-            }
-            else {
-                song.live = false;
+    let setlists = band.setlists;
+    if (setlists) {
+        for (let j = 0; j < setlists.length; j++) {
+            let setlist = setlists[j];
+            for (let i = 0; i < setlist.songs.length; i++) {
+                let song = setlist.songs[i];
+                if (song.status === "confirmed") {
+                    song.live = true;
+                }
+                else {
+                    song.live = false;
+                }
             }
         }
     }

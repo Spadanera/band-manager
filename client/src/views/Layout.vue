@@ -165,7 +165,7 @@
       :title="play.title"
       :author="play.author"
       :open="play.open"
-      :isList="setList.length ? true : false"
+      :isList="setlist.length ? true : false"
       @close="closePlayer"
       @ended="endedSong"
       @next="nextSong"
@@ -195,6 +195,18 @@
         </v-btn>
       </v-img>
     </v-dialog>
+    <v-snackbar
+      v-model="snackbar.enabled"
+      :bottom="true"
+      :left="false"
+      :multi-line="false"
+      :right="false"
+      :timeout="3000"
+      :vertical="false"
+    >
+      {{ snackbar.text }}
+      <v-btn text @click="snackbar.enabled = false">Close</v-btn>
+    </v-snackbar>
   </div>
 </template>
 
@@ -231,8 +243,12 @@ export default {
       },
       image: "",
       imageDialog: false,
-      setList: [],
+      setlist: [],
       playIndex: 0,
+      snackbar: {
+        enebled: false,
+        text: "",
+      },
     };
   },
   methods: {
@@ -286,22 +302,22 @@ export default {
     },
     closePlayer() {
       this.play.open = false;
-      this.setList = [];
+      this.setlist = [];
       this.playIndex = 0;
     },
     openImage(image) {
       this.image = image;
       this.imageDialog = true;
     },
-    playSetlist(setList) {
-      this.setList = setList.filter(s => s.preview);
+    playSetlist(setlist) {
+      this.setlist = setlist.filter(s => s.preview);
       this.playIndex = 0;
-      this.startPlayer(this.setList[0]);
+      this.startPlayer(this.setlist[0]);
     },
     endedSong() {
       this.playIndex++;
-      if (this.setList.length > this.playIndex) {
-        this.startPlayer(this.setList[this.playIndex]);
+      if (this.setlist.length > this.playIndex) {
+        this.startPlayer(this.setlist[this.playIndex]);
       }
       else {
         this.closePlayer();
@@ -313,14 +329,21 @@ export default {
     previousSong() {
       if (this.playIndex > 0) {
         this.playIndex--;
-        this.startPlayer(this.setList[this.playIndex]);
+        this.startPlayer(this.setlist[this.playIndex]);
       }
+    },
+    showSnackbar(text) {
+      this.snackbar = {
+        enabled: true,
+        text
+      };
     }
   },
   async created() {
     this.$root.$on("startPlayer", this.startPlayer);
     this.$root.$on("playSetlist", this.playSetlist);
     this.$root.$on("openImage", this.openImage);
+    this.$root.$on("showSnackbar", this.showSnackbar);
     try {
       let isLoggedIn = await client.get("/auth/checkauthentication");
       this.isLoggedIn = isLoggedIn.data;
@@ -366,5 +389,6 @@ img {
 
 .v-dialog {
   box-shadow: none !important;
+  overflow-x: hidden !important;
 }
 </style>

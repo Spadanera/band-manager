@@ -115,6 +115,9 @@ new Vue({
       if (error.response.status === 401) {
         window.location.href = `${window.origin}?from=${encodeURIComponent(window.location.href)}`;
       }
+      if (error.response.status >= 500) {
+        this.$root.$emit("showSnackbar", error);
+      }
       return Promise.reject(error);
     });
   },

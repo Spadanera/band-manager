@@ -27,7 +27,7 @@ router.get("/band", async (req, res) => {
                 outputBand.bandMembers = band.bandMembers;
             }
             if (band.isSetlistPublic) {
-                outputBand.setList = band.setList;
+                outputBand.setlists = band.setlists;
             }
             if (band.location) {
                 outputBand.location_address = JSON.parse(band.location);
@@ -54,14 +54,14 @@ router.get("/band/:id", async (req, res) => {
         for (let i = 0; i < band.events.length; i++) {
             let event = band.events[i];
             if (!event.isSetlistPublic) {
-                delete event.setList;
+                delete event.setlists;
             }
         }
         if (!band.isMembersPublic) {
             delete band.bandMembers;
         }
         if (!band.isSetlistPublic) {
-            delete band.setList;
+            delete band.setlists;
         }
         if (band.location) {
             band.location_address = JSON.parse(band.location);
@@ -80,20 +80,30 @@ router.get("/band/:id", async (req, res) => {
 router.get("/event", async (req, res) => {
     try {
         let events = await Event.find({ isPublic: true });
+        let outputEvents = [];
         if (events) {
             for (let i = 0; i < events.length; i++) {
                 if (!events[i].isSetlistPublic) {
-                    delete events[i].setList;
+                    delete events[i].setlist;
                 }
-                events[i].band = Band.find({ _id: events[i]._id }).select("name description logo location type tributeArtist genres isPublic");
+                if (events[i].eventDate >= (new Date()).toISOString().split("T").shift()) {
+                    let band = await Band.findOne({ _id: events[i].bandId }).select("name description logo location type tributeArtist genres isPublic");
+                    if (band.isPublic) {
+                        let outputEvent = JSON.parse(JSON.stringify(events[i]));
+                        outputEvent.band = band;
+                        if (events[i].locationAddress) {
+                            outputEvent.location_address = JSON.parse(events[i].locationAddress);
+                        }
+                        outputEvents.push(outputEvent);
+                    }
+                }
             }
-            events = events.filter(e => e.band.isPublic);
         }
-        res.json(events);
+        res.json(outputEvents);
     }
     catch (e) {
         console.error(e);
-        res.status(500).json(e);
+        res.status(500).json({ e: e.message });
     }
 });
 

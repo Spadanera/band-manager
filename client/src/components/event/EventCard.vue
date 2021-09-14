@@ -1,10 +1,35 @@
 <template>
   <v-card>
+    <v-card-title v-if="memberInfo.publicUser && event.band">
+      <v-avatar style="margin-right: 15px">
+        <img :src="event.band.logo" :alt="event.band.name" />
+      </v-avatar>
+      {{ event.band.name }}
+      <v-spacer></v-spacer>
+      <v-btn
+        v-if="memberInfo.publicUser"
+        v-show="this.waShareLink"
+        text
+        small
+        style="padding-right: 0;"
+        :href="waShareLink"
+        data-action="share/whatsapp/share"
+      >
+        <v-icon>whatsapp</v-icon>
+      </v-btn>
+    </v-card-title>
     <v-expand-transition>
       <div v-show="setlistOpen !== 0">
         <div>
           <v-row>
-            <v-col :cols="event.poster ? 7 : 12">
+            <v-col
+              :cols="
+                event.poster ||
+                (memberInfo.publicUser && event.band && event.band.logo)
+                  ? 7
+                  : 12
+              "
+            >
               <v-card-subtitle>
                 {{ moment(event.eventDate).format("LL") }}
                 <span v-if="event.eventTime"> - {{ event.eventTime }}</span>
@@ -20,7 +45,10 @@
               ></v-card-subtitle>
             </v-col>
             <v-col
-              v-show="event.poster"
+              v-show="
+                event.poster ||
+                (memberInfo.publicUser && event.band && event.band.logo)
+              "
               cols="5"
               style="padding-right: 20px; padding-top: 20px"
             >
@@ -29,7 +57,7 @@
                   <v-img
                     style="cursor: pointer"
                     class="rounded-lg"
-                    :src="event.poster"
+                    :src="event.poster || event.band.logo"
                     @click="openPoster"
                   >
                     <v-fade-transition>
@@ -56,6 +84,10 @@
       tile
       accordion
       v-model="setlistOpen"
+      v-if="
+        (!memberInfo.publicUser || event.isSetlistPublic) &&
+        event.setlist.length
+      "
     >
       <v-expansion-panel>
         <v-expansion-panel-header>
@@ -73,7 +105,12 @@
           </template>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
-          <v-btn small text @click="playSetlist" v-if="songList.filter(s => s.preview).length">
+          <v-btn
+            small
+            text
+            @click="playSetlist"
+            v-if="songList.filter((s) => s.preview).length"
+          >
             <v-icon left> play_arrow </v-icon>
             Play Setlist
           </v-btn>
@@ -88,7 +125,7 @@
         </v-expansion-panel-content>
       </v-expansion-panel>
     </v-expansion-panels>
-    <v-card-actions v-if="memberInfo.canEditEvents">
+    <v-card-actions v-if="memberInfo.canEditEvents && !memberInfo.publicUser">
       <v-btn
         v-if="memberInfo.canEditEvents"
         text
@@ -153,7 +190,7 @@ export default {
     },
     playSetlist() {
       this.$root.$emit("playSetlist", this.songList);
-    }
+    },
   },
   computed: {
     waShareLink() {
@@ -178,10 +215,10 @@ export default {
       return this.event.setlist.filter((s) => s.live);
     },
     duration() {
-      let setList = this.songList;
-      if (setList.length) {
+      let setlist = this.songList;
+      if (setlist.length) {
         return this.parseTime(
-          setList.map((s) => s.duration).reduce((a, c) => a + c)
+          setlist.map((s) => s.duration).reduce((a, c) => a + c)
         );
       } else {
         return "0:00";

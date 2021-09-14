@@ -174,7 +174,6 @@ export default {
         let band = this.copy(this.localBand);
         delete band.events;
         delete band.bandMembers;
-        delete band.setList;
         delete band.setlist;
         this.localBand = await this.Service.bandService.upsertBand(
           band, 'generalinfo'

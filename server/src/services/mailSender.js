@@ -1,7 +1,7 @@
 import { createTransport } from 'nodemailer';
 import arubaAuth from '../arubaAuth';
 
-module.exports.sendMail = async (to, subject, text) => {
+module.exports.sendMail = async (to, subject, text, isHtml) => {
     let transporter = createTransport({
         host: arubaAuth.smtp,
         port: arubaAuth.port,
@@ -13,11 +13,20 @@ module.exports.sendMail = async (to, subject, text) => {
     });
 
     // send mail with defined transport object
-    await transporter.sendMail({
+    let mail = {
         from: '"Info - Gig Addicted" <info@gig-addicted.com>',
         to: to,
         subject: subject,
         text: text
         // html: "<b>Hello world?</b>", // html body
-    });
+    };
+
+    if (isHtml) {
+        mail.html = text;
+    }
+    else {
+        mail.text = text;
+    }
+
+    await transporter.sendMail(mail);
 };

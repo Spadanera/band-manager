@@ -1,6 +1,6 @@
 <template>
   <v-container fluid class="max-height">
-    <v-row class="max-height">
+    <v-row class="max-height" style="margin-top: 0; margin-bottom: 0;">
       <v-col cols="12" xs="12" sm="12" lg="4" md="4" class="max-height">
         <SongList
           ref="confirmedList"
@@ -63,7 +63,7 @@ export default {
     SongList,
   },
   props: {
-    setList: Array,
+    setlist: Array,
     status: Array,
     memberInfo: Object,
     bandId: String,
@@ -85,9 +85,9 @@ export default {
   },
   methods: {
     getSubList() {
-      this.confirmedList = this.setList.filter((s) => s.status === "confirmed");
-      this.pendingList = this.setList.filter((s) => s.status === "pending");
-      this.removedList = this.setList.filter((s) => s.status === "removed");
+      this.confirmedList = this.setlist.filter((s) => s.status === "confirmed");
+      this.pendingList = this.setlist.filter((s) => s.status === "pending");
+      this.removedList = this.setlist.filter((s) => s.status === "removed");
       this.confirmedList.sort((s1, s2) => s1.position - s2.position);
       for (let i = 0; i < this.listArray.length; i++) {
         if (this.$refs[this.listArray[i]] && this[this.listArray[i]]) {
@@ -113,7 +113,7 @@ export default {
       this.drag = false;
     },
     getDuration(setlistType) {
-      let list = this.setList.filter((s) => s.status === setlistType);
+      let list = this.setlist.filter((s) => s.status === setlistType);
       if (list.length) {
         return this.parseTime(
           list.map((s) => s.duration).reduce((a, c) => a + c)
@@ -147,12 +147,6 @@ export default {
 };
 </script>
 
-<style scoped>
-@media screen and (min-width: 600px) {
-  .max-height-list {
-    height: calc(100% - 76px);
-    max-height: calc(100% - 76px);
-    overflow-y: auto;
-  }
-}
+<style>
+
 </style>

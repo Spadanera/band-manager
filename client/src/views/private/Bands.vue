@@ -54,18 +54,6 @@
         <v-icon>add</v-icon>
       </v-btn>
     </div>
-    <v-snackbar
-      v-model="snackbar.enabled"
-      :bottom="true"
-      :left="false"
-      :multi-line="false"
-      :right="false"
-      :timeout="3000"
-      :vertical="false"
-    >
-      {{ snackbar.text }}
-      <v-btn text @click="snackbar.enabled = false">Close</v-btn>
-    </v-snackbar>
   </v-container>
 </template>
 
@@ -81,10 +69,6 @@ export default {
     return {
       dialog: false,
       bands: [],
-      snackbar: {
-        enebled: false,
-        text: "",
-      },
       loaded: false,
       memberInfo: {}
     };
@@ -94,11 +78,8 @@ export default {
       this.bands = await this.Service.bandService.getBands();
       this.loaded = true;
     },
-    submitted(text) {
-      this.snackbar = {
-        enabled: true,
-        text,
-      };
+    submitted() {
+      this.$root.$emit("showSnackbar", "Band successfully created");
       this.loadList();
       this.dialog = false;
     },
@@ -112,6 +93,18 @@ export default {
 <style>
 .selected {
   color: red;
+}
+
+@media screen and (min-width: 900px) {
+  .max-height-alt {
+    height: calc(100% - 48px);
+    max-height: calc(100% - 48px);
+    overflow-y: auto;
+  }
+
+  .max-height-alt > .v-window__container {
+    height: 100%;
+  }
 }
 </style>
 

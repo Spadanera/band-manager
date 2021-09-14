@@ -14,10 +14,10 @@ const publicService = {
         return response.data;
     },
     getEvents: async () => {
-        let bands = (await client.get(
+        let events = (await client.get(
             `/api/public/event`
         )).data;
-        return bands;
+        return events;
     },
 };
 

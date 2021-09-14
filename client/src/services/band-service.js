@@ -32,8 +32,25 @@ const band = {
     },
     upsertBand: async (band, element) => {
         let response;
+        let input = {
+            _id: band._id
+        };
+        if (element === 'generalinfo') {
+            input = band;
+            delete input.events;
+            delete input.setlists;
+        }
+        else if (element === 'setlist') {
+            input.setlists = band.setlists;
+        }
+        else if (element === 'events') {
+            input.events = band.events;
+        }
+        else {
+            input = band;
+        }
         if (!band._id) {
-            response = await client.post("/api/band", band);
+            response = await client.post("/api/band", input);
         }
         else {
             response = await client.put(`/api/band/${band._id}/${element}`, band);
