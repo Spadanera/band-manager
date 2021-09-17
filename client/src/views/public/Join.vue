@@ -21,7 +21,7 @@
         </v-card-text>
         <v-card-text style="padding-top: 0">
           <div class="my-4 subtitle-1" style="margin-top: 0 !important">
-            Band Members
+            {{$ml.get('bandMembers')}}
           </div>
           <v-chip v-for="(member, index) in band.bandMembers" :key="index">
             <v-avatar left>
@@ -32,7 +32,7 @@
         </v-card-text>
         <v-divider></v-divider>
         <v-card-text style="padding-top: 0">
-          <v-subheader>Genres</v-subheader>
+          <v-subheader>{{$ml.get('genres')}}</v-subheader>
           <v-chip
             v-for="(genre, index) in band.genres"
             :key="index"
@@ -49,7 +49,7 @@
               src="../../assets/btn_google_light_normal_ios.svg"
               alt
             />
-            Join the band
+            {{$ml.get('joinBand')}}
           </v-btn>
           <v-spacer></v-spacer>
         </v-card-actions>

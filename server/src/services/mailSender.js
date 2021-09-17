@@ -1,5 +1,7 @@
 import { createTransport } from 'nodemailer';
 import arubaAuth from '../arubaAuth';
+import fs from 'fs';
+import path from 'path';
 
 module.exports.sendMail = async (to, subject, text, isHtml) => {
     let transporter = createTransport({
@@ -29,4 +31,13 @@ module.exports.sendMail = async (to, subject, text, isHtml) => {
     }
 
     await transporter.sendMail(mail);
+};
+
+module.exports.parseBody = (template, variables) => {
+    let body = fs.readFileSync(path.resolve(__dirname, `../templates/${template}.html`), "utf-8");
+    for (let prop in variables) {
+        body = body.replace(new RegExp(`{{${prop}}}`, 'g'), variables[prop]);
+    }
+
+    return body;
 };

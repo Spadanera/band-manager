@@ -25,7 +25,7 @@
             clearable
             dense
             flat
-            placeholder="search"
+            :placeholder="$ml.get('search')"
             v-model="search"
           >
           </v-text-field>
@@ -79,7 +79,7 @@
         </v-col>
       </v-row>
     </div>
-    <v-dialog v-model="eventDialog">
+    <v-dialog v-model="eventDialog" max-width="600px">
       <v-card>
         <EventCard :event="selectedEvent" :memberInfo="{ publicUser: true }" />
         <v-card-actions>

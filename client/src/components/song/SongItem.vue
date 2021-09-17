@@ -38,21 +38,21 @@
               <v-list-item v-show="song.preview">
                 <v-list-item-content>
                   <v-list-item-title @click="previewSong(song)"
-                    >Preview</v-list-item-title
+                    >{{$ml.get('preview')}}</v-list-item-title
                   >
                 </v-list-item-content>
               </v-list-item>
               <v-list-item>
                 <v-list-item-content>
                   <v-list-item-title @click="openSong(song)"
-                    >Edit</v-list-item-title
+                    >{{$ml.get('edit')}}</v-list-item-title
                   >
                 </v-list-item-content>
               </v-list-item>
               <v-list-item>
                 <v-list-item-content>
                   <v-list-item-title @click="deleteSong(song)"
-                    >Delete</v-list-item-title
+                    >{{$ml.get('delete')}}</v-list-item-title
                   >
                 </v-list-item-content>
               </v-list-item>

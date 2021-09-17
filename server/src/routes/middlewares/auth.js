@@ -61,7 +61,7 @@ router.get('/google/callback',
             }, { upsert: true, new: true, setDefaultsOnInsert: true });
             req.session.userId = user._id;
             req.session.token = req.user.token;
-            res.cookie('token', req.session.token);
+            res.cookie('token', req.session.token, { expires: new Date(Date.now() + 24 * 60 * 60 * 1000 * 365), httpOnly: true });
 
             // invitation
             try {

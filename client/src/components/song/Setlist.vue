@@ -5,7 +5,7 @@
         <SongList
           ref="confirmedList"
           icon="assignment_turned_in"
-          listLabel="Confirmed"
+          :listLabel="$ml.get('confirmed')"
           listName="confirmedList"
           :duration="confirmedDuration"
           :songList="confirmedList"
@@ -22,7 +22,7 @@
         <SongList
           ref="pendingList"
           icon="pending_actions"
-          listLabel="Pending"
+          :listLabel="$ml.get('pending')"
           listName="pendingList"
           :duration="pendingDuration"
           :songList="pendingList"
@@ -38,7 +38,7 @@
         <SongList
           ref="removedList"
           icon="cancel"
-          listLabel="Removed"
+          :listLabel="$ml.get('removed')"
           listName="removedList"
           :duration="removedDuration"
           :songList="removedList"

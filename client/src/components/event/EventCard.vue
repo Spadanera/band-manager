@@ -2,7 +2,7 @@
   <v-card>
     <v-card-title v-if="memberInfo.publicUser && event.band">
       <v-avatar style="margin-right: 15px">
-        <img :src="event.band.logo" :alt="event.band.name" />
+        <img v-if="event.band" :src="event.band.logo" :alt="event.band.name" />
       </v-avatar>
       {{ event.band.name }}
       <v-spacer></v-spacer>
@@ -57,6 +57,7 @@
                   <v-img
                     style="cursor: pointer"
                     class="rounded-lg"
+                    v-if="event.poster || event.band"
                     :src="event.poster || event.band.logo"
                     @click="openPoster"
                   >
@@ -93,7 +94,7 @@
         <v-expansion-panel-header>
           <template v-slot:default="{ open }">
             <v-row no-gutters style="margin-left: 32px">
-              <v-col cols="4"> Setlist </v-col>
+              <v-col cols="4"> {{$ml.get('setlist')}} </v-col>
               <v-col cols="8" class="text-right font-weight-bold">
                 <v-fade-transition leave-absolute>
                   <span v-if="open" key="0">
@@ -112,7 +113,7 @@
             v-if="songList.filter((s) => s.preview).length"
           >
             <v-icon left> play_arrow </v-icon>
-            Play Setlist
+            {{$ml.get('playSetlist')}}
           </v-btn>
           <SongList
             :memberInfo="memberInfo"
@@ -131,14 +132,14 @@
         text
         @click="$emit('openevent', event)"
       >
-        Edit
+        {{$ml.get('edit')}}
       </v-btn>
       <v-btn
         v-if="memberInfo.canEditEvents"
         text
         @click="$emit('copyevent', event)"
       >
-        copy
+        {{$ml.get('copy')}}
       </v-btn>
       <v-btn
         v-if="memberInfo.canEditEvents"
@@ -146,7 +147,7 @@
         @click="$emit('deleteevent', event._id)"
         text
       >
-        Delete
+        {{$ml.get('delete')}}
       </v-btn>
       <v-spacer></v-spacer>
       <v-btn

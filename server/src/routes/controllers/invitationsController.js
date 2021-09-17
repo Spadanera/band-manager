@@ -70,9 +70,14 @@ router.post("/", async (req, res) => {
             await bandMemberNew.save();
 
             try {
+                let inviter = await User.findOne({ _id: invitation.inviterId });
                 await mailSender.sendMail(invitation.emailAddress,
                     `Your invitation to join ${band.name} on Gig Addicted`,
-                    `Open this link to join ${process.env.PROTOCOL || "http"}://${process.env.ORIGIN || "localhost"}/#/join/${invitation.token}`);
+                    mailSender.parseBody("invitation", {
+                        inviter: inviter.displayName,
+                        bandName: band.name,
+                        link: `${process.env.PROTOCOL || "http"}://${process.env.ORIGIN || "localhost"}/#/join/${invitation.token}`,
+                    }), true);
                 let invitationNew = new Invitation(invitation);
                 band.bandMembers.push(bandMemberNew._id);
                 await band.save();

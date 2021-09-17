@@ -12,12 +12,12 @@
           <v-card>
             <v-card-title primary-title>
               <div>
-                <div class="headline">No bands</div>
-                <span class="grey--text">You have to create a Band</span>
+                <div class="headline">{{$ml.get('createBand')}}</div>
+                <span class="grey--text">{{$ml.get('needToCreateBand')}}</span>
               </div>
             </v-card-title>
             <v-card-actions class="justify-center">
-              <v-btn @click="dialog = true">Create Band</v-btn>
+              <v-btn @click="dialog = true">{{$ml.get('createBand')}}</v-btn>
             </v-card-actions>
           </v-card>
         </v-col>
@@ -79,7 +79,7 @@ export default {
       this.loaded = true;
     },
     submitted() {
-      this.$root.$emit("showSnackbar", "Band successfully created");
+      this.$root.$emit("showSnackbar", this.$ml.get("bandCreated"));
       this.loadList();
       this.dialog = false;
     },

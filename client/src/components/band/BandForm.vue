@@ -14,7 +14,7 @@
               <v-col cols="12">
                 <v-text-field
                   v-model="localBand.name"
-                  label="Name"
+                  :label="$ml.get('name')"
                   :rules="[validationRules.required]"
                   ref="name"
                 ></v-text-field>
@@ -22,7 +22,7 @@
             </v-row>
             <v-row align-content="center" style="margin-bottom: 15px">
               <v-col cols="12" md="8" style="position: relative">
-                <v-subheader>Band Logo</v-subheader>
+                <v-subheader>{{$ml.get('bandLogo')}}</v-subheader>
                 <v-img :src="bandLogo" max-width="300">
                   <v-row
                     class="fill-height ma-0"
@@ -47,7 +47,7 @@
                   show-size
                   @change="onFilePicket"
                   accept="image/*"
-                  label="File input"
+                  :label="$ml.get('fileInput')"
                 ></v-file-input>
               </v-col>
             </v-row>
@@ -56,25 +56,25 @@
                 <v-select
                   v-model="localBand.type"
                   :items="[
-                    { text: 'Cover', value: 'cover' },
-                    { text: 'Tribute', value: 'tribute' },
-                    { text: 'Original', value: 'original' },
+                    { text: $ml.get('cover'), value: 'cover' },
+                    { text: $ml.get('tribute'), value: 'tribute' },
+                    { text: $ml.get('original'), value: 'original' },
                   ]"
                   :rules="[validationRules.required]"
-                  label="Type"
+                  :label="$ml.get('type')"
                 ></v-select>
               </v-col>
               <v-col cols="12" md="8" v-if="localBand.type === 'tribute'">
                 <v-text-field
                   v-model="localBand.tributeArtist"
-                  label="Tribute Artist"
+                  :label="$ml.get('tributeArtist')"
                   :rules="localBand.type === 'trubute' ? [validationRules.required] : []"
                 ></v-text-field>
               </v-col>
             </v-row>
             <v-row>
               <v-col cols="12">
-                <v-subheader>Description</v-subheader>
+                <v-subheader>{{$ml.get('description')}}</v-subheader>
                 <ckeditor
                   :editor="editor"
                   v-model="localBand.description"
@@ -87,8 +87,8 @@
               style="margin-top: 20px"
               @input="setPlace"
               v-model="currentPlace"
-              label="Enter a location"
-              noResultFoundMessage="No result"
+              :label="$ml.get('enterLocation')"
+              :noResultFoundMessage="$ml.get('noResult')"
             />
             <v-autocomplete
               v-model="localBand.genres"
@@ -96,11 +96,11 @@
               dense
               chips
               small-chips
-              label="Genres"
+              :label="$ml.get('genres')"
               multiple
               style="margin-top: 20px"
             ></v-autocomplete>
-            <v-subheader>Visibility</v-subheader>
+            <v-subheader>{{$ml.get('visibility')}}</v-subheader>
             <v-row
               align="center"
               justify="space-around"
@@ -109,17 +109,17 @@
               <v-switch
                 v-model="localBand.isPublic"
                 class="ma-1"
-                label="Public"
+                :label="$ml.get('public')"
               ></v-switch>
               <v-switch
                 v-model="localBand.isMembersPublic"
                 class="ma-1"
-                label="Members Public"
+                :label="$ml.get('membersPublic')"
               ></v-switch>
               <v-switch
                 v-model="localBand.isSetlistPublic"
                 class="ma-1"
-                label="Setlist Public"
+                :label="$ml.get('setlistsPublic')"
               ></v-switch>
             </v-row>
             <v-btn type="submit" style="display: none"></v-btn>
@@ -129,8 +129,8 @@
       <v-divider></v-divider>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="blue darken-1" text @click="closeModal">Dismiss</v-btn>
-        <v-btn color="blue darken-1" text @click="submitForm">Save</v-btn>
+        <v-btn color="blue darken-1" text @click="closeModal">{{$ml.get('dismiss')}}</v-btn>
+        <v-btn color="blue darken-1" text @click="submitForm">{{$ml.get('save')}}</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>

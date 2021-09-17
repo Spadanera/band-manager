@@ -1,13 +1,13 @@
 <template>
   <v-dialog v-model="dialog" persistent max-width="400px">
     <v-card>
-      <v-card-title> Edit Band Member </v-card-title>
+      <v-card-title> {{$ml.get('editBandMembers')}} </v-card-title>
       <v-card-text>
         <v-form autocomplete="off" ref="form" v-model="valid" @submit.prevent="submitForm">
           <v-text-field
             v-model="localBandMember.userDisplayName"
             v-if="!localBandMember.userEmailAddress"
-            label="Name"
+            :label="$ml.get('name')"
           />
           <v-text-field v-model="localBandMember.role" label="Role" />
           <v-row
@@ -18,27 +18,27 @@
             <v-switch
               v-model="localBandMember.isAdmin"
               class="ma-1"
-              label="Admim"
+              :label="$ml.get('admin')"
             ></v-switch>
             <v-switch
               v-model="localBandMember.canEditInfo"
               class="ma-1"
-              label="Edit Info"
+              :label="$ml.get('editInfo')"
             ></v-switch>
             <v-switch
               v-model="localBandMember.canEditSetlist"
               class="ma-1"
-              label="Edit Setlist"
+              :label="$ml.get('editSetlists')"
             ></v-switch>
             <v-switch
               v-model="localBandMember.canEditEvents"
               class="ma-1"
-              label="Edit Events"
+              :label="$ml.get('editEvents')"
             ></v-switch>
             <v-switch
               v-model="localBandMember.canEditMembers"
               class="ma-1"
-              label="Edit Members"
+              :label="$ml.get('editMembers')"
             ></v-switch>
           </v-row>
           <v-btn type="submit" style="display: none;"></v-btn>
@@ -46,8 +46,8 @@
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="blue darken-1" text @click="closeModal">Dismiss</v-btn>
-        <v-btn color="blue darken-1" text @click="submitForm">Save</v-btn>
+        <v-btn color="blue darken-1" text @click="closeModal">{{$ml.get('dismiss')}}</v-btn>
+        <v-btn color="blue darken-1" text @click="submitForm">{{$ml.get('save')}}</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>

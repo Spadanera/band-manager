@@ -23,7 +23,7 @@
     <v-row>
       <v-col cols="12">
         <v-divider></v-divider>
-        <h3 v-if="pastEvents.length" style="margin-top: 20px;" class="text-center">Past Events</h3>
+        <h3 v-if="pastEvents.length" style="margin-top: 20px;" class="text-center">{{$ml.get('pastEvents')}}</h3>
       </v-col>
     </v-row>
     <v-row v-if="pastEvents.length" justify="space-around">
@@ -55,11 +55,11 @@
         <v-card>
           <v-card-title primary-title>
             <div>
-              <div class="headline">No Event</div>
+              <div class="headline">{{$ml.get('noEvent')}}</div>
             </div>
           </v-card-title>
           <v-card-actions class="justify-center">
-            <v-btn @click="openEvent">Create Event</v-btn>
+            <v-btn @click="openEvent">{{$ml.get('createEvent')}}</v-btn>
           </v-card-actions>
         </v-card>
       </v-col>
@@ -94,7 +94,7 @@
       :vertical="false"
     >
       {{ snackbar.text }}
-      <v-btn text @click="snackbar.enabled = false">Close</v-btn>
+      <v-btn text @click="snackbar.enabled = false">{{$ml.get('close')}}</v-btn>
     </v-snackbar>
     <Confirm
       :dialog="dialogConfirm"
@@ -131,9 +131,12 @@ export default {
         text: "",
       },
       eventId: "",
-      modalTitle: "Are you sure?",
-      modalText: "Event will be removed from the list",
+      modalTitle: this.$ml.get('areYouSure'),
+      modalText: this.$ml.get('eventWillRemoved'),
     };
+  },
+  created() {
+
   },
   methods: {
     openEvent(bandEvent) {
@@ -154,7 +157,7 @@ export default {
       let band = await this.Service.bandService.deleteEvent(this.band._id, this.eventId);
       this.snackbar = {
         enabled: true,
-        text: "Event deleted",
+        text: this.$ml('eventDeleted'),
       };
       this.reload(band);
     },

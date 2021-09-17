@@ -33,7 +33,7 @@
             v-slot="{ navigate }"
             custom
           >
-            <span @click="navigate">{{ link.title }}</span>
+            <span @click="navigate">{{ $ml.get(link.title) }}</span>
           </router-link>
         </v-btn>
         <v-divider vertical v-if="isLoggedIn"></v-divider>
@@ -44,7 +44,7 @@
             v-slot="{ navigate }"
             custom
           >
-            <span @click="navigate">My Bands</span>
+            <span @click="navigate">{{$ml.get("myBands")}}</span>
           </router-link>
         </v-btn>
       </v-toolbar-items>
@@ -67,8 +67,16 @@
         </template>
         <v-card>
           <v-list>
+            <v-list-item>
+              <v-list-item-content>
+                <LanguageSwitcher @close="menu = false" />
+              </v-list-item-content>
+              <v-list-item-action>
+                <v-icon>language</v-icon>
+              </v-list-item-action>
+            </v-list-item>
             <v-list-item @click="logout">
-              <v-list-item-content>LOGOUT</v-list-item-content>
+              <v-list-item-content style="text-transform: uppercase;">{{$ml.get("logout")}}</v-list-item-content>
               <v-list-item-action>
                 <v-icon>exit_to_app</v-icon>
               </v-list-item-action>
@@ -76,19 +84,22 @@
           </v-list>
         </v-card>
       </v-menu>
-      <v-btn v-else @click="login" color="primary" class="hidden-sm-and-down">
-        <img
-          class="gbutton"
-          src="../assets/btn_google_light_normal_ios.svg"
-          alt
-        />
-        Log in
-      </v-btn>
+      <v-toolbar-items v-else class="hidden-sm-and-down">
+        <v-btn text @click="login">
+          <img
+            class="gbutton"
+            src="../assets/btn_google_light_normal_ios.svg"
+            alt
+          />
+          {{$ml.get("login")}}
+        </v-btn>
+        <LanguageSwitcher @close="menu = false" :icon="true" />
+      </v-toolbar-items>
       <template v-slot:extension v-if="bandPage">
         <v-tabs v-model="bandTab" grow background-color="secondary">
-          <v-tab><span>General Info</span></v-tab>
-          <v-tab>Setlist</v-tab>
-          <v-tab>Events</v-tab>
+          <v-tab>{{$ml.get("generalInfo")}}</v-tab>
+          <v-tab>{{$ml.get("setlists")}}</v-tab>
+          <v-tab>{{$ml.get("events")}}</v-tab>
         </v-tabs>
       </template>
     </v-app-bar>
@@ -117,7 +128,7 @@
                 custom
                 to="/bands"
               >
-                <span @click="navigate">MY BANDS</span>
+                <span @click="navigate">{{$ml.get("myBands")}}</span>
               </router-link>
             </v-list-item-title>
           </v-list-item-content>
@@ -135,21 +146,29 @@
                 custom
                 :to="link.to"
               >
-                <span @click="navigate">{{ link.title }}</span>
+                <span @click="navigate">{{ $ml.get(link.title) }}</span>
               </router-link>
             </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>
       <template v-slot:append>
+        <v-list-item>
+          <v-list-item-action>
+            <v-icon>language</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <LanguageSwitcher @close="menu = false" />
+          </v-list-item-content>
+        </v-list-item>
         <v-list-item @click="logOutIn">
           <v-list-item-icon>
             <v-icon v-if="isLoggedIn">exit_to_app</v-icon>
             <v-icon v-else>login</v-icon>
           </v-list-item-icon>
-          <v-list-item-content>
-            <v-list-item-title v-if="isLoggedIn"> LOGOUT </v-list-item-title>
-            <v-list-item-title v-else> LOGIN / REGISTER </v-list-item-title>
+          <v-list-item-content style="text-transform: uppercase">
+            <v-list-item-title v-if="isLoggedIn"> {{$ml.get("logout")}} </v-list-item-title>
+            <v-list-item-title v-else> {{$ml.get("login")}} </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </template>
@@ -214,10 +233,13 @@
 import NprogressContainer from "vue-nprogress/src/NprogressContainer";
 import VuetifyAudio from "../components/song/VuetifyAudio.vue";
 import client from "../services/client";
+import LanguageSwitcher from "../components/layout/LanguageSwitcher.vue";
+
 export default {
   components: {
     NprogressContainer,
     VuetifyAudio,
+    LanguageSwitcher,
   },
   data() {
     return {
@@ -230,10 +252,10 @@ export default {
       bandTab: null,
       drawer: null,
       links: [
-        { title: "HOME", to: "/", icon: "home" },
-        { title: "BANDS", to: "/public-bands", icon: "recent_actors" },
-        { title: "EVENTS", to: "/public-events", icon: "event" },
-        { title: "ABOUT", to: "/about", icon: "info" },
+        { title: "home", to: "/", icon: "home" },
+        { title: "bands", to: "/public-bands", icon: "recent_actors" },
+        { title: "events", to: "/public-events", icon: "event" },
+        { title: "about", to: "/about", icon: "info" },
       ],
       play: {
         preview: "",
@@ -261,7 +283,9 @@ export default {
     login() {
       const urlParams = new URLSearchParams(window.location.search);
       const from = urlParams.get("from");
-      window.location.href = `/auth${from ? `?from=${encodeURIComponent(from)}` : ''}`;
+      window.location.href = `/auth${
+        from ? `?from=${encodeURIComponent(from)}` : ""
+      }`;
     },
     logout() {
       this.menu = false;
@@ -310,7 +334,7 @@ export default {
       this.imageDialog = true;
     },
     playSetlist(setlist) {
-      this.setlist = setlist.filter(s => s.preview);
+      this.setlist = setlist.filter((s) => s.preview);
       this.playIndex = 0;
       this.startPlayer(this.setlist[0]);
     },
@@ -318,8 +342,7 @@ export default {
       this.playIndex++;
       if (this.setlist.length > this.playIndex) {
         this.startPlayer(this.setlist[this.playIndex]);
-      }
-      else {
+      } else {
         this.closePlayer();
       }
     },
@@ -335,9 +358,9 @@ export default {
     showSnackbar(text) {
       this.snackbar = {
         enabled: true,
-        text
+        text,
       };
-    }
+    },
   },
   async created() {
     this.$root.$on("startPlayer", this.startPlayer);

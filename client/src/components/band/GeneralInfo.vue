@@ -11,7 +11,7 @@
       </v-col>
       <v-col style="padding-bottom: 30px;">
         <v-card>
-          <v-card-title class="headline">Band Members</v-card-title>
+          <v-card-title class="headline">{{$ml.get('bandMembers')}}</v-card-title>
           <v-list two-line :threeLine="memberInfo.isAdmin">
             <template v-for="(bandMember, index) in band.bandMembers">
               <v-divider :key="index" inset></v-divider>
@@ -33,35 +33,35 @@
                   <v-list-item-content v-if="memberInfo.isAdmin">
                     <div>
                       <v-chip class="ma-1" v-if="bandMember.isAdmin" small>
-                        Admin
+                        {{$ml.get('admin')}}
                       </v-chip>
                       <v-chip
                         class="ma-1"
                         v-if="bandMember.isAdmin || bandMember.canEditInfo"
                         small
                       >
-                        Edit Info
+                        {{$ml.get('editInfo')}}
                       </v-chip>
                       <v-chip
                         class="ma-1"
                         v-if="bandMember.isAdmin || bandMember.canEditSetlist"
                         small
                       >
-                        Edit Setlist
+                        {{$ml.get('editSetlists')}}
                       </v-chip>
                       <v-chip
                         class="ma-1"
                         v-if="bandMember.isAdmin || bandMember.canEditEvents"
                         small
                       >
-                        Edit Events
+                        {{$ml.get('editEvents')}}
                       </v-chip>
                       <v-chip
                         class="ma-1"
                         v-if="bandMember.isAdmin || bandMember.canEditMembers"
                         small
                       >
-                        Edit Members
+                        {{$ml.get('editMembers')}}
                       </v-chip>
                     </div>
                   </v-list-item-content>
@@ -117,7 +117,7 @@
       :vertical="false"
     >
       {{ snackbar.text }}
-      <v-btn text @click="snackbar.enabled = false">Close</v-btn>
+      <v-btn text @click="snackbar.enabled = false">{{$ml.get('close')}}</v-btn>
     </v-snackbar>
     <BandForm
       :dialog="dialogBand"
@@ -194,8 +194,8 @@ export default {
         this.$emit("reload", band);
     },
     confirmDeleteBandMember(bandMemberId) {
-      this.modalTitle = "Are you sure?";
-      this.modalText = "Band Member will be removed from the band";
+      this.modalTitle = this.$ml.get('areYouSure');
+      this.modalText = this.$ml.get('allMembersRemoved');
       this.dialogConfirm = true;
       this.memberToDeleteId = bandMemberId;
     },

@@ -9,13 +9,13 @@
           <v-form autocomplete="off" ref="form" v-model="valid">
             <v-text-field
               v-model="invitation.emailAddress"
-              label="Gmail Address"
+              :label="$ml.get('gmailAddress')"
               :autofocus="true"
               :rules="[validationRules.required, validationRules.email]"
             ></v-text-field>
             <v-text-field
               v-model="bandMember.role"
-              label="Role"
+              :label="$ml.get('role')"
             ></v-text-field>
             <v-row
               align="center"
@@ -25,27 +25,27 @@
               <v-switch
                 v-model="bandMember.isAdmin"
                 class="ma-1"
-                label="Admim"
+                :label="$ml.get('admin')"
               ></v-switch>
               <v-switch
                 v-model="bandMember.canEditInfo"
                 class="ma-1"
-                label="Edit Info"
+                :label="$ml.get('editInfo')"
               ></v-switch>
               <v-switch
                 v-model="bandMember.canEditSetlist"
                 class="ma-1"
-                label="Edit Setlist"
+                :label="$ml.get('editSetlists')"
               ></v-switch>
               <v-switch
                 v-model="bandMember.canEditEvents"
                 class="ma-1"
-                label="Edit Events"
+                :label="$ml.get('editEvents')"
               ></v-switch>
               <v-switch
                 v-model="bandMember.canEditMembers"
                 class="ma-1"
-                label="Edit Members"
+                :label="$ml.get('editMembers')"
               ></v-switch>
             </v-row>
           </v-form>
@@ -63,10 +63,10 @@
           :disabled="loading"
           text
           @click="closeModal"
-          >Dismiss</v-btn
+          >{{$ml.get('dismiss')}}</v-btn
         >
         <v-btn color="blue darken-1" :disabled="loading" text @click="submit"
-          >Send</v-btn
+          >{{$ml.get('send')}}</v-btn
         >
       </v-card-actions>
     </v-card>
@@ -125,13 +125,13 @@ export default {
             bandId: this.bandId,
           });
           if (response.status === 204) {
-            this.$emit("submitted", "Member already exists");
+            this.$emit("submitted", this.$ml.get('memberExists'));
           } else {
             this.$emit("submitted");
           }
           this.closeModal();
         } catch (err) {
-          alert("Error executing invitation");
+          alert(this.$ml.get('errorInvitation'));
         } finally {
           this.loading = false;
         }

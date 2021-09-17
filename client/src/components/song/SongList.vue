@@ -16,7 +16,7 @@
         </v-list-item-content>
         <v-list-item-action>
           <v-list-item-action-text>
-            Time: {{ duration }} <span style="margin-left: 10px;"
+            {{$ml.get('time')}}: {{ duration }} <span style="margin-left: 10px;"
             v-if="showPreview && localSongList.filter((s) => s.preview).length"
           >
             <v-btn small icon @click="playSetlist">
@@ -34,11 +34,11 @@
       dense
     >
       <v-subheader v-if="inEvent">
-        <span>Time: {{ duration }}</span>
+        <span>{{$ml.get('time')}}: {{ duration }}</span>
         <v-spacer></v-spacer>
         <v-menu offset-y v-if="inEvent && !readOnly">
           <template v-slot:activator="{ on, attrs }">
-            <v-btn text small v-bind="attrs" v-on="on"> LOAD SETLIST </v-btn>
+            <v-btn text small v-bind="attrs" v-on="on"> {{$ml.get('loadSetlist')}} </v-btn>
           </template>
           <v-list dense>
             <v-list-item

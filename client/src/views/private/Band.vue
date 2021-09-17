@@ -22,17 +22,20 @@
                 <v-list dense style="padding: 0">
                   <v-list-item dense>
                     <v-btn small text @click="setlistDialog(setlist)">
-                      Rename
+                      {{ $ml.get("rename") }}
                     </v-btn>
                   </v-list-item>
                   <v-list-item dense>
                     <v-btn small text @click="setlistDialog(setlist, true)">
-                      Copy
+                      {{ $ml.get("copy") }}
                     </v-btn>
                   </v-list-item>
-                  <v-list-item dense v-if="band.setlists && band.setlists.length > 1">
+                  <v-list-item
+                    dense
+                    v-if="band.setlists && band.setlists.length > 1"
+                  >
                     <v-btn small text @click="dialogConfirm = true">
-                      Delete
+                      {{ $ml.get("delete") }}
                     </v-btn>
                   </v-list-item>
                 </v-list>
@@ -51,11 +54,15 @@
                 <v-icon> add </v-icon>
               </v-btn>
             </template>
-            <span>New Setlist</span>
+            <span>{{ $ml.get("newSetlist") }}</span>
           </v-tooltip>
         </v-tabs>
         <v-tabs-items v-model="listIndex" touchless class="max-height-alt">
-          <v-tab-item v-for="setlist in band.setlists" v-bind:key="setlist._id" class="max-height">
+          <v-tab-item
+            v-for="setlist in band.setlists"
+            v-bind:key="setlist._id"
+            class="max-height"
+          >
             <Setlist
               :setlist="setlist.songs"
               :statuses="statuses"
@@ -85,7 +92,7 @@
               <v-icon>add</v-icon>
             </v-btn>
           </template>
-          <span>New Song</span>
+          <span>{{ $ml.get("newSong") }}</span>
         </v-tooltip>
       </v-tab-item>
       <v-tab-item class="max-height">
@@ -95,8 +102,10 @@
     <v-dialog v-model="titleSelistDialog" max-width="350">
       <v-card>
         <v-card-title>
-          <span v-if="newSetlist" class="headline">New Setlist</span>
-          <span v-else class="headline">Edit Setlist</span>
+          <span v-if="newSetlist" class="headline">{{
+            $ml.get("newSetlist")
+          }}</span>
+          <span v-else class="headline">{{ $ml.get("editSetlist") }}</span>
         </v-card-title>
         <v-card-text>
           <v-form
@@ -107,7 +116,7 @@
           >
             <v-text-field
               v-model="setlistTitle"
-              label="Title"
+              :label="$ml.get('title')"
               :rules="[validationRules.required]"
               ref="title"
             >
@@ -117,12 +126,15 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="setSetlistTitle"
-            >Save</v-btn
+          <v-btn
+            color="blue darken-1"
+            text
+            @click="titleSelistDialog = false"
+            >{{ $ml.get("dismiss") }}</v-btn
           >
-          <v-btn color="blue darken-1" text @click="titleSelistDialog = false"
-            >Dismiss</v-btn
-          >
+          <v-btn color="blue darken-1" text @click="setSetlistTitle">{{
+            $ml.get("save")
+          }}</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -176,11 +188,7 @@ export default {
       loaded: false,
       event: {},
       song: {},
-      statuses: [
-        { text: "Confirmed", value: "confirmed" },
-        { text: "Pending", value: "pending" },
-        { text: "Removed", value: "removed" },
-      ],
+      statuses: [],
       memberInfo: {},
       tabIndex: 0,
       titleSelistDialog: false,
@@ -189,8 +197,8 @@ export default {
       valid: true,
       toCopy: false,
       dialogConfirm: false,
-      modalTitle: "Are you sure?",
-      modalText: "Setlist will be deleted",
+      modalTitle: "",
+      modalText: "",
     };
   },
   methods: {
@@ -291,7 +299,7 @@ export default {
     setlistDialog(setlist, toCopy) {
       this.toCopy = toCopy;
       if (setlist && setlist.title) {
-        this.setlistTitle = setlist.title + (toCopy ? " - Copy" : "");
+        this.setlistTitle = setlist.title + (toCopy ? ` - ${this.$ml.get('copy')}` : "");
         this.newSetlist = toCopy;
       } else {
         this.setlistTitle = "";
@@ -348,6 +356,13 @@ export default {
     },
   },
   async created() {
+    this.statuses = [
+      { text: this.$ml.get("confirmed"), value: "confirmed" },
+      { text: this.$ml.get("pending"), value: "pending" },
+      { text: this.$ml.get("removed"), value: "removed" },
+    ];
+    this.modalTitle = this.$ml.get('areYouSure');
+    this.madalText = this.$ml.get('setlistWillDeleted');
     this.loadBand();
     this.memberInfo = await this.Service.bandService.memberInfo(
       this.$route.params.id

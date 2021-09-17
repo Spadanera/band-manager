@@ -45,7 +45,9 @@ auth(passport);
 app.use(passport.initialize());
 app.use(cookieSession({
   name: 'session',
-  keys: ['123']
+  keys: ['123'],
+  maxAge: 24 * 60 * 60 * 1000 * 365, // 24 hours
+  secure: process.env.PROTOCOL === "HTTPS"
 }));
 app.use(cookieParser());
 

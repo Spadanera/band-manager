@@ -58,8 +58,8 @@
           "
         >
           <v-divider v-if="!inBand" style="clear: both"></v-divider>
-          <v-subheader>Band Members</v-subheader>
-          <v-chip v-for="(member, index) in band.bandMembers" :key="index">
+          <v-subheader>{{$ml.get('bandMembers')}}</v-subheader>
+          <v-chip v-for="(member, index) in band.bandMembers" :key="index" class="ma-1">
             <v-avatar left>
               <v-img :src="member.userPicture"></v-img>
             </v-avatar>
@@ -71,7 +71,7 @@
           v-if="band.genres && band.genres.length"
         >
           <v-divider style="clear: both"></v-divider>
-          <v-subheader>Genres</v-subheader>
+          <v-subheader>{{$ml.get('genres')}}</v-subheader>
           <v-chip
             v-for="(genre, index) in band.genres"
             :key="index"
@@ -82,14 +82,14 @@
         </v-card-text>
         <v-divider></v-divider>
         <v-card-text style="padding-top: 0" v-if="memberInfo.isAdmin">
-          <v-subheader>Visibility</v-subheader>
-          <div v-if="!band.isPublic">Nothing is public</div>
+          <v-subheader>{{$ml.get('visibility')}}</v-subheader>
+          <div v-if="!band.isPublic">{{$ml.get('nothingIsPublic')}}</div>
           <v-chip v-if="band.isPublic" class="ma-1"> Public </v-chip>
           <v-chip v-if="band.isMembersPublic" class="ma-1">
-            Members Public
+            {{$ml.get('membersPublic')}}
           </v-chip>
           <v-chip v-if="band.isSetlistPublic" class="ma-1">
-            Setlist Public
+            {{$ml.get('setlistsPublic')}}
           </v-chip>
         </v-card-text>
         <v-card-text
@@ -188,7 +188,7 @@
                     {{ event.description }}
                   </v-card-text>
                   <v-subheader v-if="event.isSetlistPublic">
-                    Event Setlist
+                    {{$ml.get('eventSetlist')}}
                   </v-subheader>
                   <SongList
                     :memberInfo="memberInfo"
@@ -234,7 +234,7 @@
             v-if="songList.filter((s) => s.preview).length"
           >
             <v-icon left> play_arrow </v-icon>
-            Play Setlist
+            {{$ml.get('playSetlist')}}
           </v-btn>
           <SongList
             :memberInfo="memberInfo"
@@ -248,9 +248,9 @@
       </v-expansion-panel>
     </v-expansion-panels>
     <v-card-actions v-if="!inBand && !memberInfo.publicUser">
-      <v-btn text @click="openBand()">Open</v-btn>
+      <v-btn text @click="openBand()">{{$ml.get('open')}}</v-btn>
       <v-btn v-if="memberInfo.isCreator" text color="error" @click="modalDelete"
-        >Delete</v-btn
+        >{{$ml.get('delete')}}</v-btn
       >
       <v-spacer></v-spacer>
     </v-card-actions>
@@ -289,13 +289,13 @@ export default {
   },
   methods: {
     modalDelete() {
-      this.modalTitle = "Are you sure?";
-      this.modalText = "Band with all setlists and events will be deleted";
+      this.modalTitle = this.$ml.get("areYouSure");
+      this.modalText = this.$ml.get("allBandDeleted");
       this.dialog = true;
     },
     async deleteBand() {
       await this.Service.bandService.deleteBand(this.band._id);
-      this.$emit("submitted", "Band successfully deleted");
+      this.$emit("submitted", this.$ml.get("bandDelated"));
     },
     openBand() {
       this.$router.push({

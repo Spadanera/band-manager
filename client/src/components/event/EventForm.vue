@@ -1,9 +1,9 @@
 <template>
   <v-dialog v-model="dialog" scrollable persistent max-width="700px">
     <v-card>
-      <v-tabs v-model="tab">
-        <v-tab> INFO </v-tab>
-        <v-tab> SETLIST </v-tab>
+      <v-tabs v-model="tab" stlye="text-transform: uppercase">
+        <v-tab> {{$ml.get('info')}} </v-tab>
+        <v-tab> {{$ml.get('setlist')}} </v-tab>
       </v-tabs>
       <v-card-text style="max-height: 700px" v-show="tab === 0">
         <v-form
@@ -25,7 +25,7 @@
                 <template v-slot:activator="{ on, attrs }">
                   <v-text-field
                     v-model="event.eventDate"
-                    label="Event date"
+                    :label="$ml.get('eventDate')"
                     append-icon="event"
                     readonly
                     v-bind="attrs"
@@ -36,14 +36,14 @@
                 <v-date-picker v-model="event.eventDate" scrollable>
                   <v-spacer></v-spacer>
                   <v-btn text color="primary" @click="dialogDate = false">
-                    Cancel
+                    {{$ml.get('cancel')}}
                   </v-btn>
                   <v-btn
                     text
                     color="primary"
                     @click="$refs.dialogDate.save(event.eventDate)"
                   >
-                    OK
+                    {{$ml.get('ok')}}
                   </v-btn>
                 </v-date-picker>
               </v-dialog>
@@ -59,7 +59,7 @@
                 <template v-slot:activator="{ on, attrs }">
                   <v-text-field
                     v-model="event.eventTime"
-                    label="Event Time"
+                    :label="$ml.get('eventTime')"
                     append-icon="schedule"
                     readonly
                     v-bind="attrs"
@@ -75,14 +75,14 @@
                 >
                   <v-spacer></v-spacer>
                   <v-btn text color="primary" @click="dialogTime = false">
-                    Cancel
+                    {{$ml.get('cancel')}}
                   </v-btn>
                   <v-btn
                     text
                     color="primary"
                     @click="$refs.dialogTime.save(event.eventTime)"
                   >
-                    OK
+                    {{$ml.get('ok')}}
                   </v-btn>
                 </v-time-picker>
               </v-dialog>
@@ -90,24 +90,24 @@
           </v-row>
           <v-text-field
             v-model="event.locationName"
-            label="Location Name"
+            :label="$ml.get('locationName')"
             :rules="[validationRules.required]"
           ></v-text-field>
           <GoogleMapsAutocomplete
             @input="setPlace"
             v-model="currentPlace"
-            label="Location address"
+            :label="$ml.get('locationAddress')"
             noResultFoundMessage="No result"
           />
           <v-textarea
             v-model="event.description"
-            label="Description"
+            :label="$ml.get('description')"
             :auto-grow="true"
             rows="1"
           ></v-textarea>
           <v-row justify="space-around">
             <v-col cols="12" md="6" style="position: relative">
-              <v-subheader>Event Poster</v-subheader>
+              <v-subheader>{{$ml.get('eventPoster')}}</v-subheader>
               <v-img :src="eventPoster" max-width="300">
                 <v-row class="fill-height ma-0" align="center" justify="center">
                 </v-row>
@@ -127,20 +127,20 @@
                 show-size
                 @change="onFilePicket"
                 accept="image/*"
-                label="File input"
+                :label="$ml.get('fileInput')"
               ></v-file-input>
             </v-col>
             <v-col cols="12" md="6">
-              <v-subheader> Public Visibility </v-subheader>
+              <v-subheader> {{$ml.get('publicVisibility')}} </v-subheader>
               <v-switch
                 v-model="event.isPublic"
                 class="ma-1"
-                label="Event Public"
+                :label="$ml.get('eventPublic')"
               ></v-switch>
               <v-switch
                 v-model="event.isSetlistPublic"
                 class="ma-1"
-                label="Setlist Public"
+                :label="$ml.get('setlistPublic')"
               ></v-switch>
             </v-col>
           </v-row>
@@ -165,8 +165,8 @@
       <v-divider></v-divider>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="blue darken-1" text @click="closeModal">Dismiss</v-btn>
-        <v-btn color="blue darken-1" text @click="submitForm">Save</v-btn>
+        <v-btn color="blue darken-1" text @click="closeModal">{{$ml.get('dismiss')}}</v-btn>
+        <v-btn color="blue darken-1" text @click="submitForm">{{$ml.get('save')}}</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>

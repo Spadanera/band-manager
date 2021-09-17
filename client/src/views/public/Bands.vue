@@ -22,7 +22,7 @@
             clearable
             dense
             flat
-            placeholder="search"
+            :placeholder="$ml.get('search')"
             v-model="search"
           >
           </v-text-field>

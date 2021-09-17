@@ -2,8 +2,8 @@
   <v-dialog v-model="dialog" persistent max-width="600px">
     <v-card>
       <v-card-title>
-        <span v-if="!localSong.title" class="headline">Add Song</span>
-        <span v-else class="headline">Edit Song</span>
+        <span v-if="!localSong.title" class="headline">{{$ml.get('addSong')}}</span>
+        <span v-else class="headline">{{$ml.get('editSong')}}</span>
       </v-card-title>
       <v-card-text>
         <v-container grid-list-md>
@@ -15,18 +15,18 @@
           >
             <v-switch
               v-model="localSong.cover"
-              label="Cover"
+              :label="$ml.get('cover')"
               style="position: absolute; right: 20px; top: 5px;"
             ></v-switch>
             <v-text-field
               v-if="!localSong.cover"
               v-model="localSong.title"
-              label="Title"
+              :label="$ml.get('title')"
               :rules="[validationRules.required]"
             ></v-text-field>
             <v-combobox
               v-else
-              label="Title"
+              :label="$ml.get('title')"
               :value="title"
               :items="virtualItems"
               :search-input.sync="search"
@@ -38,11 +38,11 @@
               item-value="id"
               return-object
               @input="onSelected"
-              hint="Type 3 characters to query"
+              :hint="$ml.get('type3Char')"
             >
               <template slot="no-data">
                 <v-list-item>
-                  <v-list-item-title>No results</v-list-item-title>
+                  <v-list-item-title>{{$ml.get('noResult')}}</v-list-item-title>
                 </v-list-item>
               </template>
 
@@ -58,23 +58,23 @@
             <div class="text-right">
               <v-btn v-if="localSong.preview" small text @click="startPlay">
                 <v-icon left> play_arrow </v-icon>
-                Play Preview
+                {{$ml.get('playPreview')}}
               </v-btn>
             </div>
             <v-text-field
               v-model="localSong.author"
-              label="Author"
+              :label="$ml.get('author')"
             ></v-text-field>
             <v-text-field
               v-model="localSong.duration"
-              label="Time"
-              suffix="seconds"
+              :label="$ml.get('time')"
+              :suffix="$ml.get('seconds')"
             ></v-text-field>
             <v-select
               v-model="localSong.status"
               :items="statuses"
               :rules="[validationRules.required]"
-              label="Status"
+              :label="$ml.get('status')"
             ></v-select>
             <v-btn type="submit" style="display: none"></v-btn>
           </v-form>
@@ -83,9 +83,9 @@
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn color="blue darken-1" type="submit" text @click="closeDialog"
-          >Dismiss</v-btn
+          >{{$ml.get('dismiss')}}</v-btn
         >
-        <v-btn color="blue darken-1" text @click="saveSong">Save</v-btn>
+        <v-btn color="blue darken-1" text @click="saveSong">{{$ml.get('save')}}</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
