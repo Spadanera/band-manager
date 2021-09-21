@@ -1,11 +1,15 @@
 import mongoose from 'mongoose';
-import Song from './Song';
 
 const BandType = Object.freeze({
     Cover: 'cover',
     Tribute: 'tribute',
-    Original: 'original'
+    Original: 'original',
 });
+
+const Link = {
+    title: String,
+    url: String
+};
 
 let BandSchema = new mongoose.Schema({
     creatorUserId: mongoose.Schema.Types.ObjectId,
@@ -19,6 +23,7 @@ let BandSchema = new mongoose.Schema({
     type: { type: String, enum: Object.values(BandType), default: BandType.Cover },
     tributeArtist: String,
     genres: [String],
+    links: [Link],
     isPublic: Boolean,
     isMembersPublic: Boolean,
     isSetlistPublic: Boolean,

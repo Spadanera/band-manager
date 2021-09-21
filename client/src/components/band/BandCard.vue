@@ -58,8 +58,12 @@
           "
         >
           <v-divider v-if="!inBand" style="clear: both"></v-divider>
-          <v-subheader>{{$ml.get('bandMembers')}}</v-subheader>
-          <v-chip v-for="(member, index) in band.bandMembers" :key="index" class="ma-1">
+          <v-subheader>{{ $ml.get("bandMembers") }}</v-subheader>
+          <v-chip
+            v-for="(member, index) in band.bandMembers"
+            :key="index"
+            class="ma-1"
+          >
             <v-avatar left>
               <v-img :src="member.userPicture"></v-img>
             </v-avatar>
@@ -71,7 +75,7 @@
           v-if="band.genres && band.genres.length"
         >
           <v-divider style="clear: both"></v-divider>
-          <v-subheader>{{$ml.get('genres')}}</v-subheader>
+          <v-subheader>{{ $ml.get("genres") }}</v-subheader>
           <v-chip
             v-for="(genre, index) in band.genres"
             :key="index"
@@ -80,17 +84,30 @@
             {{ genre }}
           </v-chip>
         </v-card-text>
-        <v-divider></v-divider>
         <v-card-text style="padding-top: 0" v-if="memberInfo.isAdmin">
-          <v-subheader>{{$ml.get('visibility')}}</v-subheader>
-          <div v-if="!band.isPublic">{{$ml.get('nothingIsPublic')}}</div>
-          <v-chip v-if="band.isPublic" class="ma-1"> Public </v-chip>
+          <v-divider></v-divider>
+          <v-subheader>{{ $ml.get("visibility") }}</v-subheader>
+          <div v-if="!band.isPublic">{{ $ml.get("nothingIsPublic") }}</div>
+          <v-chip v-if="band.isPublic" class="ma-1">
+            {{ $ml.get("public") }}
+          </v-chip>
           <v-chip v-if="band.isMembersPublic" class="ma-1">
-            {{$ml.get('membersPublic')}}
+            {{ $ml.get("membersPublic") }}
           </v-chip>
           <v-chip v-if="band.isSetlistPublic" class="ma-1">
-            {{$ml.get('setlistsPublic')}}
+            {{ $ml.get("setlistsPublic") }}
           </v-chip>
+        </v-card-text>
+        <v-card-text v-if="band.links && band.links.length">
+          <v-divider></v-divider>
+          <v-subheader>Link</v-subheader>
+          <v-container>
+            <v-row>
+              <v-col v-for="(link, i) in band.links" v-bind:key="i">
+                <a :href="link.url" target="_blank">{{ link.title }}</a>
+              </v-col>
+            </v-row>
+          </v-container>
         </v-card-text>
         <v-card-text
           v-if="inBand && (memberInfo.isAdmin || memberInfo.canEditInfo)"
@@ -147,13 +164,14 @@
               v-bind:key="event._id"
             >
               <v-expansion-panel-header>
-                <v-list three-line style="max-width: calc(100% - -24px);">
+                <v-list three-line style="max-width: calc(100% - -24px)">
                   <v-list-item>
                     <v-list-item-avatar size="60" v-if="event.poster">
                       <v-img :src="event.poster"></v-img>
                     </v-list-item-avatar>
                     <v-list-item-content>
-                      <v-list-item-title class="text-truncate"
+                      <v-list-item-title
+                        class="text-truncate"
                         v-html="event.locationName"
                       ></v-list-item-title>
                       <v-list-item-subtitle
@@ -181,18 +199,18 @@
               </v-expansion-panel-header>
               <v-expansion-panel-content>
                 <v-card>
-                  <v-card-text style="padding-bottom: 0;">
-                    <strong>{{event.locationName}}</strong>
+                  <v-card-text style="padding-bottom: 0">
+                    <strong>{{ event.locationName }}</strong>
                   </v-card-text>
                   <v-card-text>
                     {{ event.description }}
                   </v-card-text>
                   <v-subheader v-if="event.isSetlistPublic">
-                    {{$ml.get('eventSetlist')}}
+                    {{ $ml.get("eventSetlist") }}
                   </v-subheader>
                   <SongList
                     :memberInfo="memberInfo"
-                    :songList="event.setlist.filter(s => s.live)"
+                    :songList="event.setlist.filter((s) => s.live)"
                     :inEvent="true"
                     :readOnly="true"
                     :duration="duration"
@@ -234,7 +252,7 @@
             v-if="songList.filter((s) => s.preview).length"
           >
             <v-icon left> play_arrow </v-icon>
-            {{$ml.get('playSetlist')}}
+            {{ $ml.get("playSetlist") }}
           </v-btn>
           <SongList
             :memberInfo="memberInfo"
@@ -248,9 +266,13 @@
       </v-expansion-panel>
     </v-expansion-panels>
     <v-card-actions v-if="!inBand && !memberInfo.publicUser">
-      <v-btn text @click="openBand()">{{$ml.get('open')}}</v-btn>
-      <v-btn v-if="memberInfo.isCreator" text color="error" @click="modalDelete"
-        >{{$ml.get('delete')}}</v-btn
+      <v-btn text @click="openBand()">{{ $ml.get("open") }}</v-btn>
+      <v-btn
+        v-if="memberInfo.isCreator"
+        text
+        color="error"
+        @click="modalDelete"
+        >{{ $ml.get("delete") }}</v-btn
       >
       <v-spacer></v-spacer>
     </v-card-actions>

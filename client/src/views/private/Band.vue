@@ -76,24 +76,19 @@
             />
           </v-tab-item>
         </v-tabs-items>
-        <v-tooltip left>
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn
-              color="primary"
-              dark
-              fixed
-              bottom
-              right
-              fab
-              @click="openSong"
-              v-bind="attrs"
-              v-on="on"
-            >
-              <v-icon>add</v-icon>
-            </v-btn>
-          </template>
-          <span>{{ $ml.get("newSong") }}</span>
-        </v-tooltip>
+        <v-btn
+          color="primary"
+          dark
+          fixed
+          bottom
+          right
+          fab
+          @click="openSong"
+          v-bind="attrs"
+          v-on="on"
+        >
+          <v-icon>add</v-icon>
+        </v-btn>
       </v-tab-item>
       <v-tab-item class="max-height">
         <EventsList :band="band" :memberInfo="memberInfo" @reload="loadBand" />
@@ -299,7 +294,8 @@ export default {
     setlistDialog(setlist, toCopy) {
       this.toCopy = toCopy;
       if (setlist && setlist.title) {
-        this.setlistTitle = setlist.title + (toCopy ? ` - ${this.$ml.get('copy')}` : "");
+        this.setlistTitle =
+          setlist.title + (toCopy ? ` - ${this.$ml.get("copy")}` : "");
         this.newSetlist = toCopy;
       } else {
         this.setlistTitle = "";
@@ -361,8 +357,8 @@ export default {
       { text: this.$ml.get("pending"), value: "pending" },
       { text: this.$ml.get("removed"), value: "removed" },
     ];
-    this.modalTitle = this.$ml.get('areYouSure');
-    this.madalText = this.$ml.get('setlistWillDeleted');
+    this.modalTitle = this.$ml.get("areYouSure");
+    this.madalText = this.$ml.get("setlistWillDeleted");
     this.loadBand();
     this.memberInfo = await this.Service.bandService.memberInfo(
       this.$route.params.id

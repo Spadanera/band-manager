@@ -26,6 +26,9 @@ router.get("/:id", async (req, res) => {
     try {
         let bandMembers = await BandMember.find({ userId: req.session.userId }).select("_id");
         let band = await Band.findOne({ _id: req.params.id, bandMembers: { "$in": bandMembers } }).populate("bandMembers events setlists");
+        if (!band.links) {
+            band.links = [];
+        }
         res.json(band);
     }
     catch (e) {
@@ -91,6 +94,7 @@ router.put("/:id/:element", async (req, res) => {
     try {
         let bandMember = await BandMember({ userId: req.session.userId, bandId: req.params.id, isAdmin: true });
         if (bandMember && req.params.id === req.body._id) {
+            let result;
             let band = formatSetlist(req.body);
             let _band = await Band.findOne({ _id: req.params.id }).populate("bandMembers events setlists");
             switch (req.params.element) {
@@ -99,6 +103,7 @@ router.put("/:id/:element", async (req, res) => {
                     band.bandMembers = _band.bandMembers;
                     band.events = _band.events;
                     await Band.findOneAndUpdate({ _id: req.params.id }, band);
+                    result = band;
                     break;
                 case 'setlist':
                     let setlists = JSON.parse(JSON.stringify(_band.setlists));
@@ -139,7 +144,7 @@ router.put("/:id/:element", async (req, res) => {
             }
 
             await _band.populate("bandMembers events setlists").execPopulate();
-            res.json(_band);
+            res.json(result || _band);
         }
         else {
             res.status(401).send("Unauthorized");

@@ -19,6 +19,7 @@ router.get("/band", async (req, res) => {
                 type: band.type,
                 tributeArtist: band.tributeArtist,
                 genres: band.genres,
+                links: band.links,
                 events: band.events.filter(e => e.isPublic),
                 isMembersPublic: band.isMembersPublic,
                 isSetlistPublic: band.isSetlistPublic

@@ -22,7 +22,7 @@
             </v-row>
             <v-row align-content="center" style="margin-bottom: 15px">
               <v-col cols="12" md="8" style="position: relative">
-                <v-subheader>{{$ml.get('bandLogo')}}</v-subheader>
+                <v-subheader>{{ $ml.get("bandLogo") }}</v-subheader>
                 <v-img :src="bandLogo" max-width="300">
                   <v-row
                     class="fill-height ma-0"
@@ -68,13 +68,17 @@
                 <v-text-field
                   v-model="localBand.tributeArtist"
                   :label="$ml.get('tributeArtist')"
-                  :rules="localBand.type === 'trubute' ? [validationRules.required] : []"
+                  :rules="
+                    localBand.type === 'trubute'
+                      ? [validationRules.required]
+                      : []
+                  "
                 ></v-text-field>
               </v-col>
             </v-row>
             <v-row>
               <v-col cols="12">
-                <v-subheader>{{$ml.get('description')}}</v-subheader>
+                <v-subheader>{{ $ml.get("description") }}</v-subheader>
                 <ckeditor
                   :editor="editor"
                   v-model="localBand.description"
@@ -100,7 +104,7 @@
               multiple
               style="margin-top: 20px"
             ></v-autocomplete>
-            <v-subheader>{{$ml.get('visibility')}}</v-subheader>
+            <v-subheader>{{ $ml.get("visibility") }}</v-subheader>
             <v-row
               align="center"
               justify="space-around"
@@ -122,6 +126,45 @@
                 :label="$ml.get('setlistsPublic')"
               ></v-switch>
             </v-row>
+            <v-subheader>Link</v-subheader>
+            <v-row v-for="(link, i) in localBand.links" v-bind:key="i" dense style="margin-bottom: 20px;">
+              <v-col cols="8">
+                <v-row>
+                  <v-col>
+                    <v-text-field
+                      dense
+                      :rules="[validationRules.required]"
+                      v-model="link.title"
+                      :label="$ml.get('title')"
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="2">
+                    <v-btn icon @click="localBand.links.splice(i, 1)">
+                      <v-icon> remove </v-icon>
+                    </v-btn>
+                  </v-col>
+                </v-row>
+              </v-col>
+              <v-col cols="12">
+                <v-text-field
+                  dense
+                  label="Link"
+                  :rules="[validationRules.required, validationRules.url]"
+                  v-model="link.url"
+                >
+                </v-text-field>
+              </v-col>
+            </v-row>
+            <v-row dense>
+              <v-col cols="12">
+                <v-btn
+                  icon
+                  @click="localBand.links.push({ title: '', url: '' })"
+                >
+                  <v-icon>add</v-icon>
+                </v-btn>
+              </v-col>
+            </v-row>
             <v-btn type="submit" style="display: none"></v-btn>
           </v-form>
         </v-container>
@@ -129,8 +172,12 @@
       <v-divider></v-divider>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="blue darken-1" text @click="closeModal">{{$ml.get('dismiss')}}</v-btn>
-        <v-btn color="blue darken-1" text @click="submitForm">{{$ml.get('save')}}</v-btn>
+        <v-btn color="blue darken-1" text @click="closeModal">{{
+          $ml.get("dismiss")
+        }}</v-btn>
+        <v-btn color="blue darken-1" text @click="submitForm">{{
+          $ml.get("save")
+        }}</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -176,7 +223,8 @@ export default {
         delete band.bandMembers;
         delete band.setlist;
         this.localBand = await this.Service.bandService.upsertBand(
-          band, 'generalinfo'
+          band,
+          "generalinfo"
         );
         this.$emit("submitted", this.localBand);
         this.$emit("close", false);
