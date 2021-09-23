@@ -96,7 +96,7 @@
         <LanguageSwitcher @close="menu = false" :icon="true" />
       </v-toolbar-items>
       <template v-slot:extension v-if="bandPage">
-        <v-tabs v-model="bandTab" grow background-color="secondary">
+        <v-tabs v-model="bandTab" show-arrows grow background-color="secondary">
           <v-tab>{{$ml.get("generalInfo")}}</v-tab>
           <v-tab>{{$ml.get("setlists")}}</v-tab>
           <v-tab>{{$ml.get("events")}}</v-tab>

@@ -13,7 +13,9 @@ const Song = {
     position: { type: Number, default: 1 },
     audio: String,
     preview: String,
-    cover: Boolean
+    cover: Boolean,
+    lyrics: String,
+    bpm: String,
 };
 
 export default Song;

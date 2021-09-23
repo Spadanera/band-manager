@@ -17,10 +17,31 @@ router.get("/songs", async (req, res) => {
                     duration: s.duration,
                     album: s.album.title,
                     author: s.artist.name,
-                    preview: s.preview
+                    preview: s.preview,
+                    bpm: s.bpm
                 };
             })
         );
+    } catch (e) {
+        console.error(e);
+        res.status(500).send({ e: e.message });
+    }
+});
+
+router.get("/song/:id", async (req, res) => {
+    try {
+        let track = await deezerSearch.track(req.params.id);
+        res.json(track);
+    } catch (e) {
+        console.error(e);
+        res.status(500).send({ e: e.message });
+    }
+});
+
+router.get("/lyrics", async (req, res) => {
+    try {
+        let lyrics = await deezerSearch.lyrics(req.query.title, req.query.author);
+        res.json(lyrics);
     } catch (e) {
         console.error(e);
         res.status(500).send({ e: e.message });

@@ -17,6 +17,7 @@
           @openevent="openEvent(event)"
           @deleteevent="confirmDeleteEvent"
           @copyevent="copyEvent"
+          @startlive="startLive"
         />
       </v-col>
     </v-row>
@@ -43,6 +44,7 @@
           @openevent="openEvent(event)"
           @deleteevent="confirmDeleteEvent"
           @copyevent="copyEvent"
+          @startlive="startLive"
         />
       </v-col>
     </v-row>
@@ -103,6 +105,7 @@
       :text="modalText"
       @close="dialogConfirm = false"
     />
+    <LiveDialog :dialog="liveDialog" :event="liveEvent" @close="liveDialog = false;" />
   </v-container>
 </template>
 
@@ -110,6 +113,7 @@
 import EventCard from "./EventCard.vue";
 import EventForm from "./EventForm.vue";
 import Confirm from "./../layout/Confirm.vue";
+import LiveDialog from "../song/Live.vue";
 
 export default {
   name: "EventsList",
@@ -117,6 +121,7 @@ export default {
     EventCard,
     EventForm,
     Confirm,
+    LiveDialog
   },
   props: {
     band: Object,
@@ -133,6 +138,10 @@ export default {
       eventId: "",
       modalTitle: this.$ml.get('areYouSure'),
       modalText: this.$ml.get('eventWillRemoved'),
+      liveDialog: false,
+      liveEvent: {
+        setlist: []
+      }
     };
   },
   created() {
@@ -169,9 +178,12 @@ export default {
       delete bandCopied._id;
       bandCopied.eventDate = undefined;
       bandCopied.eventTime = undefined;
-      bandCopied.poster = undefined;
       this.$refs.eventform.reload(bandCopied);
       this.dialogEvent = true;
+    },
+    startLive(event) {
+      this.liveEvent = event;
+      this.liveDialog = true;
     }
   },
   computed: {

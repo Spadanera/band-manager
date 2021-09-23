@@ -109,7 +109,12 @@ export default new MLCreate({
             preview: "Preview",
             loadSetlist: "LOAD SETLIST",
             locationAddress: "Location address",
-            publicVisibility: "Public Visibility"
+            publicVisibility: "Public Visibility",
+            lyrics: "Lyrics",
+            startLive: "Start Live",
+            missingTime: "Missing time",
+            startMetronome: "Start Metronome",
+            stopMetronome: "Stop Metronome",
         }),
         new MLanguage('it').create({
             it: "Italiano",
@@ -207,7 +212,12 @@ export default new MLCreate({
             preview: "Anteprima",
             loadSetlist: "CARICA SCALETTA",
             locationAddress: "Indirizzo della location",
-            publicVisibility: "Visibilità pubblica"
+            publicVisibility: "Visibilità pubblica",
+            lyrics: "Testo",
+            startLive: "Inizia Live",
+            missingTime: "Tempo rimanente",
+            startMetronome: "Avvia Metronomo",
+            stopMetronome: "Ferma Metronomo",
         }),
     ]
 })

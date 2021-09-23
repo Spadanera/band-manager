@@ -84,8 +84,6 @@
           right
           fab
           @click="openSong"
-          v-bind="attrs"
-          v-on="on"
         >
           <v-icon>add</v-icon>
         </v-btn>

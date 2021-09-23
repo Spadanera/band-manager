@@ -19,6 +19,7 @@
     "cors": "^2.8.5",
     "express": "^4.16.4",
     "express-form-data": "^2.0.10",
+    "genius-lyrics-api": "^3.2.0",
     "lodash": "^4.17.15",
     "mongodb": "^3.1.13",
     "mongoose": "^5.7.5",

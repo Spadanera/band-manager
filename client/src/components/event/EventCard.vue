@@ -11,7 +11,7 @@
         v-show="this.waShareLink"
         text
         small
-        style="padding-right: 0;"
+        style="padding-right: 0"
         :href="waShareLink"
         data-action="share/whatsapp/share"
       >
@@ -94,7 +94,7 @@
         <v-expansion-panel-header>
           <template v-slot:default="{ open }">
             <v-row no-gutters style="margin-left: 32px">
-              <v-col cols="4"> {{$ml.get('setlist')}} </v-col>
+              <v-col cols="4"> {{ $ml.get("setlist") }} </v-col>
               <v-col cols="8" class="text-right font-weight-bold">
                 <v-fade-transition leave-absolute>
                   <span v-if="open" key="0">
@@ -106,15 +106,30 @@
           </template>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
-          <v-btn
-            small
-            text
-            @click="playSetlist"
-            v-if="songList.filter((s) => s.preview).length"
-          >
-            <v-icon left> play_arrow </v-icon>
-            {{$ml.get('playSetlist')}}
-          </v-btn>
+          <v-row>
+            <v-col>
+              <v-btn
+                small
+                text
+                @click="playSetlist"
+                v-if="songList.filter((s) => s.preview).length"
+              >
+                <v-icon left> play_arrow </v-icon>
+                {{ $ml.get("playSetlist") }}
+              </v-btn>
+            </v-col>
+            <v-col v-if="!memberInfo.publicUser">
+              <v-btn
+                small
+                text
+                @click="startLive"
+                v-if="songList.filter((s) => s.preview).length"
+              >
+                <v-icon left> slideshow </v-icon>
+                {{ $ml.get("startLive") }}
+              </v-btn>  
+            </v-col>
+          </v-row>
           <SongList
             :memberInfo="memberInfo"
             :songList="songList"
@@ -132,14 +147,14 @@
         text
         @click="$emit('openevent', event)"
       >
-        {{$ml.get('edit')}}
+        {{ $ml.get("edit") }}
       </v-btn>
       <v-btn
         v-if="memberInfo.canEditEvents"
         text
         @click="$emit('copyevent', event)"
       >
-        {{$ml.get('copy')}}
+        {{ $ml.get("copy") }}
       </v-btn>
       <v-btn
         v-if="memberInfo.canEditEvents"
@@ -147,7 +162,7 @@
         @click="$emit('deleteevent', event._id)"
         text
       >
-        {{$ml.get('delete')}}
+        {{ $ml.get("delete") }}
       </v-btn>
       <v-spacer></v-spacer>
       <v-btn
@@ -192,6 +207,9 @@ export default {
     playSetlist() {
       this.$root.$emit("playSetlist", this.songList);
     },
+    startLive() {
+      this.$emit("startlive", this.event);
+    }
   },
   computed: {
     waShareLink() {
