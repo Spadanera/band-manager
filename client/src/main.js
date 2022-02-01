@@ -68,7 +68,7 @@ Vue.prototype.validationRules = {
     return pattern.test(value) || 'Invalid e-mail.'
   },
   url: value => {
-    const pattern = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g;
+    const pattern = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/g;
     return pattern.test(value) || 'Invalid URL.'
   }
 },
